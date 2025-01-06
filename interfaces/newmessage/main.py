@@ -2,6 +2,7 @@ import re
 import typing
 
 import emoji
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QVBoxLayout,
@@ -26,6 +27,9 @@ class MessageWindow:
     def __init__(self, app):
         self.app = app
         self.window = QDialog()
+        self.window.setWindowFlags(
+            self.window.windowFlags() | Qt.WindowType.WindowMaximizeButtonHint
+        )
         self.window.setWindowIcon(QIcon("source/icons/window-icon.svg"))
         self.window.setMinimumSize(800, 600)
         self.window.setWindowTitle("Mensagem")
