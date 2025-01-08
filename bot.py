@@ -57,9 +57,7 @@ class Bot:
             for reaction in reactions:
                 code_reaction = reaction
                 reaction = (
-                    random_choose(reaction)
-                    if isinstance(reaction, list)
-                    else reaction
+                    random_choose(reaction) if isinstance(reaction, list) else reaction
                 )
                 reaction = emoji.emojize(reaction)
                 try:
@@ -129,7 +127,7 @@ class Bot:
             message_condition = MessageConditions(
                 message, expected_message=expected_message
             )
-            all_condition_is_true = False
+
             conditions_to_confirm = []
             if conditions:
                 for each_conditions in conditions:
@@ -140,13 +138,9 @@ class Bot:
             if expected_message:
                 conditions_to_confirm.append(message.content in expected_message)
 
-            all_condition_is_true = conditions_to_confirm.count(True) == len(
-                conditions_to_confirm
-            )
-
             logger.info(f"Verificando condições {conditions_to_confirm}")
 
-            if all_condition_is_true:
+            if all(conditions_to_confirm):
                 if delay:
                     await apply_delay(delay)
                 if reply:
