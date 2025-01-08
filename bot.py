@@ -53,7 +53,9 @@ class Bot:
             await asyncio.sleep(delay)
 
         @self.client.event
-        async def send_reaction(reactions, message: discord.Message, where: str):
+        async def send_reaction(
+            reactions: list[str], message: discord.Message, where: str
+        ):
             for reaction in reactions:
                 code_reaction = reaction
                 reaction = (
@@ -72,7 +74,7 @@ class Bot:
                     print(reaction)
 
         @self.client.event
-        async def send_reply(replies, message: discord.Message, where: str):
+        async def send_reply(replies: list[str], message: discord.Message, where: str):
             for reply in replies:
                 reply = random_choose(reply) if isinstance(reply, list) else reply
                 reply = Variable(message).apply_variable(reply)
