@@ -102,14 +102,14 @@ class Bot:
             )
 
         @self.client.event
-        async def kick_member(kick: bool, message: discord.Message):
-            await message.author.kick()
-            logger.info(f'Expulsando jogador "{message.author.name}".')
+        async def kick_member(member: discord.Member):
+            await member.kick()
+            logger.info(f'Expulsando jogador "{member.name}".')
 
         @self.client.event
-        async def ban_member(ban: bool, message: discord.Message):
-            await message.author.ban()
-            logger.info(f'Banindo jogador "{message.author.name}".')
+        async def ban_member(member: discord.Member):
+            await member.ban()
+            logger.info(f'Banindo jogador "{member.name}".')
 
         async def message_and_reply(
             message: discord.Message,
@@ -157,6 +157,10 @@ class Bot:
                     await remove_message(message)
                 if pin:
                     await pin_message(message)
+                if ban:
+                    await ban_member(message.author)
+                if kick:
+                    await kick_member(message.author)
 
     def run(self):
         try:
