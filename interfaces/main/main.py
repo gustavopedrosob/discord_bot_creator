@@ -147,6 +147,9 @@ class Main(QMainWindow):
         left_frame.addWidget(remove_message_button)
         left_frame.addWidget(remove_all_message_button)
 
+        left_frame.setContentsMargins(20, 10, 10, 10)
+        right_frame.setContentsMargins(10, 10, 20, 10)
+
         main_layout.addLayout(left_frame)
         main_layout.addLayout(right_frame)
 
