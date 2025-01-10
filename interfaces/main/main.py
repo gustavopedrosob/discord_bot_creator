@@ -67,7 +67,7 @@ class Main(QMainWindow):
         )
         new_message_action = QAction("&Nova mensagem", self)
         new_message_action.triggered.connect(self.new_message)
-        remove_all_message_action = QAction("&Apagar todas mensagens", self)
+        remove_all_message_action = QAction("&Remover todas mensagens", self)
         remove_all_message_action.triggered.connect(self.clear_messages)
 
         # Add actions to the menus
