@@ -62,25 +62,25 @@ class MessageWindow:
         ):
             left_layout.addWidget(widget)
 
-        self.group_pin_or_del = QRadioGroup(QLabel("Ação"))
+        self.group_pin_or_del = QRadioGroup(QLabel("Ação:"))
         self.group_pin_or_del.add_radio("pin", QCheckBox("Fixar"))
         self.group_pin_or_del.add_radio("delete", QCheckBox("Deletar"))
-        right_layout.addLayout(self.group_pin_or_del.layout)
+        right_layout.addWidget(self.group_pin_or_del)
 
-        self.group_kick_or_ban = QRadioGroup(QLabel("Penalidade"))
+        self.group_kick_or_ban = QRadioGroup(QLabel("Penalidade:"))
         self.group_kick_or_ban.add_radio("kick", QCheckBox("Expulsar"))
         self.group_kick_or_ban.add_radio("ban", QCheckBox("Banir"))
-        right_layout.addLayout(self.group_kick_or_ban.layout)
+        right_layout.addWidget(self.group_kick_or_ban)
 
-        self.group_where_reply = QRadioGroup(QLabel("Onde responder"))
+        self.group_where_reply = QRadioGroup(QLabel("Onde responder:"))
         self.group_where_reply.add_radio("group", QCheckBox("Grupo"))
         self.group_where_reply.add_radio("private", QCheckBox("Privado"))
-        right_layout.addLayout(self.group_where_reply.layout)
+        right_layout.addWidget(self.group_where_reply)
 
-        self.group_where_react = QRadioGroup(QLabel("Onde reagir"))
+        self.group_where_react = QRadioGroup(QLabel("Onde reagir:"))
         self.group_where_react.add_radio("author", QCheckBox("Autor"))
         self.group_where_react.add_radio("bot", QCheckBox("Bot"))
-        right_layout.addLayout(self.group_where_react.layout)
+        right_layout.addWidget(self.group_where_react)
 
         delay_label = QLabel("Delay:")
         self.delay = QSpinBox()
@@ -176,18 +176,18 @@ class MessageWindow:
             conditions_list if not len(conditions_list) == 0 else None
         )
 
-        if self.group_pin_or_del.current_name == "pin":
+        if self.group_pin_or_del.get_current_name() == "pin":
             result["pin"] = True
-        elif self.group_pin_or_del.current_name == "delete":
+        elif self.group_pin_or_del.get_current_name() == "delete":
             result["delete"] = True
 
-        selected_where_reply = self.group_where_reply.current_name
+        selected_where_reply = self.group_where_reply.get_current_name()
         if selected_where_reply:
-            result["where reply"] = selected_where_reply.objectName()
+            result["where reply"] = selected_where_reply
 
-        selected_where_react = self.group_where_react.current_name
+        selected_where_react = self.group_where_react.get_current_name()
         if selected_where_react:
-            result["where reaction"] = selected_where_react.objectName()
+            result["where reaction"] = selected_where_react
 
         result["delay"] = self.delay.value()
 
@@ -232,12 +232,12 @@ class EditMessageWindow(MessageWindow):
         if "pin" in data:
             pin = data["pin"]
             if pin:
-                self.group_pin_or_del.radios["pin"].setChecked(True)
+                self.group_pin_or_del.get_radio("pin").setChecked(True)
 
         if "delete" in data:
             delete = data["delete"]
             if delete:
-                self.group_pin_or_del.radios["delete"].setChecked(True)
+                self.group_pin_or_del.get_radio("delete").setChecked(True)
 
         if "delay" in data:
             delay = int(data["delay"])
@@ -246,16 +246,16 @@ class EditMessageWindow(MessageWindow):
         if "where reply" in data:
             where_reply = data["where reply"]
             if where_reply == "group":
-                self.group_where_reply.radios["group"].setChecked(True)
+                self.group_where_reply.get_radio("group").setChecked(True)
             else:
-                self.group_where_reply.radios["private"].setChecked(True)
+                self.group_where_reply.get_radio("private").setChecked(True)
 
         if "where reaction" in data:
             where_reaction = data["where reaction"]
             if where_reaction == "author":
-                self.group_where_react.radios["author"].setChecked(True)
+                self.group_where_react.get_radio("author").setChecked(True)
             else:
-                self.group_where_react.radios["bot"].setChecked(True)
+                self.group_where_react.get_radio("bot").setChecked(True)
 
 
 class NewMessageWindow(MessageWindow):

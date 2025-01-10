@@ -1,31 +1,37 @@
-from PySide6.QtWidgets import QGridLayout
+from PySide6.QtWidgets import QGridLayout, QWidget, QLabel
 
 
-class QRadioGroup:
-    def __init__(self, label):
-        self.layout = QGridLayout()
-        self.label = label
-        self.radios = {}
-        self.current = None
-        self.current_name = None
+class QRadioGroup(QWidget):
+    def __init__(self, label: QLabel):
+        super().__init__()
+        self.__layout = QGridLayout()
+        self.__label = label
+        self.__radios = {}
+        self.__current = None
+        self.__current_name = None
+        self.__layout.addWidget(self.__label, 0, 0)
+        self.setLayout(self.__layout)
 
-        self.layout.addWidget(self.label, 0, 0)
-        self.layout.setContentsMargins(10, 10, 10, 10)
-
-    def add_radio(self, name, radio):
+    def add_radio(self, name: str, radio):
         radio.clicked.connect(lambda r: self.radio_clicked(name, radio))
-        self.layout.addWidget(radio, len(self.radios), 1)
-        self.radios[name] = radio
+        self.__layout.addWidget(radio, len(self.__radios), 1)
+        self.__radios[name] = radio
 
-    def radio_clicked(self, name, radio):
-        if name == self.current_name:
-            self.current.setChecked(False)
-            self.current = None
-            self.current_name = None
+    def radio_clicked(self, name: str, radio):
+        if name == self.__current_name:
+            self.__current.setChecked(False)
+            self.__current = None
+            self.__current_name = None
         else:
-            self.current = radio
-            self.current_name = name
-            for r in self.radios.values():
+            self.__current = radio
+            self.__current_name = name
+            for r in self.__radios.values():
                 if r != radio:
                     r.setChecked(False)
-            self.current.setChecked(True)
+            self.__current.setChecked(True)
+
+    def get_current_name(self):
+        return self.__current_name
+
+    def get_radio(self, name: str):
+        return self.__radios[name]
