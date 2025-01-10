@@ -9,7 +9,6 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QDialog,
     QLabel,
-    QFrame,
     QComboBox,
     QPushButton,
     QListWidget,
@@ -19,6 +18,7 @@ from PySide6.QtWidgets import (
 )
 
 from core.functions import have_in
+from interfaces.newmessage.listbox import QListBox
 from interfaces.newmessage.radiogroup import QRadioGroup
 from interpreter.conditions import conditions_keys
 
@@ -38,73 +38,29 @@ class MessageWindow:
         mid_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
 
-        # Widgets
         self.name_text = QLabel("Nome:")
         self.name_entry = QLineEdit()
 
-        expected_message_text = QLabel("Mensagem esperada")
-        self.expected_message = QLineEdit()
+        reactions_combox = QComboBox()
+        reactions_combox.addItems([v["en"] for v in emoji.EMOJI_DATA.values()])
+        reactions_combox.setEditable(True)
 
-        reply_text = QLabel("Resposta")
-        self.reply = QLineEdit()
+        conditions_combobox = QComboBox()
+        conditions_combobox.addItems(conditions_keys)
+        conditions_combobox.setEditable(True)
 
-        reactions_text = QLabel("Reações")
-        self.reactions = QComboBox()
-        self.reactions.addItems([""] + [v["en"] for v in emoji.EMOJI_DATA.values()])
+        self.listbox_conditions = QListBox("Condições", conditions_combobox)
+        self.listbox_reactions = QListBox("Reações", reactions_combox)
+        self.listbox_messages = QListBox("Mensagens", QLineEdit())
+        self.listbox_replies = QListBox("Respostas", QLineEdit())
 
-        conditions_text = QLabel("Condições")
-        self.conditions = QComboBox()
-        self.conditions.addItems([""] + conditions_keys)
-
-        add_button = QPushButton("Adicionar")
-
-        # Layout setup
-        for widget in [
-            expected_message_text,
-            self.expected_message,
-            reply_text,
-            self.reply,
-            reactions_text,
-            self.reactions,
-            conditions_text,
-            self.conditions,
-        ]:
-            left_layout.addWidget(widget)
-
-        left_layout.addStretch()
-
-        # Listboxes setup
-        listbox_frame = QFrame(self.window)
-
-        listbox_conditions_text = QLabel("Condições", listbox_frame)
-        self.listbox_conditions = QListWidget(listbox_frame)
-
-        listbox_reactions_text = QLabel("Reações", listbox_frame)
-        self.listbox_reactions = QListWidget(listbox_frame)
-
-        listbox_messages_text = QLabel("Mensagens", listbox_frame)
-        self.listbox_messages = QListWidget(listbox_frame)
-
-        listbox_replies_text = QLabel("Respostas", listbox_frame)
-        self.listbox_replies = QListWidget(listbox_frame)
-
-        remove_button = QPushButton("Remover", listbox_frame)
-        remove_all_button = QPushButton("Remover todos", listbox_frame)
-
-        # Adding widgets to layout
-        for widget in [
-            listbox_conditions_text,
+        for widget in (
             self.listbox_conditions,
-            listbox_replies_text,
-            self.listbox_replies,
-            listbox_messages_text,
-            self.listbox_messages,
-            listbox_reactions_text,
             self.listbox_reactions,
-        ]:
-            mid_layout.addWidget(widget)
-
-        frame_options = QFrame(self.window)
+            self.listbox_messages,
+            self.listbox_replies,
+        ):
+            left_layout.addWidget(widget)
 
         self.group_pin_or_del = QRadioGroup(QLabel("Ação"))
         self.group_pin_or_del.add_radio("pin", QCheckBox("Fixar"))
@@ -131,7 +87,9 @@ class MessageWindow:
         self.delay.setFixedWidth(250)
 
         # Save and quit button
-        save_and_quit_button = QPushButton("Salvar e sair", frame_options)
+        save_and_quit_button = QPushButton("Salvar e sair")
+        save_and_quit_button.setAutoDefault(False)
+        save_and_quit_button.setDefault(False)
 
         for widget in (
             delay_label,
@@ -142,9 +100,6 @@ class MessageWindow:
         right_layout.addStretch()
 
         buttons_layout = QHBoxLayout()
-        buttons_layout.addWidget(add_button)
-        buttons_layout.addWidget(remove_button)
-        buttons_layout.addWidget(remove_all_button)
         buttons_layout.addWidget(save_and_quit_button)
 
         horizontal_layout = QHBoxLayout()
@@ -160,10 +115,7 @@ class MessageWindow:
 
         self.window.setLayout(vertical_layout)
 
-        remove_button.clicked.connect(self.remove_all_selected_on_listbox)
-        remove_all_button.clicked.connect(self.remove_all_on_listbox)
         save_and_quit_button.clicked.connect(self.on_save_and_quit)
-        add_button.clicked.connect(self.insert_any_on_listbox)
 
     def on_save_and_quit(self):
         # Adicionar validação de campos
@@ -186,66 +138,28 @@ class MessageWindow:
                 listbox.addItem(value)
                 entry.clear()
 
-    def insert_any_on_listbox(self):
-        for listbox, entry in zip(self.__all_listbox(), self.__all_entries()):
-            # se for o reactions, no discord o limite de reações por mensagem é de 20,
-            # ou seja, a gente precisa limitar a quantidade de reactions.
-            self.insert_on_listbox(
-                listbox, entry, limit=19 if entry == self.reactions else 0
-            )
-
     @staticmethod
     def remove_selected_on_listbox(listbox: QListWidget):
         """remove um item selecionado na listbox"""
         for item in listbox.selectedItems():
             listbox.takeItem(listbox.indexFromItem(item).row())
 
-    def remove_all_selected_on_listbox(self):
-        for listbox in self.__all_listbox():
-            self.remove_selected_on_listbox(listbox)
-
-    def remove_all_on_listbox(self):
-        """remove todos os items em todas listbox"""
-        for listbox in self.__all_listbox():
-            listbox: QListWidget
-            listbox.clear()
-
-    def __all_listbox(self):
-        return (
-            self.listbox_messages,
-            self.listbox_replies,
-            self.listbox_reactions,
-            self.listbox_conditions,
-        )
-
-    def __all_entries(self):
-        return self.expected_message, self.reply, self.reactions, self.conditions
-
     def get_data(self):
         result = {}
 
-        expected_message_list = [
-            self.listbox_messages.item(i).text()
-            for i in range(self.listbox_messages.count())
-        ]
+        expected_message_list = self.listbox_messages.get_items_text()
         result["expected message"] = (
             expected_message_list if not len(expected_message_list) == 0 else None
         )
 
-        reply_list = [
-            self.listbox_replies.item(i).text()
-            for i in range(self.listbox_replies.count())
-        ]
+        reply_list = self.listbox_replies.get_items_text()
         result["reply"] = (
             list(map(lambda replies: replies.split("¨"), reply_list))
             if have_in(reply_list, "¨", reverse=True)
             else reply_list if not len(reply_list) == 0 else None
         )
 
-        reactions_list = [
-            self.listbox_reactions.item(i).text()
-            for i in range(self.listbox_reactions.count())
-        ]
+        reactions_list = self.listbox_reactions.get_items_text()
         result["reaction"] = (
             list(
                 map(
@@ -257,10 +171,7 @@ class MessageWindow:
             else None
         )
 
-        conditions_list = [
-            self.listbox_conditions.item(i).text()
-            for i in range(self.listbox_conditions.count())
-        ]
+        conditions_list = self.listbox_conditions.get_items_text()
         result["conditions"] = (
             conditions_list if not len(conditions_list) == 0 else None
         )
@@ -292,17 +203,16 @@ class EditMessageWindow(MessageWindow):
         if "expected message" in data:
             expected_messages = data["expected message"]
             if expected_messages:
-                for expected_message in expected_messages:
-                    self.listbox_messages.addItem(expected_message)
+                self.listbox_messages.list.addItems(expected_messages)
 
         if "reply" in data:
             replies = data["reply"]
             if replies:
                 for reply in replies:
                     (
-                        self.listbox_replies.addItem("¨".join(reply))
+                        self.listbox_replies.list.addItem("¨".join(reply))
                         if type(reply) == list
-                        else self.listbox_replies.addItem(reply)
+                        else self.listbox_replies.list.addItem(reply)
                     )
 
         if "reaction" in data:
@@ -310,15 +220,14 @@ class EditMessageWindow(MessageWindow):
             if reaction:
                 list(
                     map(
-                        lambda x: self.listbox_reactions.addItem(" ".join(x)),
+                        lambda x: self.listbox_reactions.list.addItem(" ".join(x)),
                         reaction,
                     )
                 )
         if "conditions" in data:
             conditions = data["conditions"]
             if conditions:
-                for condition in conditions:
-                    self.listbox_conditions.addItem(condition)
+                self.listbox_conditions.list.addItems(conditions)
 
         if "pin" in data:
             pin = data["pin"]
