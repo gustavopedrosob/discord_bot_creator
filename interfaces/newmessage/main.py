@@ -60,8 +60,6 @@ class MessageWindow:
 
         # Layout setup
         for widget in [
-            self.name_text,
-            self.name_entry,
             expected_message_text,
             self.expected_message,
             reply_text,
@@ -74,7 +72,6 @@ class MessageWindow:
             left_layout.addWidget(widget)
 
         left_layout.addStretch()
-        left_layout.addWidget(add_button)
 
         # Listboxes setup
         listbox_frame = QFrame(self.window)
@@ -104,8 +101,6 @@ class MessageWindow:
             self.listbox_messages,
             listbox_reactions_text,
             self.listbox_reactions,
-            remove_button,
-            remove_all_button,
         ]:
             mid_layout.addWidget(widget)
 
@@ -169,14 +164,25 @@ class MessageWindow:
             right_layout.addWidget(widget)
 
         right_layout.addStretch()
-        right_layout.addWidget(save_and_quit_button)
 
-        main_layout = QHBoxLayout()
-        main_layout.addLayout(left_layout)
-        main_layout.addLayout(mid_layout)
-        main_layout.addLayout(right_layout)
+        buttons_layout = QHBoxLayout()
+        buttons_layout.addWidget(add_button)
+        buttons_layout.addWidget(remove_button)
+        buttons_layout.addWidget(remove_all_button)
+        buttons_layout.addWidget(save_and_quit_button)
 
-        self.window.setLayout(main_layout)
+        horizontal_layout = QHBoxLayout()
+        horizontal_layout.addLayout(left_layout)
+        horizontal_layout.addLayout(mid_layout)
+        horizontal_layout.addLayout(right_layout)
+
+        vertical_layout = QVBoxLayout()
+        vertical_layout.addWidget(self.name_text)
+        vertical_layout.addWidget(self.name_entry)
+        vertical_layout.addLayout(horizontal_layout)
+        vertical_layout.addLayout(buttons_layout)
+
+        self.window.setLayout(vertical_layout)
 
         remove_button.clicked.connect(self.remove_all_selected_on_listbox)
         remove_all_button.clicked.connect(self.remove_all_on_listbox)
