@@ -65,6 +65,12 @@ class Main(QMainWindow):
                 "https://github.com/gustavopedrosob/bot_discord_easy_creator"
             )
         )
+        report_action = QAction("&Reportar bug", self)
+        report_action.triggered.connect(
+            lambda: webbrowser.open(
+                "https://github.com/gustavopedrosob/bot_discord_easy_creator/issues/new"
+            )
+        )
         new_message_action = QAction("&Nova mensagem", self)
         new_message_action.triggered.connect(self.new_message)
         remove_all_message_action = QAction("&Remover todas mensagens", self)
@@ -74,6 +80,7 @@ class Main(QMainWindow):
         file_menu.addAction(exit_action)
         help_menu.addAction(credits_action)
         help_menu.addAction(project_action)
+        help_menu.addAction(report_action)
         edit_menu.addAction(new_message_action)
         edit_menu.addAction(remove_all_message_action)
 
