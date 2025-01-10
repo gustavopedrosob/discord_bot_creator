@@ -21,6 +21,7 @@ from bot import IntegratedBot
 from core.config import instance as config
 from core.messages import messages
 from interfaces.classes.qpassword import QPassword
+from interfaces.credits.credits import CreditsWindow
 from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow
 
 logger = logging.getLogger(__name__)
@@ -34,6 +35,7 @@ class Main(QMainWindow):
         self.setWindowIcon(QIcon("source/icons/window-icon.svg"))
 
         self.message_window = None
+        self.credits_window = CreditsWindow()
         self.bot = None
         self.bot_thread = None
 
@@ -55,6 +57,7 @@ class Main(QMainWindow):
         exit_action = QAction("&Sair", self)
         exit_action.triggered.connect(self.close)
         credits_action = QAction("&Creditos", self)
+        credits_action.triggered.connect(self.credits_window.window.show)
         add_message_action = QAction("&Adicionar mensagem", self)
         add_message_action.triggered.connect(self.new_message)
         remove_all_message_action = QAction("&Apagar todas mensagens", self)
