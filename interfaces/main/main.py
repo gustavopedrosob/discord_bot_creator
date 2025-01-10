@@ -3,7 +3,8 @@ import typing
 import webbrowser
 from threading import Thread
 
-from PySide6.QtGui import QIcon, QAction
+from PySide6.QtCore import QPoint
+from PySide6.QtGui import QIcon, QAction, Qt
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
@@ -126,6 +127,12 @@ class Main(QMainWindow):
         message_label = QLabel("Mensagens")
 
         self.messages_list_widget = QListWidget()
+        self.messages_list_widget.setContextMenuPolicy(
+            Qt.ContextMenuPolicy.CustomContextMenu
+        )
+        self.messages_list_widget.customContextMenuRequested.connect(
+            self.message_context_menu_event
+        )
 
         new_message_button = QPushButton("Nova")
         new_message_button.clicked.connect(self.new_message)
@@ -265,3 +272,15 @@ class Main(QMainWindow):
         self.switch_bot_button.clicked.disconnect(self.turn_off_bot)
         self.switch_bot_button.clicked.connect(self.start_turn_on_bot_thread)
         logger.info("Bot desligado!")
+
+    def message_context_menu_event(self, position: QPoint):
+        context_menu = QMenu(self)
+        new_message_action = QAction("Nova", self)
+        new_message_action.triggered.connect(self.new_message)
+        edit_message_action = QAction("Editar", self)
+        edit_message_action.triggered.connect(self.edit_selected_message)
+        remove_message_action = QAction("Deletar", self)
+        remove_message_action.triggered.connect(self.remove_selected_message)
+        for action in [new_message_action, edit_message_action, remove_message_action]:
+            context_menu.addAction(action)
+        context_menu.exec(self.messages_list_widget.mapToGlobal(position))
