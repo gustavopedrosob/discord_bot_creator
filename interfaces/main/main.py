@@ -1,5 +1,6 @@
 import logging
 import typing
+import webbrowser
 from threading import Thread
 
 from PySide6.QtGui import QIcon, QAction
@@ -58,6 +59,12 @@ class Main(QMainWindow):
         exit_action.triggered.connect(self.close)
         credits_action = QAction("&Creditos", self)
         credits_action.triggered.connect(self.credits_window.window.show)
+        project_action = QAction("&Projeto", self)
+        project_action.triggered.connect(
+            lambda: webbrowser.open(
+                "https://github.com/gustavopedrosob/bot_discord_easy_creator"
+            )
+        )
         add_message_action = QAction("&Adicionar mensagem", self)
         add_message_action.triggered.connect(self.new_message)
         remove_all_message_action = QAction("&Apagar todas mensagens", self)
@@ -66,6 +73,7 @@ class Main(QMainWindow):
         # Add actions to the menus
         file_menu.addAction(exit_action)
         help_menu.addAction(credits_action)
+        help_menu.addAction(project_action)
         edit_menu.addAction(add_message_action)
         edit_menu.addAction(remove_all_message_action)
 
