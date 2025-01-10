@@ -100,15 +100,15 @@ class Main(QMainWindow):
         self.token_widget.line_edit.returnPressed.connect(self.update_token)
 
         # Execute Bot Button
-        self.exec_bot_button = QPushButton("Executar o bot")
-        self.exec_bot_button.clicked.connect(self.init_bot)
+        self.switch_bot_button = QPushButton("Ligar bot")
+        self.switch_bot_button.clicked.connect(self.start_turn_on_bot_thread)
 
         # Adding Widgets to Right Frame
         right_frame.addWidget(self.logs_text_edit)
         right_frame.addWidget(self.cmd_line_edit)
         right_frame.addWidget(QLabel("Token:"))
         right_frame.addWidget(self.token_widget)
-        right_frame.addWidget(self.exec_bot_button)
+        right_frame.addWidget(self.switch_bot_button)
 
         # Left Frame for Messages
         left_frame = QVBoxLayout()
@@ -160,12 +160,12 @@ class Main(QMainWindow):
         """Returns the current token saved in the "config.json" file."""
         return config.get("token")
 
-    def __run_bot(self):
+    def __turn_on_bot(self):
         self.bot = IntegratedBot(self)
         self.bot.run()
 
-    def init_bot(self):
-        self.bot_thread = Thread(target=self.__run_bot)
+    def start_turn_on_bot_thread(self):
+        self.bot_thread = Thread(target=self.__turn_on_bot)
         self.bot_thread.start()
 
     def entry_command(self):
@@ -241,14 +241,14 @@ class Main(QMainWindow):
         self.logs_text_edit.insertPlainText(message)
 
     def change_init_bot_button(self):
-        self.exec_bot_button.setText("Desligar o bot")
-        self.exec_bot_button.clicked.disconnect(self.init_bot)
-        self.exec_bot_button.clicked.connect(self.turnoff_bot)
+        self.switch_bot_button.setText("Desligar bot")
+        self.switch_bot_button.clicked.disconnect(self.start_turn_on_bot_thread)
+        self.switch_bot_button.clicked.connect(self.turn_off_bot)
 
-    def turnoff_bot(self):
+    def turn_off_bot(self):
         self.bot.client.loop.create_task(self.bot.client.close())
         self.bot_thread.join()
-        self.exec_bot_button.setText("Executar o bot")
-        self.exec_bot_button.clicked.disconnect(self.turnoff_bot)
-        self.exec_bot_button.clicked.connect(self.init_bot)
+        self.switch_bot_button.setText("Ligar bot")
+        self.switch_bot_button.clicked.disconnect(self.turn_off_bot)
+        self.switch_bot_button.clicked.connect(self.start_turn_on_bot_thread)
         logger.info("Bot desligado!")
