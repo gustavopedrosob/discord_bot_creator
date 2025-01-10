@@ -202,16 +202,16 @@ class EditMessageWindow(MessageWindow):
         if "expected message" in data:
             expected_messages = data["expected message"]
             if expected_messages:
-                self.listbox_messages.list.addItems(expected_messages)
+                self.listbox_messages.add_items(expected_messages)
 
         if "reply" in data:
             replies = data["reply"]
             if replies:
                 for reply in replies:
                     (
-                        self.listbox_replies.list.addItem("¨".join(reply))
+                        self.listbox_replies.add_item("¨".join(reply))
                         if type(reply) == list
-                        else self.listbox_replies.list.addItem(reply)
+                        else self.listbox_replies.add_item(reply)
                     )
 
         if "reaction" in data:
@@ -219,14 +219,14 @@ class EditMessageWindow(MessageWindow):
             if reaction:
                 list(
                     map(
-                        lambda x: self.listbox_reactions.list.addItem(" ".join(x)),
+                        lambda x: self.listbox_reactions.add_item(" ".join(x)),
                         reaction,
                     )
                 )
         if "conditions" in data:
             conditions = data["conditions"]
             if conditions:
-                self.listbox_conditions.list.addItems(conditions)
+                self.listbox_conditions.add_items(conditions)
 
         if "pin" in data:
             pin = data["pin"]
