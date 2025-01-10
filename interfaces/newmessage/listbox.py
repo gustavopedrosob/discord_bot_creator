@@ -1,6 +1,7 @@
 import typing
 
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QVBoxLayout,
     QListWidget,
@@ -9,6 +10,7 @@ from PySide6.QtWidgets import (
     QListWidgetItem,
     QWidget,
     QComboBox,
+    QMenu,
 )
 
 
@@ -47,3 +49,14 @@ class QListBox(QWidget):
 
     def add_items(self, items: typing.List[str]):
         self.__list.addItems(items)
+
+    def contextMenuEvent(self, event):
+        context_menu = QMenu(self)
+        delete_action = QAction("Remover", self)
+        delete_action.triggered.connect(self.__delete_selected_items)
+        context_menu.addAction(delete_action)
+        context_menu.exec(event.globalPos())
+
+    def __delete_selected_items(self):
+        for item in self.__list.selectedItems():
+            self.__list.takeItem(self.__list.row(item))
