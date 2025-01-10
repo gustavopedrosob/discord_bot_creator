@@ -10,12 +10,12 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QPushButton,
-    QLineEdit,
     QTextEdit,
     QListWidget,
     QLabel,
     QMenuBar,
     QMenu,
+    QComboBox,
 )
 
 from bot import IntegratedBot
@@ -90,9 +90,12 @@ class Main(QMainWindow):
         self.logs_text_edit.setReadOnly(True)
 
         # Command Entry Frame
-        self.cmd_line_edit = QLineEdit()
-        self.cmd_line_edit.setPlaceholderText("Cmd")
-        self.cmd_line_edit.returnPressed.connect(self.entry_command)
+        self.cmd_combobox = QComboBox()
+        self.cmd_combobox.addItems(["clear"])
+        self.cmd_combobox.setEditable(True)
+        self.cmd_combobox.lineEdit().clear()
+        self.cmd_combobox.lineEdit().setPlaceholderText("Cmd")
+        self.cmd_combobox.lineEdit().returnPressed.connect(self.entry_command)
 
         # Token Entry Frame
         self.token_widget = QPassword()
@@ -105,7 +108,7 @@ class Main(QMainWindow):
 
         # Adding Widgets to Right Frame
         right_frame.addWidget(self.logs_text_edit)
-        right_frame.addWidget(self.cmd_line_edit)
+        right_frame.addWidget(self.cmd_combobox)
         right_frame.addWidget(QLabel("Token:"))
         right_frame.addWidget(self.token_widget)
         right_frame.addWidget(self.switch_bot_button)
@@ -170,10 +173,10 @@ class Main(QMainWindow):
 
     def entry_command(self):
         """Handles commands for the bot's log entry."""
-        cmd = self.cmd_line_edit.text()
+        cmd = self.cmd_combobox.lineEdit().text()
         if cmd in ["cls", "clear"]:
             self.logs_text_edit.clear()
-            self.cmd_line_edit.clear()
+            self.cmd_combobox.clear()
 
     def update_token(self):
         """Updates the token in the "config.json" file and in the interface."""
