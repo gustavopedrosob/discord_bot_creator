@@ -84,7 +84,6 @@ class MessageWindow:
 
         delay_label = QLabel("Delay:")
         self.delay = QSpinBox()
-        self.delay.setFixedWidth(250)
 
         # Save and quit button
         save_and_quit_button = QPushButton("Salvar e sair")
