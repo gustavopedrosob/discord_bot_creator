@@ -1,0 +1,37 @@
+from PySide6.QtWidgets import QGridLayout, QWidget, QLabel, QCheckBox
+
+
+class QCheckBoxGroup(QWidget):
+    def __init__(self, label: QLabel):
+        super().__init__()
+        self.__layout = QGridLayout()
+        self.__label = label
+        self.__checkboxes = {}
+        self.__current = None
+        self.__current_name = None
+        self.__layout.addWidget(self.__label, 0, 0)
+        self.setLayout(self.__layout)
+
+    def add_checkbox(self, name: str, checkbox: QCheckBox):
+        checkbox.clicked.connect(lambda r: self.__checkbox_clicked(name, checkbox))
+        self.__layout.addWidget(checkbox, len(self.__checkboxes), 1)
+        self.__checkboxes[name] = checkbox
+
+    def __checkbox_clicked(self, name: str, checkbox: QCheckBox):
+        if name == self.__current_name:
+            self.__current.setChecked(False)
+            self.__current = None
+            self.__current_name = None
+        else:
+            self.__current = checkbox
+            self.__current_name = name
+            for r in self.__checkboxes.values():
+                if r != checkbox:
+                    r.setChecked(False)
+            self.__current.setChecked(True)
+
+    def get_current_name(self) -> str:
+        return self.__current_name
+
+    def get_checkbox(self, name: str) -> QCheckBox:
+        return self.__checkboxes[name]
