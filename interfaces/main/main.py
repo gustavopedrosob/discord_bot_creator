@@ -2,7 +2,7 @@ import logging
 import typing
 from threading import Thread
 
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QAction
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
@@ -13,6 +13,8 @@ from PySide6.QtWidgets import (
     QTextEdit,
     QListWidget,
     QLabel,
+    QMenuBar,
+    QMenu,
 )
 
 from bot import IntegratedBot
@@ -34,6 +36,35 @@ class Main(QMainWindow):
         self.message_window = None
         self.bot = None
         self.bot_thread = None
+
+        # Create the menu bar
+        self.menu_bar = QMenuBar(self)
+        self.setMenuBar(self.menu_bar)
+
+        # Create menus
+        file_menu = QMenu("&Arquivo", self)
+        edit_menu = QMenu("&Editar", self)
+        help_menu = QMenu("&Ajuda", self)
+
+        # Add menus to the menu bar
+        self.menu_bar.addMenu(file_menu)
+        self.menu_bar.addMenu(edit_menu)
+        self.menu_bar.addMenu(help_menu)
+
+        # Create actions
+        exit_action = QAction("&Sair", self)
+        exit_action.triggered.connect(self.close)
+        credits_action = QAction("&Creditos", self)
+        add_message_action = QAction("&Adicionar mensagem", self)
+        add_message_action.triggered.connect(self.new_message)
+        remove_all_message_action = QAction("&Apagar todas mensagens", self)
+        remove_all_message_action.triggered.connect(self.clear_messages)
+
+        # Add actions to the menus
+        file_menu.addAction(exit_action)
+        help_menu.addAction(credits_action)
+        edit_menu.addAction(add_message_action)
+        edit_menu.addAction(remove_all_message_action)
 
         # Central Widget and Layouts
         central_widget = QWidget()
