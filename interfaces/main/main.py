@@ -126,10 +126,10 @@ class Main(QMainWindow):
         edit_messages_button = QPushButton("Editar")
         edit_messages_button.clicked.connect(self.edit_selected_message)
 
-        remove_message_button = QPushButton("Apagar")
+        remove_message_button = QPushButton("Remover")
         remove_message_button.clicked.connect(self.remove_selected_message)
 
-        remove_all_message_button = QPushButton("Apagar todas")
+        remove_all_message_button = QPushButton("Remover todas")
         remove_all_message_button.clicked.connect(self.clear_messages)
 
         # Adding Widgets to Left Frame
