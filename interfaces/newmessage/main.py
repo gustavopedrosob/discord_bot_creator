@@ -8,18 +8,18 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QDialog,
-    QGroupBox,
     QLabel,
     QFrame,
     QComboBox,
     QPushButton,
     QListWidget,
-    QRadioButton,
     QSpinBox,
     QLineEdit,
+    QCheckBox,
 )
 
 from core.functions import have_in
+from interfaces.newmessage.radiogroup import QRadioGroup
 from interpreter.conditions import conditions_keys
 
 
@@ -106,58 +106,34 @@ class MessageWindow:
 
         frame_options = QFrame(self.window)
 
-        # Pin or delete options using QCheckBox instead of QRadioButton
-        self.group_pin_or_del = QGroupBox("Tratativa", frame_options)
-        layout_pin_or_del = QVBoxLayout(self.group_pin_or_del)
+        self.group_pin_or_del = QRadioGroup(QLabel("Ação"))
+        self.group_pin_or_del.add_radio("pin", QCheckBox("Fixar"))
+        self.group_pin_or_del.add_radio("delete", QCheckBox("Deletar"))
+        right_layout.addLayout(self.group_pin_or_del.layout)
 
-        self.pin_checkbox = QRadioButton("Fixar")
+        self.group_kick_or_ban = QRadioGroup(QLabel("Penalidade"))
+        self.group_kick_or_ban.add_radio("kick", QCheckBox("Expulsar"))
+        self.group_kick_or_ban.add_radio("ban", QCheckBox("Banir"))
+        right_layout.addLayout(self.group_kick_or_ban.layout)
 
-        layout_pin_or_del.addWidget(self.pin_checkbox)
-        self.delete_checkbox = QRadioButton("Remover")
-        layout_pin_or_del.addWidget(self.delete_checkbox)
+        self.group_where_reply = QRadioGroup(QLabel("Onde responder"))
+        self.group_where_reply.add_radio("group", QCheckBox("Grupo"))
+        self.group_where_reply.add_radio("private", QCheckBox("Privado"))
+        right_layout.addLayout(self.group_where_reply.layout)
 
-        # Kick or ban options using QCheckBox instead of QRadioButton
-        self.group_kick_or_ban = QGroupBox("Penalidade", frame_options)
-        layout_kick_or_ban = QVBoxLayout(self.group_kick_or_ban)
-
-        self.kick_checkbox = QRadioButton("Expulsar")
-        layout_kick_or_ban.addWidget(self.kick_checkbox)
-        self.ban_checkbox = QRadioButton("Banir")
-        layout_kick_or_ban.addWidget(self.ban_checkbox)
-
-        # Where to reply options using QCheckBox instead of QRadioButton
-        self.group_where_reply = QGroupBox("Onde responder", frame_options)
-        layout_frame_where_reply = QVBoxLayout(self.group_where_reply)
-
-        self.group_checkbox = QRadioButton("Grupo")
-        self.group_checkbox.setObjectName("group")
-        layout_frame_where_reply.addWidget(self.group_checkbox)
-        self.private_checkbox = QRadioButton("Privada")
-        self.private_checkbox.setObjectName("private")
-        layout_frame_where_reply.addWidget(self.private_checkbox)
-
-        # Where to react options using QCheckBox instead of QRadioButton
-        self.group_where_react = QGroupBox("Onde reagir")
-        layout_where_reaction = QVBoxLayout(self.group_where_react)
-
-        self.bot_checkbox = QRadioButton("Bot")
-        self.bot_checkbox.setObjectName("bot")
-        layout_where_reaction.addWidget(self.bot_checkbox)
-        self.author_checkbox = QRadioButton("Autor")
-        self.author_checkbox.setObjectName("author")
-        layout_where_reaction.addWidget(self.author_checkbox)
+        self.group_where_react = QRadioGroup(QLabel("Onde reagir"))
+        self.group_where_react.add_radio("author", QCheckBox("Autor"))
+        self.group_where_react.add_radio("bot", QCheckBox("Bot"))
+        right_layout.addLayout(self.group_where_react.layout)
 
         delay_label = QLabel("Delay:")
         self.delay = QSpinBox()
+        self.delay.setFixedWidth(250)
 
         # Save and quit button
         save_and_quit_button = QPushButton("Salvar e sair", frame_options)
 
         for widget in (
-            self.group_pin_or_del,
-            self.group_kick_or_ban,
-            self.group_where_reply,
-            self.group_where_react,
             delay_label,
             self.delay,
         ):
@@ -289,31 +265,22 @@ class MessageWindow:
             conditions_list if not len(conditions_list) == 0 else None
         )
 
-        if self.pin_checkbox.isChecked():
+        if self.group_pin_or_del.current_name == "pin":
             result["pin"] = True
-        elif self.delete_checkbox.isChecked():
+        elif self.group_pin_or_del.current_name == "delete":
             result["delete"] = True
 
-        selected_where_reply = self.__get_checked(self.group_where_reply)
+        selected_where_reply = self.group_where_reply.current_name
         if selected_where_reply:
             result["where reply"] = selected_where_reply.objectName()
 
-        selected_where_react = self.__get_checked(self.group_where_react)
+        selected_where_react = self.group_where_react.current_name
         if selected_where_react:
             result["where reaction"] = selected_where_react.objectName()
 
         result["delay"] = self.delay.value()
 
         return result
-
-    @staticmethod
-    def __get_checked(groupbox: QGroupBox):
-        """Returns the checked radio button from the groupbox"""
-
-        for child in groupbox.findChildren(QRadioButton):
-            child: QRadioButton
-            if child.isChecked():
-                return child
 
 
 class EditMessageWindow(MessageWindow):
@@ -356,12 +323,12 @@ class EditMessageWindow(MessageWindow):
         if "pin" in data:
             pin = data["pin"]
             if pin:
-                self.pin_checkbox.setChecked(True)
+                self.group_pin_or_del.radios["pin"].setChecked(True)
 
         if "delete" in data:
             delete = data["delete"]
             if delete:
-                self.delete_checkbox.setChecked(True)
+                self.group_pin_or_del.radios["delete"].setChecked(True)
 
         if "delay" in data:
             delay = int(data["delay"])
@@ -370,16 +337,16 @@ class EditMessageWindow(MessageWindow):
         if "where reply" in data:
             where_reply = data["where reply"]
             if where_reply == "group":
-                self.group_checkbox.setChecked(True)
+                self.group_where_reply.radios["group"].setChecked(True)
             else:
-                self.private_checkbox.setChecked(True)
+                self.group_where_reply.radios["private"].setChecked(True)
 
         if "where reaction" in data:
             where_reaction = data["where reaction"]
             if where_reaction == "author":
-                self.author_checkbox.setChecked(True)
+                self.group_where_react.radios["author"].setChecked(True)
             else:
-                self.bot_checkbox.setChecked(True)
+                self.group_where_react.radios["bot"].setChecked(True)
 
 
 class NewMessageWindow(MessageWindow):
