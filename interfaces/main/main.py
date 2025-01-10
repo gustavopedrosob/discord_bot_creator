@@ -72,18 +72,38 @@ class Main(QMainWindow):
                 "https://github.com/gustavopedrosob/bot_discord_easy_creator/issues/new"
             )
         )
-        new_message_action = QAction("&Nova mensagem", self)
-        new_message_action.triggered.connect(self.new_message)
-        remove_all_message_action = QAction("&Remover todas mensagens", self)
-        remove_all_message_action.triggered.connect(self.clear_messages)
+        self.new_message_action = QAction("&Nova mensagem", self)
+        self.new_message_action.triggered.connect(self.new_message)
+        self.new_message_action.setShortcut("Ctrl+N")
+        self.edit_message_action = QAction("&Editar mensagem", self)
+        self.edit_message_action.triggered.connect(self.edit_selected_message)
+        self.edit_message_action.setShortcut("Return")
+        self.remove_selected_message_action = QAction("&Remover mensagem", self)
+        self.remove_selected_message_action.triggered.connect(
+            self.remove_selected_message
+        )
+        self.remove_selected_message_action.setShortcut("Delete")
+        self.remove_all_message_action = QAction("&Remover todas mensagens", self)
+        self.remove_all_message_action.triggered.connect(self.clear_messages)
+        self.remove_all_message_action.setShortcut("Ctrl+Delete")
+
+        self.message_actions = [
+            self.new_message_action,
+            self.edit_message_action,
+            self.remove_selected_message_action,
+            self.remove_all_message_action,
+        ]
+
+        for action in self.message_actions:
+            self.addAction(action)
 
         # Add actions to the menus
         file_menu.addAction(exit_action)
         help_menu.addAction(credits_action)
         help_menu.addAction(project_action)
         help_menu.addAction(report_action)
-        edit_menu.addAction(new_message_action)
-        edit_menu.addAction(remove_all_message_action)
+        edit_menu.addAction(self.new_message_action)
+        edit_menu.addAction(self.remove_all_message_action)
 
         # Central Widget and Layouts
         central_widget = QWidget()
@@ -275,12 +295,6 @@ class Main(QMainWindow):
 
     def message_context_menu_event(self, position: QPoint):
         context_menu = QMenu(self)
-        new_message_action = QAction("Nova", self)
-        new_message_action.triggered.connect(self.new_message)
-        edit_message_action = QAction("Editar", self)
-        edit_message_action.triggered.connect(self.edit_selected_message)
-        remove_message_action = QAction("Deletar", self)
-        remove_message_action.triggered.connect(self.remove_selected_message)
-        for action in [new_message_action, edit_message_action, remove_message_action]:
+        for action in self.message_actions:
             context_menu.addAction(action)
         context_menu.exec(self.messages_list_widget.mapToGlobal(position))
