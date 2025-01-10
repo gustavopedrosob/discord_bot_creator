@@ -65,8 +65,8 @@ class Main(QMainWindow):
                 "https://github.com/gustavopedrosob/bot_discord_easy_creator"
             )
         )
-        add_message_action = QAction("&Adicionar mensagem", self)
-        add_message_action.triggered.connect(self.new_message)
+        new_message_action = QAction("&Nova mensagem", self)
+        new_message_action.triggered.connect(self.new_message)
         remove_all_message_action = QAction("&Apagar todas mensagens", self)
         remove_all_message_action.triggered.connect(self.clear_messages)
 
@@ -74,7 +74,7 @@ class Main(QMainWindow):
         file_menu.addAction(exit_action)
         help_menu.addAction(credits_action)
         help_menu.addAction(project_action)
-        edit_menu.addAction(add_message_action)
+        edit_menu.addAction(new_message_action)
         edit_menu.addAction(remove_all_message_action)
 
         # Central Widget and Layouts
@@ -113,23 +113,26 @@ class Main(QMainWindow):
         # Left Frame for Messages
         left_frame = QVBoxLayout()
 
-        edit_messages_button = QPushButton("Editar mensagem")
-        edit_messages_button.clicked.connect(self.edit_selected_message)
+        message_label = QLabel("Mensagens")
 
         self.messages_list_widget = QListWidget()
 
-        add_message_button = QPushButton("Adicionar mensagem")
-        add_message_button.clicked.connect(self.new_message)
+        new_message_button = QPushButton("Nova")
+        new_message_button.clicked.connect(self.new_message)
 
-        remove_message_button = QPushButton("Apagar mensagem")
+        edit_messages_button = QPushButton("Editar")
+        edit_messages_button.clicked.connect(self.edit_selected_message)
+
+        remove_message_button = QPushButton("Apagar")
         remove_message_button.clicked.connect(self.remove_selected_message)
 
-        remove_all_message_button = QPushButton("Apagar todas mensagens")
+        remove_all_message_button = QPushButton("Apagar todas")
         remove_all_message_button.clicked.connect(self.clear_messages)
 
         # Adding Widgets to Left Frame
+        left_frame.addWidget(message_label)
         left_frame.addWidget(self.messages_list_widget)
-        left_frame.addWidget(add_message_button)
+        left_frame.addWidget(new_message_button)
         left_frame.addWidget(edit_messages_button)
         left_frame.addWidget(remove_message_button)
         left_frame.addWidget(remove_all_message_button)
