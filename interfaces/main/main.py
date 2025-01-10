@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
     QMenuBar,
     QMenu,
     QComboBox,
+    QMessageBox,
 )
 
 from bot import IntegratedBot
@@ -80,11 +81,11 @@ class Main(QMainWindow):
         self.edit_message_action.setShortcut("Return")
         self.remove_selected_message_action = QAction("&Remover mensagem", self)
         self.remove_selected_message_action.triggered.connect(
-            self.remove_selected_message
+            self.confirm_remove_selected_message
         )
         self.remove_selected_message_action.setShortcut("Delete")
         self.remove_all_message_action = QAction("&Remover todas mensagens", self)
-        self.remove_all_message_action.triggered.connect(self.clear_messages)
+        self.remove_all_message_action.triggered.connect(self.confirm_remove_messages)
         self.remove_all_message_action.setShortcut("Ctrl+Delete")
 
         self.message_actions = [
@@ -161,10 +162,10 @@ class Main(QMainWindow):
         edit_messages_button.clicked.connect(self.edit_selected_message)
 
         remove_message_button = QPushButton("Remover")
-        remove_message_button.clicked.connect(self.remove_selected_message)
+        remove_message_button.clicked.connect(self.confirm_remove_selected_message)
 
         remove_all_message_button = QPushButton("Remover todas")
-        remove_all_message_button.clicked.connect(self.clear_messages)
+        remove_all_message_button.clicked.connect(self.confirm_remove_messages)
 
         # Adding Widgets to Left Frame
         left_frame.addWidget(message_label)
@@ -265,7 +266,31 @@ class Main(QMainWindow):
             messages.delete(selected_message)
             messages.save()
 
-    def clear_messages(self):
+    def confirm_remove_selected_message(self):
+        """Asks the user if they want to remove the selected message."""
+        dialog = QMessageBox(self)
+        dialog.setWindowTitle("Remover mensagem")
+        dialog.setText("Deseja remover a mensagem selecionada?")
+        dialog.setStandardButtons(
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        dialog.setDefaultButton(QMessageBox.StandardButton.No)
+        dialog.accepted.connect(self.remove_selected_message)
+        dialog.exec()
+
+    def confirm_remove_messages(self):
+        """Asks the user if they want to remove all messages."""
+        dialog = QMessageBox(self)
+        dialog.setWindowTitle("Remover todas mensagens")
+        dialog.setText("Deseja remover todas as mensagens?")
+        dialog.setStandardButtons(
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        dialog.setDefaultButton(QMessageBox.StandardButton.No)
+        dialog.accepted.connect(self.remove_messages)
+        dialog.exec()
+
+    def remove_messages(self):
         """Removes all messages from the list."""
         self.messages_list_widget.clear()
         messages.clear()
