@@ -73,6 +73,10 @@ class Main(QMainWindow):
                 "https://github.com/gustavopedrosob/bot_discord_easy_creator/issues/new"
             )
         )
+        discord_applications = QAction("&Aplicações do Discord", self)
+        discord_applications.triggered.connect(
+            lambda: webbrowser.open("https://discord.com/developers/applications/")
+        )
         self.new_message_action = QAction("&Nova mensagem", self)
         self.new_message_action.triggered.connect(self.new_message)
         self.new_message_action.setShortcut("Ctrl+N")
@@ -100,9 +104,15 @@ class Main(QMainWindow):
 
         # Add actions to the menus
         file_menu.addAction(exit_action)
-        help_menu.addAction(credits_action)
-        help_menu.addAction(project_action)
-        help_menu.addAction(report_action)
+
+        for action in [
+            discord_applications,
+            credits_action,
+            project_action,
+            report_action,
+        ]:
+            help_menu.addAction(action)
+
         edit_menu.addAction(self.new_message_action)
         edit_menu.addAction(self.remove_all_message_action)
 
