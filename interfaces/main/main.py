@@ -91,14 +91,12 @@ class Main(QMainWindow):
         self.remove_all_message_action.triggered.connect(self.confirm_remove_messages)
         self.remove_all_message_action.setShortcut("Ctrl+Delete")
 
-        self.message_actions = [
+        for action in [
             self.new_message_action,
             self.edit_message_action,
             self.remove_selected_message_action,
             self.remove_all_message_action,
-        ]
-
-        for action in self.message_actions:
+        ]:
             self.addAction(action)
 
         # Add actions to the menus
@@ -329,6 +327,9 @@ class Main(QMainWindow):
 
     def message_context_menu_event(self, position: QPoint):
         context_menu = QMenu(self)
-        for action in self.message_actions:
-            context_menu.addAction(action)
+        context_menu.addAction(self.new_message_action)
+        if self.__is_selecting_message():
+            context_menu.addAction(self.edit_message_action)
+            context_menu.addAction(self.remove_selected_message_action)
+        context_menu.addAction(self.remove_all_message_action)
         context_menu.exec(self.messages_list_widget.mapToGlobal(position))
