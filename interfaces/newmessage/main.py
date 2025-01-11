@@ -132,9 +132,7 @@ class MessageWindow:
             right_layout.addWidget(widget)
 
         right_layout.addStretch()
-
-        buttons_layout = QHBoxLayout()
-        buttons_layout.addWidget(save_and_quit_button)
+        right_layout.addWidget(save_and_quit_button)
 
         horizontal_layout = QHBoxLayout()
         horizontal_layout.addLayout(left_layout)
@@ -145,7 +143,6 @@ class MessageWindow:
         vertical_layout.addWidget(self.name_text)
         vertical_layout.addWidget(self.name_entry)
         vertical_layout.addLayout(horizontal_layout)
-        vertical_layout.addLayout(buttons_layout)
 
         self.window.setLayout(vertical_layout)
 
