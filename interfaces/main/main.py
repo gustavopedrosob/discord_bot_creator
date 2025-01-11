@@ -81,7 +81,7 @@ class Main(QMainWindow):
         self.new_message_action.setShortcut("Ctrl+N")
         self.edit_message_action = QAction("&Editar mensagem", self)
         self.edit_message_action.triggered.connect(self.edit_selected_message)
-        self.edit_message_action.setShortcut("Return")
+        self.edit_message_action.setShortcut("Ctrl+E")
         self.remove_selected_message_action = QAction("&Remover mensagem", self)
         self.remove_selected_message_action.triggered.connect(
             self.confirm_remove_selected_message
