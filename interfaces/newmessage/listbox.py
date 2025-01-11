@@ -31,8 +31,12 @@ class QListBox(QWidget):
         self.setLayout(self.__layout)
 
     def __add_item(self):
-        self.__list.addItem(QListWidgetItem(self.__line_edit.text()))
-        self.__line_edit.clear()
+        if isinstance(self.__line_edit, QComboBox):
+            self.__list.addItem(QListWidgetItem(self.__line_edit.currentText()))
+            self.__line_edit.clearEditText()
+        else:
+            self.__list.addItem(QListWidgetItem(self.__line_edit.text()))
+            self.__line_edit.clear()
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_Delete:
