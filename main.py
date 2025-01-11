@@ -3,7 +3,7 @@ import sys
 
 from PySide6.QtCore import QTranslator
 from PySide6.QtWidgets import QApplication
-
+from core.config import instance as config
 from interfaces.main.main import Main
 
 if __name__ == "__main__":
@@ -14,7 +14,7 @@ if __name__ == "__main__":
     )
     app = QApplication(sys.argv)
     translator = QTranslator()
-    translator.load("translations/en_us.qm")
+    translator.load(f"translations/{config.get("language")}.qm")
     app.installTranslator(translator)
     window = Main()
     window.show()

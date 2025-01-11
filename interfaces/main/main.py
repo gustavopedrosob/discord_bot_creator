@@ -62,9 +62,14 @@ class Main(QMainWindow):
 
         english_action = QAction(QCoreApplication.translate("QMainWindow", "English"), self)
         english_action.triggered.connect(
-            lambda: config.set("language", "en_us")
+            lambda: self.set_language("en_us")
+        )
+        portuguese_action = QAction(QCoreApplication.translate("QMainWindow", "Portuguese"), self)
+        portuguese_action.triggered.connect(
+            lambda: self.set_language("pt_br")
         )
         language_menu.addAction(english_action)
+        language_menu.addAction(portuguese_action)
 
         # Create actions
         exit_action = QAction(QCoreApplication.translate("QMainWindow", "Exit"), self)
@@ -213,6 +218,14 @@ class Main(QMainWindow):
             )
         )
         self.message_window.window.exec()
+
+    def set_language(self, language: str):
+        warning = QMessageBox(self)
+        warning.setWindowTitle(QCoreApplication.translate("QMainWindow", "Warning"))
+        warning.setText(QCoreApplication.translate("QMainWindow", "You need to restart the application to apply the changes."))
+        warning.exec()
+        config.set("language", language)
+        config.save()
 
     @staticmethod
     def get_token():
