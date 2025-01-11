@@ -13,6 +13,7 @@ class QPassword(QFrame):
         self.line_edit = QLineEdit()
         layout.addWidget(self.line_edit)
         self.hide_button = QPushButton()
+        self.hide_button.setFlat(True)
         layout.addWidget(self.hide_button)
 
         self.hide_button.clicked.connect(
