@@ -1,5 +1,4 @@
 import logging
-import typing
 import webbrowser
 from threading import Thread
 
@@ -234,11 +233,8 @@ class Main(QMainWindow):
 
     def edit_selected_message(self):
         """Opens the NewMessage interface and loads saved information."""
-        try:
-            _, selected_message = self.__get_selected_message()
-        except IndexError:
-            pass
-        else:
+        if self.__is_selecting_message():
+            selected_message = self.__get_selected_message_text()
             self.message_window = EditMessageWindow(
                 self, selected_message, messages.get(selected_message)
             )
@@ -261,32 +257,35 @@ class Main(QMainWindow):
         messages.save()
         self.messages_list_widget.addItem(message_name)
 
-    def __get_selected_message(self) -> typing.Tuple[int, str]:
-        index = self.messages_list_widget.selectedIndexes()[0].row()
-        return index, self.messages_list_widget.item(index).text()
+    def __get_selected_message(self) -> int:
+        return self.messages_list_widget.selectedIndexes()[0].row()
+
+    def __get_selected_message_text(self) -> str:
+        return self.messages_list_widget.selectedItems()[0].text()
+
+    def __is_selecting_message(self) -> bool:
+        return bool(self.messages_list_widget.selectedIndexes())
 
     def remove_selected_message(self):
         """Removes the selected message from the messages list and deletes it from "message and reply.json"."""
-        try:
-            selected_row, selected_message = self.__get_selected_message()
-        except IndexError:
-            pass
-        else:
-            self.messages_list_widget.takeItem(selected_row)
-            messages.delete(selected_message)
-            messages.save()
+        selected_row = self.__get_selected_message()
+        selected_message = self.__get_selected_message_text()
+        self.messages_list_widget.takeItem(selected_row)
+        messages.delete(selected_message)
+        messages.save()
 
     def confirm_remove_selected_message(self):
         """Asks the user if they want to remove the selected message."""
-        dialog = QMessageBox(self)
-        dialog.setWindowTitle("Remover mensagem")
-        dialog.setText("Deseja remover a mensagem selecionada?")
-        dialog.setStandardButtons(
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-        )
-        dialog.setDefaultButton(QMessageBox.StandardButton.No)
-        dialog.accepted.connect(self.remove_selected_message)
-        dialog.exec()
+        if self.__is_selecting_message():
+            dialog = QMessageBox(self)
+            dialog.setWindowTitle("Remover mensagem")
+            dialog.setText("Deseja remover a mensagem selecionada?")
+            dialog.setStandardButtons(
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+            dialog.setDefaultButton(QMessageBox.StandardButton.No)
+            dialog.accepted.connect(self.remove_selected_message)
+            dialog.exec()
 
     def confirm_remove_messages(self):
         """Asks the user if they want to remove all messages."""
