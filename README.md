@@ -84,8 +84,23 @@ Podemos configurar as "formas" de resposta, como:
 * Delay na resposta.
 * Remover ou fixar a mensagem.
 
+## Desenvolvendo traduções:
+
+Para iniciar o desenvolvimento de traduções, você precisa ter o Qt Linguist instalado (O Qt Linguist deve estar na 
+pasta do Qt), pois iremos utilizá-lo para traduzir cada widget da interface.
+Vamos começar gerando os arquivos .ts a partir das interfaces, utilize o comando a seguir:
+    
+```
+pyside6-lupdate -recursive -extensions py interfaces/ -ts translations/{lingua}.ts 
+```
+
+Agora abra o arquivo .ts gerado e traduza cada widget, após isso, compile o arquivo .ts para .qm com o comando:
+
+```
+pyside6-lrelease translations/{lingua}.ts
+```
+
+
 ## Implementações futuras:
 
-* Customização de tema da interface.
-* Seleção de linguagem da interface.
 * Reação e respostas aleatórias.

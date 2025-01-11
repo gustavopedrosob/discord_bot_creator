@@ -2,7 +2,7 @@ import logging
 import webbrowser
 from threading import Thread
 
-from PySide6.QtCore import QPoint
+from PySide6.QtCore import QPoint, QCoreApplication
 from PySide6.QtGui import QIcon, QAction, Qt
 from PySide6.QtWidgets import (
     QMainWindow,
@@ -46,48 +46,59 @@ class Main(QMainWindow):
         self.setMenuBar(self.menu_bar)
 
         # Create menus
-        file_menu = QMenu("&Arquivo", self)
-        edit_menu = QMenu("&Editar", self)
-        help_menu = QMenu("&Ajuda", self)
+        file_menu = QMenu(QCoreApplication.translate("QMainWindow", "File"), self)
+        config_menu = QMenu(QCoreApplication.translate("QMainWindow", "Config"), self)
+        edit_menu = QMenu(QCoreApplication.translate("QMainWindow", "Edit"), self)
+        help_menu = QMenu(QCoreApplication.translate("QMainWindow", "Help"), self)
 
         # Add menus to the menu bar
         self.menu_bar.addMenu(file_menu)
+        self.menu_bar.addMenu(config_menu)
         self.menu_bar.addMenu(edit_menu)
         self.menu_bar.addMenu(help_menu)
 
+        language_menu = QMenu(QCoreApplication.translate("QMainWindow", "Language"), self)
+        config_menu.addMenu(language_menu)
+
+        english_action = QAction(QCoreApplication.translate("QMainWindow", "English"), self)
+        english_action.triggered.connect(
+            lambda: config.set("language", "en_us")
+        )
+        language_menu.addAction(english_action)
+
         # Create actions
-        exit_action = QAction("&Sair", self)
+        exit_action = QAction(QCoreApplication.translate("QMainWindow", "Exit"), self)
         exit_action.triggered.connect(self.close)
-        credits_action = QAction("&Creditos", self)
+        credits_action = QAction(QCoreApplication.translate("QMainWindow", "Credits"), self)
         credits_action.triggered.connect(self.credits_window.window.show)
-        project_action = QAction("&Projeto", self)
+        project_action = QAction(QCoreApplication.translate("QMainWindow", "Project"), self)
         project_action.triggered.connect(
             lambda: webbrowser.open(
                 "https://github.com/gustavopedrosob/bot_discord_easy_creator"
             )
         )
-        report_action = QAction("&Reportar bug", self)
+        report_action = QAction(QCoreApplication.translate("QMainWindow", "Report bug"), self)
         report_action.triggered.connect(
             lambda: webbrowser.open(
                 "https://github.com/gustavopedrosob/bot_discord_easy_creator/issues/new"
             )
         )
-        discord_applications = QAction("&Aplicações do Discord", self)
+        discord_applications = QAction(QCoreApplication.translate("QMainWindow", "Discord applications"), self)
         discord_applications.triggered.connect(
             lambda: webbrowser.open("https://discord.com/developers/applications/")
         )
-        self.new_message_action = QAction("&Nova mensagem", self)
+        self.new_message_action = QAction(QCoreApplication.translate("QMainWindow", "New message"), self)
         self.new_message_action.triggered.connect(self.new_message)
         self.new_message_action.setShortcut("Ctrl+N")
-        self.edit_message_action = QAction("&Editar mensagem", self)
+        self.edit_message_action = QAction(QCoreApplication.translate("QMainWindow", "Edit message"), self)
         self.edit_message_action.triggered.connect(self.edit_selected_message)
         self.edit_message_action.setShortcut("Ctrl+E")
-        self.remove_selected_message_action = QAction("&Remover mensagem", self)
+        self.remove_selected_message_action = QAction(QCoreApplication.translate("QMainWindow", "Remove message"), self)
         self.remove_selected_message_action.triggered.connect(
             self.confirm_remove_selected_message
         )
         self.remove_selected_message_action.setShortcut("Delete")
-        self.remove_all_message_action = QAction("&Remover todas mensagens", self)
+        self.remove_all_message_action = QAction(QCoreApplication.translate("QMainWindow", "Remove all messages"), self)
         self.remove_all_message_action.triggered.connect(self.confirm_remove_messages)
         self.remove_all_message_action.setShortcut("Ctrl+Delete")
 
@@ -122,7 +133,7 @@ class Main(QMainWindow):
         # Right Frame for Bot Controls
         right_frame = QVBoxLayout()
         self.logs_text_edit = QTextEdit()
-        self.logs_text_edit.setPlaceholderText("No momento não há logs.")
+        self.logs_text_edit.setPlaceholderText(QCoreApplication.translate("QMainWindow", "No logs at moment"))
         self.logs_text_edit.setReadOnly(True)
 
         # Command Entry Frame
@@ -139,7 +150,7 @@ class Main(QMainWindow):
         self.token_widget.line_edit.returnPressed.connect(self.update_token)
 
         # Execute Bot Button
-        self.switch_bot_button = QPushButton("Ligar bot")
+        self.switch_bot_button = QPushButton(QCoreApplication.translate("QMainWindow", "Turn on bot"))
         self.switch_bot_button.clicked.connect(self.start_turn_on_bot_thread)
 
         # Adding Widgets to Right Frame
@@ -152,7 +163,7 @@ class Main(QMainWindow):
         # Left Frame for Messages
         left_frame = QVBoxLayout()
 
-        message_label = QLabel("Mensagens")
+        message_label = QLabel(QCoreApplication.translate("QMainWindow", "Messages"))
 
         self.messages_list_widget = QListWidget()
         self.messages_list_widget.setContextMenuPolicy(
@@ -162,16 +173,16 @@ class Main(QMainWindow):
             self.message_context_menu_event
         )
 
-        new_message_button = QPushButton("Nova")
+        new_message_button = QPushButton(QCoreApplication.translate("QMainWindow", "New"))
         new_message_button.clicked.connect(self.new_message)
 
-        edit_messages_button = QPushButton("Editar")
+        edit_messages_button = QPushButton(QCoreApplication.translate("QMainWindow", "Edit"))
         edit_messages_button.clicked.connect(self.edit_selected_message)
 
-        remove_message_button = QPushButton("Remover")
+        remove_message_button = QPushButton(QCoreApplication.translate("QMainWindow", "Remove"))
         remove_message_button.clicked.connect(self.confirm_remove_selected_message)
 
-        remove_all_message_button = QPushButton("Remover todas")
+        remove_all_message_button = QPushButton(QCoreApplication.translate("QMainWindow", "Remove all"))
         remove_all_message_button.clicked.connect(self.confirm_remove_messages)
 
         # Adding Widgets to Left Frame
@@ -276,8 +287,8 @@ class Main(QMainWindow):
         """Asks the user if they want to remove the selected message."""
         if self.__is_selecting_message():
             dialog = QMessageBox(self)
-            dialog.setWindowTitle("Remover mensagem")
-            dialog.setText("Deseja remover a mensagem selecionada?")
+            dialog.setWindowTitle(QCoreApplication.translate("QMainWindow", "Remove message"))
+            dialog.setText(QCoreApplication.translate("QMainWindow", "Are you sure you want to remove this message?"))
             dialog.setStandardButtons(
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
             )
@@ -288,8 +299,8 @@ class Main(QMainWindow):
     def confirm_remove_messages(self):
         """Asks the user if they want to remove all messages."""
         dialog = QMessageBox(self)
-        dialog.setWindowTitle("Remover todas mensagens")
-        dialog.setText("Deseja remover todas as mensagens?")
+        dialog.setWindowTitle(QCoreApplication.translate("QMainWindow", "Remove all messages"))
+        dialog.setText(QCoreApplication.translate("QMainWindow", "Are you sure you want to remove all messages?"))
         dialog.setStandardButtons(
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
@@ -313,14 +324,14 @@ class Main(QMainWindow):
         self.logs_text_edit.insertPlainText(message)
 
     def change_init_bot_button(self):
-        self.switch_bot_button.setText("Desligar bot")
+        self.switch_bot_button.setText(QCoreApplication.translate("QMainWindow", "Turn off bot"))
         self.switch_bot_button.clicked.disconnect(self.start_turn_on_bot_thread)
         self.switch_bot_button.clicked.connect(self.turn_off_bot)
 
     def turn_off_bot(self):
         self.bot.client.loop.create_task(self.bot.client.close())
         self.bot_thread.join()
-        self.switch_bot_button.setText("Ligar bot")
+        self.switch_bot_button.setText(QCoreApplication.translate("QMainWindow", "Turn on bot"))
         self.switch_bot_button.clicked.disconnect(self.turn_off_bot)
         self.switch_bot_button.clicked.connect(self.start_turn_on_bot_thread)
         logger.info("Bot desligado!")

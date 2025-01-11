@@ -2,7 +2,7 @@ import re
 import typing
 
 import emoji
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QCoreApplication
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QVBoxLayout,
@@ -32,13 +32,13 @@ class MessageWindow:
         )
         self.window.setWindowIcon(QIcon("source/icons/window-icon.svg"))
         self.window.setMinimumSize(800, 600)
-        self.window.setWindowTitle("Mensagem")
+        self.window.setWindowTitle(QCoreApplication.translate("QMainWindow", "Message"))
 
         left_layout = QVBoxLayout()
         mid_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
 
-        self.name_text = QLabel("Nome:")
+        self.name_text = QLabel(QCoreApplication.translate("QMainWindow", "Name"))
         self.name_entry = QLineEdit()
 
         reactions_combox = QComboBox()
@@ -49,10 +49,10 @@ class MessageWindow:
         conditions_combobox.addItems(conditions_keys)
         conditions_combobox.setEditable(True)
 
-        self.listbox_conditions = QListBox("Condições", conditions_combobox)
-        self.listbox_reactions = QListBox("Reações", reactions_combox)
-        self.listbox_messages = QListBox("Mensagens", QLineEdit())
-        self.listbox_replies = QListBox("Respostas", QLineEdit())
+        self.listbox_conditions = QListBox(QCoreApplication.translate("QMainWindow", "Conditions"), conditions_combobox)
+        self.listbox_reactions = QListBox(QCoreApplication.translate("QMainWindow", "Reactions"), reactions_combox)
+        self.listbox_messages = QListBox(QCoreApplication.translate("QMainWindow", "Messages"), QLineEdit())
+        self.listbox_replies = QListBox(QCoreApplication.translate("QMainWindow", "Replies"), QLineEdit())
 
         for widget in (
             self.listbox_conditions,
@@ -62,31 +62,31 @@ class MessageWindow:
         ):
             left_layout.addWidget(widget)
 
-        self.group_pin_or_del = QCheckBoxGroup(QLabel("Ação:"))
-        self.group_pin_or_del.add_checkbox("pin", QCheckBox("Fixar"))
-        self.group_pin_or_del.add_checkbox("delete", QCheckBox("Deletar"))
+        self.group_pin_or_del = QCheckBoxGroup(QLabel(QCoreApplication.translate("QMainWindow", "Action")))
+        self.group_pin_or_del.add_checkbox("pin", QCheckBox(QCoreApplication.translate("QMainWindow", "Pin")))
+        self.group_pin_or_del.add_checkbox("delete", QCheckBox(QCoreApplication.translate("QMainWindow", "Delete")))
         right_layout.addWidget(self.group_pin_or_del)
 
-        self.group_kick_or_ban = QCheckBoxGroup(QLabel("Penalidade:"))
-        self.group_kick_or_ban.add_checkbox("kick", QCheckBox("Expulsar"))
-        self.group_kick_or_ban.add_checkbox("ban", QCheckBox("Banir"))
+        self.group_kick_or_ban = QCheckBoxGroup(QLabel(QCoreApplication.translate("QMainWindow", "Penalty")))
+        self.group_kick_or_ban.add_checkbox("kick", QCheckBox(QCoreApplication.translate("QMainWindow", "Kick")))
+        self.group_kick_or_ban.add_checkbox("ban", QCheckBox(QCoreApplication.translate("QMainWindow", "Ban")))
         right_layout.addWidget(self.group_kick_or_ban)
 
-        self.group_where_reply = QCheckBoxGroup(QLabel("Onde responder:"))
-        self.group_where_reply.add_checkbox("group", QCheckBox("Grupo"))
-        self.group_where_reply.add_checkbox("private", QCheckBox("Privado"))
+        self.group_where_reply = QCheckBoxGroup(QLabel(QCoreApplication.translate("QMainWindow", "Where reply")))
+        self.group_where_reply.add_checkbox("group", QCheckBox(QCoreApplication.translate("QMainWindow", "Group")))
+        self.group_where_reply.add_checkbox("private", QCheckBox(QCoreApplication.translate("QMainWindow", "Private")))
         right_layout.addWidget(self.group_where_reply)
 
-        self.group_where_react = QCheckBoxGroup(QLabel("Onde reagir:"))
-        self.group_where_react.add_checkbox("author", QCheckBox("Autor"))
-        self.group_where_react.add_checkbox("bot", QCheckBox("Bot"))
+        self.group_where_react = QCheckBoxGroup(QLabel(QCoreApplication.translate("QMainWindow", "Where react")))
+        self.group_where_react.add_checkbox("author", QCheckBox(QCoreApplication.translate("QMainWindow", "Author")))
+        self.group_where_react.add_checkbox("bot", QCheckBox(QCoreApplication.translate("QMainWindow", "Bot")))
         right_layout.addWidget(self.group_where_react)
 
-        delay_label = QLabel("Delay:")
+        delay_label = QLabel(QCoreApplication.translate("QMainWindow", "Delay"))
         self.delay = QSpinBox()
 
         # Save and quit button
-        save_and_quit_button = QPushButton("Salvar e sair")
+        save_and_quit_button = QPushButton(QCoreApplication.translate("QMainWindow", "Save and quit"))
         save_and_quit_button.setAutoDefault(False)
         save_and_quit_button.setDefault(False)
 
