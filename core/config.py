@@ -9,7 +9,7 @@ class Config:
         if os.path.exists("config.yaml"):
             self.load()
         else:
-            self.__content = {}
+            self.__content = {"token": ""}
             self.save()
 
     def load(self):
