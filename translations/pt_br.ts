@@ -88,7 +88,7 @@
     </message>
     <message>
         <location filename="../interfaces/main/main.py" line="106"/>
-        <location filename="../interfaces/main/main.py" line="315"/>
+        <location filename="../interfaces/main/main.py" line="319"/>
         <source>Remove all messages</source>
         <translation>Remover todas mensagens</translation>
     </message>
@@ -99,7 +99,7 @@
     </message>
     <message>
         <location filename="../interfaces/main/main.py" line="158"/>
-        <location filename="../interfaces/main/main.py" line="347"/>
+        <location filename="../interfaces/main/main.py" line="355"/>
         <source>Turn on bot</source>
         <translation>Ligar bot</translation>
     </message>
@@ -140,12 +140,24 @@
         <translation>Você tem certeza que deseja remover esta mensagem?</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="316"/>
+        <location filename="../interfaces/main/main.py" line="309"/>
+        <location filename="../interfaces/main/main.py" line="325"/>
+        <source>Yes</source>
+        <translation>Sim</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/main/main.py" line="311"/>
+        <location filename="../interfaces/main/main.py" line="327"/>
+        <source>No</source>
+        <translation>Não</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/main/main.py" line="320"/>
         <source>Are you sure you want to remove all messages?</source>
         <translation>Você tem certeza que deseja remover todas as mensagens?</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="340"/>
+        <location filename="../interfaces/main/main.py" line="348"/>
         <source>Turn off bot</source>
         <translation>Desligar bot</translation>
     </message>
