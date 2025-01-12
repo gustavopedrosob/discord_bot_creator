@@ -213,6 +213,11 @@ class MessageWindow:
         elif self.group_pin_or_del.get_current_name() == "delete":
             result["delete"] = True
 
+        if self.group_kick_or_ban.get_current_name() == "kick":
+            result["kick"] = True
+        elif self.group_kick_or_ban.get_current_name() == "ban":
+            result["ban"] = True
+
         selected_where_reply = self.group_where_reply.get_current_name()
         if selected_where_reply:
             result["where reply"] = selected_where_reply
@@ -282,6 +287,16 @@ class EditMessageWindow(MessageWindow):
         if "delay" in data:
             delay = int(data["delay"])
             self.delay.setValue(delay)
+
+        if "kick" in data:
+            kick = data["kick"]
+            if kick:
+                self.group_kick_or_ban.get_checkbox("kick").setChecked(True)
+
+        if "ban" in data:
+            ban = data["ban"]
+            if ban:
+                self.group_kick_or_ban.get_checkbox("ban").setChecked(True)
 
         if "where reply" in data:
             where_reply = data["where reply"]
