@@ -61,7 +61,7 @@ class Bot:
                 reaction = (
                     random_choose(reaction) if isinstance(reaction, list) else reaction
                 )
-                reaction = emoji.emojize(reaction)
+                reaction = emoji.emojize(reaction, language="alias")
                 try:
                     if where == "author":
                         await message.add_reaction(reaction)
@@ -130,7 +130,9 @@ class Bot:
                 message, expected_message=expected_message
             )
 
-            conditions_to_confirm = list(map(lambda x: message_condition.string_conditions[x], conditions))
+            conditions_to_confirm = list(
+                map(lambda x: message_condition.string_conditions[x], conditions)
+            )
 
             # é importante adicionar a condição expected message se tiver alguma mensagem esperada porque, senão podem ocorrer erros inesperados.
             if expected_message:
@@ -139,13 +141,20 @@ class Bot:
             logger.info(f"Verificando condições {conditions_to_confirm}")
 
             if all(conditions_to_confirm):
-                if delay: await apply_delay(delay)
-                if reply: await send_reply(reply, message, where_reply)
-                if reaction: await send_reaction(reaction, message, where_reaction)
-                if delete: await remove_message(message)
-                if pin: await pin_message(message)
-                if ban: await ban_member(message.author)
-                if kick: await kick_member(message.author)
+                if delay:
+                    await apply_delay(delay)
+                if reply:
+                    await send_reply(reply, message, where_reply)
+                if reaction:
+                    await send_reaction(reaction, message, where_reaction)
+                if delete:
+                    await remove_message(message)
+                if pin:
+                    await pin_message(message)
+                if ban:
+                    await ban_member(message.author)
+                if kick:
+                    await kick_member(message.author)
 
     def run(self):
         try:
