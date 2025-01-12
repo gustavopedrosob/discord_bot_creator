@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import typing
 
 import discord
 import emoji
@@ -35,11 +36,9 @@ class Bot:
                     expected_message=message_data.get("expected message"),
                     reply=message_data.get("reply"),
                     reaction=message_data.get("reaction"),
-                    delete=message_data.get("delete"),
-                    pin=message_data.get("pin"),
                     delay=message_data.get("delay"),
-                    kick=message_data.get("kick"),
-                    ban=message_data.get("ban"),
+                    pin_or_del=message_data.get("pin or del"),
+                    kick_or_ban=message_data.get("kick or ban"),
                     where_reply=message_data.get("where reply"),
                     where_reaction=message_data.get("where reaction"),
                 )
@@ -122,11 +121,9 @@ class Bot:
             expected_message: str,
             reply: list[str],
             reaction: list[str],
-            delete: bool,
-            pin: bool,
             delay: int,
-            ban: bool,
-            kick: bool,
+            pin_or_del: typing.Optional[str],
+            kick_or_ban: typing.Optional[str],
             where_reply: str = "group",
             where_reaction: str = "author",
         ):
@@ -154,13 +151,13 @@ class Bot:
                     )
                 if where_reaction == "author":
                     await send_reaction(reaction, message)
-                if delete:
+                if pin_or_del == "delete":
                     await remove_message(message)
-                if pin:
+                if pin_or_del == "pin":
                     await pin_message(message)
-                if ban:
+                if kick_or_ban == "ban":
                     await ban_member(message.author)
-                if kick:
+                if kick_or_ban == "kick":
                     await kick_member(message.author)
 
     def run(self):

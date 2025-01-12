@@ -208,15 +208,13 @@ class MessageWindow:
             conditions_list if not len(conditions_list) == 0 else None
         )
 
-        if self.group_pin_or_del.get_current_name() == "pin":
-            result["pin"] = True
-        elif self.group_pin_or_del.get_current_name() == "delete":
-            result["delete"] = True
+        pin_or_del = self.group_pin_or_del.get_current_name()
+        if pin_or_del:
+            result["pin or del"] = pin_or_del
 
-        if self.group_kick_or_ban.get_current_name() == "kick":
-            result["kick"] = True
-        elif self.group_kick_or_ban.get_current_name() == "ban":
-            result["ban"] = True
+        kick_or_ban = self.group_kick_or_ban.get_current_name()
+        if kick_or_ban:
+            result["kick or ban"] = kick_or_ban
 
         selected_where_reply = self.group_where_reply.get_current_name()
         if selected_where_reply:
@@ -274,28 +272,22 @@ class EditMessageWindow(MessageWindow):
             if conditions:
                 self.listbox_conditions.add_items(conditions)
 
-        if "pin" in data:
-            pin = data["pin"]
-            if pin:
+        if "pin or del" in data:
+            pin_or_del = data["pin or del"]
+            if pin_or_del == "pin":
                 self.group_pin_or_del.get_checkbox("pin").setChecked(True)
-
-        if "delete" in data:
-            delete = data["delete"]
-            if delete:
+            elif pin_or_del == "delete":
                 self.group_pin_or_del.get_checkbox("delete").setChecked(True)
 
         if "delay" in data:
             delay = int(data["delay"])
             self.delay.setValue(delay)
 
-        if "kick" in data:
-            kick = data["kick"]
-            if kick:
+        if "kick or ban" in data:
+            kick_or_ban = data["kick or ban"]
+            if kick_or_ban == "kick":
                 self.group_kick_or_ban.get_checkbox("kick").setChecked(True)
-
-        if "ban" in data:
-            ban = data["ban"]
-            if ban:
+            elif kick_or_ban == "ban":
                 self.group_kick_or_ban.get_checkbox("ban").setChecked(True)
 
         if "where reply" in data:
