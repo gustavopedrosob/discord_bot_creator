@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QCheckBox,
 )
 
-from core.functions import have_in
+from core.functions import have_in, raise_emoji_popup
 from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
 from interpreter.conditions import conditions_keys
@@ -42,9 +42,8 @@ class MessageWindow:
         self.name_text = QLabel(QCoreApplication.translate("QMainWindow", "Name"))
         self.name_entry = QLineEdit()
 
-        reactions_combox = QComboBox()
-        reactions_combox.addItems([v["en"] for v in emoji.EMOJI_DATA.values()])
-        reactions_combox.setEditable(True)
+        reactions_line_edit = QLineEdit()
+        reactions_line_edit.mousePressEvent = lambda event: raise_emoji_popup()
 
         conditions_combobox = QComboBox()
         conditions_combobox.addItems(conditions_keys)
@@ -54,7 +53,7 @@ class MessageWindow:
             QCoreApplication.translate("QMainWindow", "Conditions"), conditions_combobox
         )
         self.listbox_reactions = QListBox(
-            QCoreApplication.translate("QMainWindow", "Reactions"), reactions_combox
+            QCoreApplication.translate("QMainWindow", "Reactions"), reactions_line_edit
         )
         self.listbox_messages = QListBox(
             QCoreApplication.translate("QMainWindow", "Messages"), QLineEdit()
@@ -194,7 +193,9 @@ class MessageWindow:
         result["reaction"] = (
             list(
                 map(
-                    lambda reactions: re.findall(r":[a-zA-Z_0-9]+:", reactions),
+                    lambda reactions: [
+                        emoji.demojize(reaction) for reaction in reactions
+                    ],
                     reactions_list,
                 )
             )
@@ -247,14 +248,22 @@ class EditMessageWindow(MessageWindow):
                     )
 
         if "reaction" in data:
-            reaction = data["reaction"]
-            if reaction:
+            reactions = data["reaction"]
+            if reactions:
                 list(
                     map(
-                        lambda x: self.listbox_reactions.add_item(" ".join(x)),
-                        reaction,
+                        lambda reaction: self.listbox_reactions.add_item(
+                            "".join(
+                                map(
+                                    lambda r: emoji.emojize(r, language="alias"),
+                                    reaction,
+                                )
+                            )
+                        ),
+                        reactions,
                     )
                 )
+
         if "conditions" in data:
             conditions = data["conditions"]
             if conditions:
