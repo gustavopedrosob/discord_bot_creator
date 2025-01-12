@@ -53,9 +53,7 @@ class Bot:
             await asyncio.sleep(delay)
 
         @self.client.event
-        async def send_reaction(
-            reactions: list[str], message: discord.Message, where: str
-        ):
+        async def send_reaction(reactions: list[str], message: discord.Message):
             for reaction in reactions:
                 code_reaction = reaction
                 reaction = (
@@ -63,10 +61,7 @@ class Bot:
                 )
                 reaction = emoji.emojize(reaction, language="alias")
                 try:
-                    if where == "author":
-                        await message.add_reaction(reaction)
-                    elif where == "bot" and message.author.bot:
-                        await message.add_reaction(reaction)
+                    await message.add_reaction(reaction)
                     logger.info(
                         f'Adicionando a reação "{code_reaction}" a mensagem "{emoji.demojize(message.content)}" do autor {message.author}.'
                     )
@@ -74,15 +69,25 @@ class Bot:
                     print(reaction)
 
         @self.client.event
-        async def send_reply(replies: list[str], message: discord.Message, where: str):
+        async def send_reply(
+            replies: list[str],
+            reactions: list[str],
+            message: discord.Message,
+            where: str,
+            where_reaction: str,
+        ):
             for reply in replies:
                 reply = random_choose(reply) if isinstance(reply, list) else reply
                 reply = Variable(message).apply_variable(reply)
                 if where == "group":
-                    await message.channel.send(reply)
+                    message = await message.channel.send(reply)
+                    if where_reaction == "bot":
+                        await send_reaction(reactions, message)
                 elif where == "private":
                     dm_channel = await message.author.create_dm()
-                    await dm_channel.send(reply)
+                    message = await dm_channel.send(reply)
+                    if where_reaction == "bot":
+                        await send_reaction(reactions, message)
                 logger.info(
                     f'Enviando a resposta "{reply}" à mensagem "{emoji.demojize(message.content)}" do autor {message.author}.'
                 )
@@ -144,9 +149,11 @@ class Bot:
                 if delay:
                     await apply_delay(delay)
                 if reply:
-                    await send_reply(reply, message, where_reply)
-                if reaction:
-                    await send_reaction(reaction, message, where_reaction)
+                    await send_reply(
+                        reply, reaction, message, where_reply, where_reaction
+                    )
+                if where_reaction == "author":
+                    await send_reaction(reaction, message)
                 if delete:
                     await remove_message(message)
                 if pin:
