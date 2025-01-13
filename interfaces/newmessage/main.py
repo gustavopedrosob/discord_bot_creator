@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
     QSpinBox,
     QLineEdit,
     QCheckBox,
+    QMessageBox,
 )
 
 from core.functions import have_in, raise_emoji_popup
@@ -147,8 +148,31 @@ class MessageWindow:
         save_and_quit_button.clicked.connect(self.on_save_and_quit)
 
     def on_save_and_quit(self):
-        # Adicionar validação de campos
+        if self.__has_opposite_conditions():
+            message_box = QMessageBox()
+            message_box.setWindowTitle(
+                QCoreApplication.translate("QMainWindow", "Opposite conditions")
+            )
+            message_box.setWindowIcon(QIcon("source/icons/window-icon.svg"))
+            message_box.setText(
+                QCoreApplication.translate(
+                    "QMainWindow",
+                    "You can't have opposite conditions, please remove them.",
+                )
+            )
+            message_box.exec()
+            return
         self.window.accept()
+
+    def __has_opposite_conditions(self) -> bool:
+        conditions = self.listbox_conditions.get_items_text()
+        for condition in conditions:
+            opposite_condition = (
+                condition[4:] if condition.startswith("not ") else f"not {condition}"
+            )
+            if opposite_condition in conditions:
+                return True
+        return False
 
     def get_name(self):
         return self.name_entry.text()
