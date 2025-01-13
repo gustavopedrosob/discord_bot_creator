@@ -47,7 +47,6 @@ class MessageWindow:
 
         conditions_combobox = QComboBox()
         conditions_combobox.addItems(conditions_keys)
-        conditions_combobox.setEditable(True)
 
         self.listbox_conditions = QListBox(
             QCoreApplication.translate("QMainWindow", "Conditions"), conditions_combobox

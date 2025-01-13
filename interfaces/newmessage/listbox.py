@@ -24,10 +24,6 @@ class QListBox(QWidget):
         self.__layout.addWidget(self.__label)
         self.__layout.addWidget(self.__list)
         self.__layout.addWidget(self.__line_edit)
-        if isinstance(self.__line_edit, QComboBox):
-            self.__line_edit.lineEdit().returnPressed.connect(self.__add_item)
-        else:
-            self.__line_edit.returnPressed.connect(self.__add_item)
         self.setLayout(self.__layout)
 
     def __add_item(self):
@@ -42,6 +38,8 @@ class QListBox(QWidget):
         if event.key() == Qt.Key.Key_Delete:
             for item in self.__list.selectedItems():
                 self.__list.takeItem(self.__list.row(item))
+        elif event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
+            self.__add_item()
         else:
             super().keyPressEvent(event)
 
