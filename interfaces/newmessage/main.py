@@ -18,6 +18,7 @@ from PySide6.QtWidgets import (
 )
 
 from core.functions import have_in, raise_emoji_popup
+from core.messages import messages
 from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
 from interpreter.conditions import conditions_keys
@@ -146,8 +147,25 @@ class MessageWindow:
 
         save_and_quit_button.clicked.connect(self.on_save_and_quit)
 
+    @staticmethod
+    def __is_name_new():
+        return True
+
     def on_save_and_quit(self):
-        if self.__has_opposite_conditions():
+        if self.get_name() in messages.message_names() and self.__is_name_new():
+            message_box = QMessageBox()
+            message_box.setWindowTitle(
+                QCoreApplication.translate("QMainWindow", "Name already exists")
+            )
+            message_box.setWindowIcon(QIcon("source/icons/window-icon.svg"))
+            message_box.setText(
+                QCoreApplication.translate(
+                    "QMainWindow",
+                    "You can't set a message with a name that already exists.",
+                )
+            )
+            message_box.exec()
+        elif self.__has_opposite_conditions():
             message_box = QMessageBox()
             message_box.setWindowTitle(
                 QCoreApplication.translate("QMainWindow", "Opposite conditions")
@@ -160,8 +178,8 @@ class MessageWindow:
                 )
             )
             message_box.exec()
-            return
-        self.window.accept()
+        else:
+            self.window.accept()
 
     def __has_opposite_conditions(self) -> bool:
         conditions = self.listbox_conditions.get_items_text()
@@ -268,6 +286,7 @@ class MessageWindow:
 class EditMessageWindow(MessageWindow):
     def __init__(self, app, name: str, data: dict):
         super().__init__(app)
+        self.__name = name
         self.name_entry.setText(name)
 
         if "expected message" in data:
@@ -338,6 +357,9 @@ class EditMessageWindow(MessageWindow):
                 self.group_where_react.get_checkbox("author").setChecked(True)
             else:
                 self.group_where_react.get_checkbox("bot").setChecked(True)
+
+    def __is_name_new(self) -> bool:
+        return self.get_name() != self.__name
 
 
 class NewMessageWindow(MessageWindow):
