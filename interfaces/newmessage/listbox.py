@@ -1,7 +1,7 @@
 import typing
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QAction
+from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QVBoxLayout,
     QListWidget,
@@ -11,7 +11,10 @@ from PySide6.QtWidgets import (
     QWidget,
     QComboBox,
     QMenu,
+    QHBoxLayout,
 )
+
+from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
 
 
 class QListBox(QWidget):
@@ -20,10 +23,18 @@ class QListBox(QWidget):
         self.__layout = QVBoxLayout()
         self.__list = QListWidget()
         self.__label = QLabel(title)
+        self.__add_button = QColorResponsiveButton()
+        self.__add_button.setIcon(QIcon("source/icons/plus-solid"))
+        self.__add_button.clicked.connect(self.__add_item)
+        self.__add_button.setFlat(True)
         self.__line_edit = line_edit
+        self.__horizontal_layout = QHBoxLayout()
+        self.__horizontal_layout.addWidget(self.__line_edit)
+        self.__horizontal_layout.addWidget(self.__add_button)
+        self.__horizontal_layout.setStretch(0, True)
         self.__layout.addWidget(self.__label)
         self.__layout.addWidget(self.__list)
-        self.__layout.addWidget(self.__line_edit)
+        self.__layout.addLayout(self.__horizontal_layout)
         self.setLayout(self.__layout)
 
     def __add_item(self):
