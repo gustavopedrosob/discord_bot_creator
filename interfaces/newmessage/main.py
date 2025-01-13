@@ -76,9 +76,9 @@ class MessageWindow:
         self.group_pin_or_del.add_checkbox(
             "pin", QCheckBox(QCoreApplication.translate("QMainWindow", "Pin"))
         )
-        self.group_pin_or_del.add_checkbox(
-            "delete", QCheckBox(QCoreApplication.translate("QMainWindow", "Delete"))
-        )
+        del_checkbox = QCheckBox(QCoreApplication.translate("QMainWindow", "Delete"))
+        del_checkbox.checkStateChanged.connect(self.__del_checked)
+        self.group_pin_or_del.add_checkbox("delete", del_checkbox)
         right_layout.addWidget(self.group_pin_or_del)
 
         self.group_kick_or_ban = QCheckBoxGroup(
@@ -106,9 +106,9 @@ class MessageWindow:
         self.group_where_react = QCheckBoxGroup(
             QLabel(QCoreApplication.translate("QMainWindow", "Where react"))
         )
-        self.group_where_react.add_checkbox(
-            "author", QCheckBox(QCoreApplication.translate("QMainWindow", "Author"))
-        )
+        author_checkbox = QCheckBox(QCoreApplication.translate("QMainWindow", "Author"))
+        author_checkbox.checkStateChanged.connect(self.__author_checked)
+        self.group_where_react.add_checkbox("author", author_checkbox)
         self.group_where_react.add_checkbox(
             "bot", QCheckBox(QCoreApplication.translate("QMainWindow", "Bot"))
         )
@@ -153,6 +153,20 @@ class MessageWindow:
 
     def get_name(self):
         return self.name_entry.text()
+
+    def __del_checked(self, check_state: int):
+        author_checkbox = self.group_where_react.get_checkbox("author")
+        if check_state == Qt.CheckState.Checked:
+            author_checkbox.setDisabled(True)
+        else:
+            author_checkbox.setDisabled(False)
+
+    def __author_checked(self, check_state: int):
+        del_checkbox = self.group_pin_or_del.get_checkbox("delete")
+        if check_state == Qt.CheckState.Checked:
+            del_checkbox.setDisabled(True)
+        else:
+            del_checkbox.setDisabled(False)
 
     @staticmethod
     def insert_on_listbox(
