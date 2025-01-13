@@ -269,7 +269,6 @@ class EditMessageWindow(MessageWindow):
     def __init__(self, app, name: str, data: dict):
         super().__init__(app)
         self.name_entry.setText(name)
-        self.name_entry.setEnabled(False)
 
         if "expected message" in data:
             expected_messages = data["expected message"]

@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
     QMenu,
     QComboBox,
     QMessageBox,
+    QListWidgetItem,
 )
 
 from bot import IntegratedBot
@@ -298,15 +299,22 @@ class Main(QMainWindow):
             )
             self.message_window.window.accepted.connect(
                 lambda: self.accepted_edit_selected_message(
-                    selected_message, self.message_window.get_data()
+                    selected_message,
+                    self.message_window.get_name(),
+                    self.message_window.get_data(),
                 )
             )
             self.message_window.window.exec()
 
-    @staticmethod
-    def accepted_edit_selected_message(message_name: str, message_data: dict):
-        messages.set(message_name, message_data)
+    def accepted_edit_selected_message(
+        self, old_message_name: str, new_message_name: str, message_data: dict
+    ):
+        if not new_message_name:
+            new_message_name = old_message_name
+        messages.delete(old_message_name)
+        messages.set(new_message_name, message_data)
         messages.save()
+        self.__get_list_item_message(old_message_name).setText(new_message_name)
 
     def accepted_new_message(self, message_name: str, message_data: dict):
         if not message_name:
@@ -317,6 +325,16 @@ class Main(QMainWindow):
 
     def __get_selected_message(self) -> int:
         return self.messages_list_widget.selectedIndexes()[0].row()
+
+    def __get_list_item_message(self, message: str) -> QListWidgetItem:
+        return self.messages_list_widget.item(
+            next(
+                filter(
+                    lambda i: self.messages_list_widget.item(i).text() == message,
+                    range(self.messages_list_widget.count()),
+                )
+            )
+        )
 
     def __get_selected_message_text(self) -> str:
         return self.messages_list_widget.selectedItems()[0].text()
