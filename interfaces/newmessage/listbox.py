@@ -45,6 +45,9 @@ class QListBox(QWidget):
         else:
             super().keyPressEvent(event)
 
+    def __is_selecting(self) -> bool:
+        return bool(self.__list.selectedItems())
+
     def get_items_text(self) -> typing.List[str]:
         return [self.__list.item(i).text() for i in range(self.__list.count())]
 
@@ -55,11 +58,12 @@ class QListBox(QWidget):
         self.__list.addItems(items)
 
     def contextMenuEvent(self, event):
-        context_menu = QMenu(self)
-        delete_action = QAction("Remover", self)
-        delete_action.triggered.connect(self.__delete_selected_items)
-        context_menu.addAction(delete_action)
-        context_menu.exec(event.globalPos())
+        if self.__is_selecting():
+            context_menu = QMenu(self)
+            delete_action = QAction("Remover", self)
+            delete_action.triggered.connect(self.__delete_selected_items)
+            context_menu.addAction(delete_action)
+            context_menu.exec(event.globalPos())
 
     def __delete_selected_items(self):
         for item in self.__list.selectedItems():
