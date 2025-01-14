@@ -18,36 +18,21 @@ from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
 
 
 class QListBox(QWidget):
-    def __init__(self, title: str, line_edit: typing.Union[QLineEdit, QComboBox]):
+    def __init__(self, line_edit: typing.Union[QLineEdit, QComboBox]):
         super().__init__()
-        self.__collapsed = False
-        self.__widget = QWidget()
         self.__list = QListWidget()
-        self.__collapse_button = QColorResponsiveButton()
-        self.__collapse_button.setIcon(QIcon("source/icons/angle-down-solid.svg"))
-        self.__collapse_button.setFlat(True)
-        self.__collapse_button.clicked.connect(self.__collapse)
-        self.__label = QLabel(title)
         self.__add_button = QColorResponsiveButton()
         self.__add_button.setIcon(QIcon("source/icons/plus-solid"))
         self.__add_button.clicked.connect(self.__add_item)
         self.__add_button.setFlat(True)
         self.__line_edit = line_edit
-        self.__header_layout = QHBoxLayout()
-        self.__header_layout.addWidget(self.__collapse_button)
-        self.__header_layout.addWidget(self.__label)
-        self.__header_layout.setStretch(1, True)
         self.__horizontal_layout = QHBoxLayout()
         self.__horizontal_layout.addWidget(self.__line_edit)
         self.__horizontal_layout.addWidget(self.__add_button)
         self.__horizontal_layout.setStretch(0, True)
-        self.__widget_layout = QVBoxLayout()
-        self.__widget_layout.addWidget(self.__list)
-        self.__widget_layout.addLayout(self.__horizontal_layout)
-        self.__widget.setLayout(self.__widget_layout)
         self.__layout = QVBoxLayout()
-        self.__layout.addLayout(self.__header_layout)
-        self.__layout.addWidget(self.__widget)
+        self.__layout.addWidget(self.__list)
+        self.__layout.addLayout(self.__horizontal_layout)
         self.setLayout(self.__layout)
 
     def __add_item(self):
@@ -57,15 +42,6 @@ class QListBox(QWidget):
         else:
             self.__list.addItem(QListWidgetItem(self.__line_edit.text()))
             self.__line_edit.clear()
-
-    def __collapse(self):
-        if self.__collapsed:
-            self.__widget.show()
-            self.__collapse_button.setIcon(QIcon("source/icons/angle-down-solid.svg"))
-        else:
-            self.__widget.hide()
-            self.__collapse_button.setIcon(QIcon("source/icons/angle-right-solid.svg"))
-        self.__collapsed = not self.__collapsed
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_Delete:

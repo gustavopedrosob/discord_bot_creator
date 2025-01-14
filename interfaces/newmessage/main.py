@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
 
 from core.functions import have_in, raise_emoji_popup
 from core.messages import messages
+from interfaces.classes.collapse_group import QCollapseGroup
 from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
 from interpreter.conditions import conditions_keys
@@ -49,24 +50,30 @@ class MessageWindow:
         conditions_combobox = QComboBox()
         conditions_combobox.addItems(conditions_keys)
 
-        self.listbox_conditions = QListBox(
-            QCoreApplication.translate("QMainWindow", "Conditions"), conditions_combobox
+        self.listbox_conditions = QListBox(conditions_combobox)
+        collapse_conditions = QCollapseGroup(
+            QCoreApplication.translate("QMainWindow", "Conditions"),
+            self.listbox_conditions,
         )
-        self.listbox_reactions = QListBox(
-            QCoreApplication.translate("QMainWindow", "Reactions"), reactions_line_edit
+        self.listbox_reactions = QListBox(reactions_line_edit)
+        collapse_reactions = QCollapseGroup(
+            QCoreApplication.translate("QMainWindow", "Conditions"),
+            self.listbox_reactions,
         )
-        self.listbox_messages = QListBox(
-            QCoreApplication.translate("QMainWindow", "Messages"), QLineEdit()
+        self.listbox_messages = QListBox(QLineEdit())
+        collapse_messages = QCollapseGroup(
+            QCoreApplication.translate("QMainWindow", "Messages"), self.listbox_messages
         )
-        self.listbox_replies = QListBox(
-            QCoreApplication.translate("QMainWindow", "Replies"), QLineEdit()
+        self.listbox_replies = QListBox(QLineEdit())
+        collapse_replies = QCollapseGroup(
+            QCoreApplication.translate("QMainWindow", "Replies"), self.listbox_replies
         )
 
         for widget in (
-            self.listbox_conditions,
-            self.listbox_reactions,
-            self.listbox_messages,
-            self.listbox_replies,
+            collapse_conditions,
+            collapse_reactions,
+            collapse_messages,
+            collapse_replies,
         ):
             left_layout.addWidget(widget)
 
