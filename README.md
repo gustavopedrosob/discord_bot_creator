@@ -13,12 +13,13 @@ de executar o bot.
 
 ##### Linguagens:
 
-* [Python 3](https://www.python.org/downloads/)
+* [Python 3.12.6](https://www.python.org/downloads/release/python-3126/)
 
 ##### Bibliotecas Python:
 
 * Discord
 * Emoji
+* Emojis
 
 #### Instalação:
 
