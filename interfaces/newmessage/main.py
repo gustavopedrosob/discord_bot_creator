@@ -1,7 +1,7 @@
 import typing
 
 import emoji
-from PySide6.QtCore import Qt, QCoreApplication
+from PySide6.QtCore import Qt, QCoreApplication, QPoint
 from PySide6.QtGui import QIcon, QMouseEvent
 from PySide6.QtWidgets import (
     QVBoxLayout,
@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
 from core.functions import have_in
 from core.messages import messages
 from interfaces.classes.collapse_group import QCollapseGroup
+from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
 from interfaces.classes.emoji_picker import QEmojiPickerPopup
 from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
@@ -48,7 +49,6 @@ class MessageWindow:
         self.name_entry = QLineEdit()
 
         reactions_line_edit = QLineEdit()
-        reactions_line_edit.mousePressEvent = self.__raise_emote_popup
 
         conditions_combobox = QComboBox()
         conditions_combobox.addItems(conditions_keys)
@@ -59,6 +59,13 @@ class MessageWindow:
             self.listbox_conditions,
         )
         self.listbox_reactions = QListBox(reactions_line_edit)
+        emote_button = QColorResponsiveButton()
+        emote_button.setIcon(QIcon("source/icons/face-smile-solid.svg"))
+        emote_button.setFlat(True)
+        emote_button.clicked.connect(
+            lambda: self.__raise_emote_popup(emote_button.mapToGlobal(QPoint(0, 0)))
+        )
+        self.listbox_reactions.entry_layout().addWidget(emote_button)
         collapse_reactions = QCollapseGroup(
             QCoreApplication.translate("QMainWindow", "Reactions"),
             self.listbox_reactions,
@@ -161,8 +168,8 @@ class MessageWindow:
             lambda text: reactions_line_edit.setText(reactions_line_edit.text() + text)
         )
 
-    def __raise_emote_popup(self, event: QMouseEvent):
-        self.emoji_picker_popup.move(event.globalPos())
+    def __raise_emote_popup(self, point: QPoint):
+        self.emoji_picker_popup.move(point.x() - 500, point.y() - 500)
         self.emoji_picker_popup.exec()
 
     @staticmethod

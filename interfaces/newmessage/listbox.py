@@ -64,6 +64,9 @@ class QListBox(QWidget):
     def add_items(self, items: typing.List[str]):
         self.__list.addItems(items)
 
+    def entry_layout(self) -> QHBoxLayout:
+        return self.__horizontal_layout
+
     def contextMenuEvent(self, event):
         if self.__is_selecting():
             context_menu = QMenu(self)
