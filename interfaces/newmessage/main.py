@@ -156,6 +156,10 @@ class MessageWindow:
         self.window.setLayout(vertical_layout)
 
         save_and_quit_button.clicked.connect(self.on_save_and_quit)
+        emoji_picker = self.emoji_picker_popup.emoji_picker()
+        emoji_picker.emoji_click.connect(
+            lambda text: reactions_line_edit.setText(reactions_line_edit.text() + text)
+        )
 
     def __raise_emote_popup(self, event: QMouseEvent):
         self.emoji_picker_popup.move(event.globalPos())

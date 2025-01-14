@@ -1,6 +1,6 @@
 import typing
 
-from PySide6.QtCore import QPoint, QCoreApplication, QSize
+from PySide6.QtCore import QPoint, QCoreApplication, QSize, Signal
 from PySide6.QtGui import QIcon, QFont, QAction, Qt
 from PySide6.QtWidgets import (
     QVBoxLayout,
@@ -119,6 +119,7 @@ class QEmojiGrid(QWidget):
 
 
 class QEmojiPicker(QWidget):
+    emoji_click = Signal(str)
     bottom_font = QFont()
     bottom_font.setBold(True)
     bottom_font.setPointSize(16)
@@ -246,16 +247,16 @@ class QEmojiPicker(QWidget):
             emoji_grid.add_emoji(emoji_button)
 
     def __bind_emoji_button(self, emoji_button: QEmojiButton):
-        emoji_button.enterEvent = lambda event: self.__mouse_enter_emoji(
-            emoji_button.emoji()
-        )
+        emoji = emoji_button.emoji()
+        emoji_button.enterEvent = lambda event: self.__mouse_enter_emoji(emoji)
         emoji_button.leaveEvent = lambda event: self.__mouse_leave_emoji()
         emoji_button.on_favorite.triggered.connect(
-            lambda event: self.add_favorite(emoji_button.emoji())
+            lambda event: self.add_favorite(emoji)
         )
         emoji_button.on_remove_favorite.triggered.connect(
-            lambda event: self.remove_favorite(emoji_button.emoji())
+            lambda event: self.remove_favorite(emoji)
         )
+        emoji_button.pressed.connect(lambda: self.emoji_click.emit(emoji.emoji))
 
     def add_favorite(self, emoji: Emoji):
         emoji_button = self.emoji_button(emoji)
