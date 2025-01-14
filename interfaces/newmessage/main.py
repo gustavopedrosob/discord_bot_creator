@@ -2,7 +2,7 @@ import typing
 
 import emoji
 from PySide6.QtCore import Qt, QCoreApplication
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QMouseEvent
 from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
@@ -17,9 +17,10 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
-from core.functions import have_in, raise_emoji_popup
+from core.functions import have_in
 from core.messages import messages
 from interfaces.classes.collapse_group import QCollapseGroup
+from interfaces.classes.emoji_picker import QEmojiPickerPopup
 from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
 from interpreter.conditions import conditions_keys
@@ -37,6 +38,8 @@ class MessageWindow:
         self.window.resize(800, 600)
         self.window.setWindowTitle(QCoreApplication.translate("QMainWindow", "Message"))
 
+        self.emoji_picker_popup = QEmojiPickerPopup()
+
         left_layout = QVBoxLayout()
         mid_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
@@ -45,7 +48,7 @@ class MessageWindow:
         self.name_entry = QLineEdit()
 
         reactions_line_edit = QLineEdit()
-        reactions_line_edit.mousePressEvent = lambda event: raise_emoji_popup()
+        reactions_line_edit.mousePressEvent = self.__raise_emote_popup
 
         conditions_combobox = QComboBox()
         conditions_combobox.addItems(conditions_keys)
@@ -57,7 +60,7 @@ class MessageWindow:
         )
         self.listbox_reactions = QListBox(reactions_line_edit)
         collapse_reactions = QCollapseGroup(
-            QCoreApplication.translate("QMainWindow", "Conditions"),
+            QCoreApplication.translate("QMainWindow", "Reactions"),
             self.listbox_reactions,
         )
         self.listbox_messages = QListBox(QLineEdit())
@@ -153,6 +156,10 @@ class MessageWindow:
         self.window.setLayout(vertical_layout)
 
         save_and_quit_button.clicked.connect(self.on_save_and_quit)
+
+    def __raise_emote_popup(self, event: QMouseEvent):
+        self.emoji_picker_popup.move(event.globalPos())
+        self.emoji_picker_popup.exec()
 
     @staticmethod
     def __is_name_new():
