@@ -125,8 +125,8 @@ class QEmojiPicker(QWidget):
     line_edit_font = QFont()
     line_edit_font.setPointSize(12)
 
-    def __init__(self, parent):
-        super().__init__(parent)
+    def __init__(self):
+        super().__init__()
         self.__line_edit = QLineEdit()
         self.__line_edit.setFont(self.line_edit_font)
         self.__line_edit.setPlaceholderText(
@@ -302,7 +302,10 @@ class QEmojiPickerPopup(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowFlags(Qt.WindowType.Popup)
-        self.__emoji_picker = QEmojiPicker(self)
+        self.__emoji_picker = QEmojiPicker()
+        layout = QVBoxLayout()
+        layout.addWidget(self.__emoji_picker)
+        self.setLayout(layout)
 
     def emoji_picker(self):
         return self.__emoji_picker
