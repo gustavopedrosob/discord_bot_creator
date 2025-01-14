@@ -154,12 +154,11 @@ class MessageWindow:
 
         save_and_quit_button.clicked.connect(self.on_save_and_quit)
 
-    @staticmethod
-    def __is_name_new():
-        return True
+    def is_name_valid(self):
+        return self.get_name() not in messages.message_names()
 
     def on_save_and_quit(self):
-        if self.get_name() in messages.message_names() and self.__is_name_new():
+        if not self.is_name_valid():
             message_box = QMessageBox()
             message_box.setWindowTitle(
                 QCoreApplication.translate("QMainWindow", "Name already exists")
@@ -365,8 +364,11 @@ class EditMessageWindow(MessageWindow):
             else:
                 self.group_where_react.get_checkbox("bot").setChecked(True)
 
-    def __is_name_new(self) -> bool:
-        return self.get_name() != self.__name
+    def is_name_valid(self) -> bool:
+        if self.get_name() == self.__name:
+            return True
+        else:
+            return self.__is_name_valid()
 
 
 class NewMessageWindow(MessageWindow):
