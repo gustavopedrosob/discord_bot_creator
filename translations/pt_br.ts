@@ -16,7 +16,7 @@
     <message>
         <location filename="../interfaces/classes/emoji_picker.py" line="159"/>
         <source>Smileys &amp; Emotion</source>
-        <translation>Emoções</translation>
+        <translation>Carinhas &amp; Emoções</translation>
     </message>
     <message>
         <location filename="../interfaces/classes/emoji_picker.py" line="166"/>
@@ -46,7 +46,7 @@
     <message>
         <location filename="../interfaces/classes/emoji_picker.py" line="196"/>
         <source>Symbols</source>
-        <translation>Simbolos</translation>
+        <translation>Símbolos</translation>
     </message>
     <message>
         <location filename="../interfaces/classes/emoji_picker.py" line="202"/>
