@@ -32,15 +32,15 @@ class Bot:
             for message_data in messages.content().values():
                 await message_and_reply(
                     message=message,
-                    conditions=message_data.get("conditions"),
-                    expected_message=message_data.get("expected message"),
-                    reply=message_data.get("reply"),
-                    reaction=message_data.get("reaction"),
-                    delay=message_data.get("delay"),
-                    pin_or_del=message_data.get("pin or del"),
-                    kick_or_ban=message_data.get("kick or ban"),
-                    where_reply=message_data.get("where reply"),
-                    where_reaction=message_data.get("where reaction"),
+                    conditions=message_data["conditions"],
+                    expected_message=message_data["expected message"],
+                    reply=message_data["reply"],
+                    reaction=message_data["reaction"],
+                    delay=message_data["delay"],
+                    pin_or_del=message_data["pin or del"],
+                    kick_or_ban=message_data["kick or ban"],
+                    where_reply=message_data["where reply"],
+                    where_reaction=message_data["where reaction"],
                 )
 
         @self.client.event
@@ -118,14 +118,14 @@ class Bot:
         async def message_and_reply(
             message: discord.Message,
             conditions: list[str],
-            expected_message: str,
+            expected_message: list[str],
             reply: list[str],
             reaction: list[str],
             delay: int,
             pin_or_del: typing.Optional[str],
             kick_or_ban: typing.Optional[str],
-            where_reply: str = "group",
-            where_reaction: str = "author",
+            where_reply: typing.Optional[str],
+            where_reaction: typing.Optional[str],
         ):
 
             message_condition = MessageConditions(

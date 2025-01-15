@@ -241,58 +241,20 @@ class MessageWindow:
         for item in listbox.selectedItems():
             listbox.takeItem(listbox.indexFromItem(item).row())
 
-    def get_data(self):
-        result = {}
-
-        expected_message_list = self.listbox_messages.get_items_text()
-        result["expected message"] = (
-            expected_message_list if not len(expected_message_list) == 0 else None
-        )
-
+    def get_data(self) -> dict:
+        result = {"expected message": self.listbox_messages.get_items_text()}
         reply_list = self.listbox_replies.get_items_text()
-        result["reply"] = (
-            list(map(lambda replies: replies.split("¨"), reply_list))
-            if have_in(reply_list, "¨", reverse=True)
-            else reply_list if not len(reply_list) == 0 else None
-        )
-
+        result["reply"] = list(map(lambda replies: replies.split("¨"), reply_list))
         reactions_list = self.listbox_reactions.get_items_text()
-        result["reaction"] = (
-            list(
-                map(
-                    lambda reactions: [
-                        emoji.demojize(reaction) for reaction in reactions
-                    ],
-                    reactions_list,
-                )
-            )
-            if not len(reactions_list) == 0
-            else None
+        result["reaction"] = list(
+            map(lambda reactions: list(reactions), reactions_list)
         )
-
-        conditions_list = self.listbox_conditions.get_items_text()
-        result["conditions"] = (
-            conditions_list if not len(conditions_list) == 0 else None
-        )
-
-        pin_or_del = self.group_pin_or_del.get_current_name()
-        if pin_or_del:
-            result["pin or del"] = pin_or_del
-
-        kick_or_ban = self.group_kick_or_ban.get_current_name()
-        if kick_or_ban:
-            result["kick or ban"] = kick_or_ban
-
-        selected_where_reply = self.group_where_reply.get_current_name()
-        if selected_where_reply:
-            result["where reply"] = selected_where_reply
-
-        selected_where_react = self.group_where_react.get_current_name()
-        if selected_where_react:
-            result["where reaction"] = selected_where_react
-
+        result["conditions"] = self.listbox_conditions.get_items_text()
+        result["pin or del"] = self.group_pin_or_del.get_current_name()
+        result["kick or ban"] = self.group_kick_or_ban.get_current_name()
+        result["where reply"] = self.group_where_reply.get_current_name()
+        result["where reaction"] = self.group_where_react.get_current_name()
         result["delay"] = self.delay.value()
-
         return result
 
 
@@ -302,74 +264,45 @@ class EditMessageWindow(MessageWindow):
         self.__name = name
         self.name_entry.setText(name)
 
-        if "expected message" in data:
-            expected_messages = data["expected message"]
-            if expected_messages:
-                self.listbox_messages.add_items(expected_messages)
+        expected_messages = data["expected message"]
+        if expected_messages:
+            self.listbox_messages.add_items(expected_messages)
 
-        if "reply" in data:
-            replies = data["reply"]
-            if replies:
-                for reply in replies:
-                    (
-                        self.listbox_replies.add_item("¨".join(reply))
-                        if type(reply) == list
-                        else self.listbox_replies.add_item(reply)
-                    )
+        replies = data["reply"]
+        if replies:
+            for reply in replies:
+                (self.listbox_replies.add_item("¨".join(reply)))
 
-        if "reaction" in data:
-            reactions = data["reaction"]
-            if reactions:
-                list(
-                    map(
-                        lambda reaction: self.listbox_reactions.add_item(
-                            "".join(
-                                map(
-                                    lambda r: emoji.emojize(r, language="alias"),
-                                    reaction,
-                                )
-                            )
-                        ),
-                        reactions,
-                    )
+        reactions_list = data["reaction"]
+        if reactions_list:
+            list(
+                map(
+                    lambda reactions: self.listbox_reactions.add_item(
+                        "".join(reactions)
+                    ),
+                    reactions_list,
                 )
+            )
 
-        if "conditions" in data:
-            conditions = data["conditions"]
-            if conditions:
-                self.listbox_conditions.add_items(conditions)
+        self.listbox_conditions.add_items(data["conditions"])
 
-        if "pin or del" in data:
-            pin_or_del = data["pin or del"]
-            if pin_or_del == "pin":
-                self.group_pin_or_del.get_checkbox("pin").setChecked(True)
-            elif pin_or_del == "delete":
-                self.group_pin_or_del.get_checkbox("delete").setChecked(True)
+        pin_or_del = self.group_pin_or_del.get_checkbox(data["pin or del"])
+        if pin_or_del:
+            pin_or_del.setChecked(True)
 
-        if "delay" in data:
-            delay = int(data["delay"])
-            self.delay.setValue(delay)
+        self.delay.setValue(data["delay"])
 
-        if "kick or ban" in data:
-            kick_or_ban = data["kick or ban"]
-            if kick_or_ban == "kick":
-                self.group_kick_or_ban.get_checkbox("kick").setChecked(True)
-            elif kick_or_ban == "ban":
-                self.group_kick_or_ban.get_checkbox("ban").setChecked(True)
+        kick_or_ban = self.group_kick_or_ban.get_checkbox(data["kick or ban"])
+        if kick_or_ban:
+            kick_or_ban.setChecked(True)
 
-        if "where reply" in data:
-            where_reply = data["where reply"]
-            if where_reply == "group":
-                self.group_where_reply.get_checkbox("group").setChecked(True)
-            else:
-                self.group_where_reply.get_checkbox("private").setChecked(True)
+        where_reply = self.group_where_reply.get_checkbox(data["where reply"])
+        if where_reply:
+            where_reply.setChecked(True)
 
-        if "where reaction" in data:
-            where_reaction = data["where reaction"]
-            if where_reaction == "author":
-                self.group_where_react.get_checkbox("author").setChecked(True)
-            else:
-                self.group_where_react.get_checkbox("bot").setChecked(True)
+        where_reaction = self.group_where_react.get_checkbox(data["where reaction"])
+        if where_reaction:
+            where_reaction.setChecked(True)
 
     def is_name_valid(self) -> bool:
         if self.get_name() == self.__name:
