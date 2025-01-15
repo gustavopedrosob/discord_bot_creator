@@ -25,27 +25,18 @@ class Bot(Client):
         if message.author != self.user:
             logger.info(f'Identificada mensagem "{message.content}".')
 
-            for message_data in messages.content().values():
+            for message_name, message_data in messages.content().items():
                 message_condition = MessageConditions(
                     message, expected_message=message_data["expected message"]
                 )
-
-                conditions_to_confirm = list(
-                    map(
-                        lambda x: message_condition.string_conditions[x],
-                        message_data["conditions"],
-                    )
+                conditions_to_confirm = message_condition.filter(
+                    message_data["conditions"]
+                )
+                logger.info(
+                    f"Verificando condições da mensagem {message_name}: {conditions_to_confirm}"
                 )
 
-                # é importante adicionar a condição expected message se tiver alguma mensagem esperada porque, senão podem ocorrer erros inesperados.
-                if message_data["expected message"]:
-                    conditions_to_confirm.append(
-                        message.content in message_data["expected message"]
-                    )
-
-                logger.info(f"Verificando condições {conditions_to_confirm}")
-
-                if all(conditions_to_confirm):
+                if all(conditions_to_confirm.values()):
                     if message_data["delay"]:
                         await self.apply_delay(message_data["delay"])
                     if message_data["reply"]:

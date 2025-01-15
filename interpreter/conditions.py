@@ -125,3 +125,10 @@ class MessageConditions:
             "emojis in message": emojis_in_message,
             "not emojis in message": not_emojis_in_message,
         }
+
+    def filter(self, conditions: list[str]) -> dict[str, bool]:
+        return {
+            key: value
+            for key, value in self.string_conditions.items()
+            if key in conditions
+        }
