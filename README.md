@@ -1,13 +1,15 @@
-![Icon](source/icons/icon.svg)
+<p align="center">
+  <img src="source/icons/icon.svg" alt="Logo">
+</p>
 
 # Bot Discord Easy Creator
 
 ## Sobre:
 
-Bot Discord Easy Creator ou BDEC, é um software gratuito para criação de bots no Discord, com interface interativa capaz
+**Bot Discord Easy Creator**, é um software gratuito para criação de bots no Discord, com interface interativa capaz
 de executar o bot.
 
-## Como iniciar (Passo a passo):
+## Como iniciar:
 
 ### 1º Passo: Instalando dependências e bibliotecas
 
@@ -17,63 +19,85 @@ de executar o bot.
 
 ##### Bibliotecas Python:
 
-* Discord
-* Emoji
-* Emojis
+* [discord.py](https://pypi.org/project/discord.py/) - 2.4.0
+* [emojis](https://pypi.org/project/emojis/) - 0.7.0
+* [PySide6](https://pypi.org/project/PySide6/) - 6.8.1.1
 
 #### Instalação:
 
 Abra o cmd e digite:
 
-```
-pip install -r requirements.txt
-```
-
-Ou execute o arquivo: install dependencies.bat
-
-### 2º Passo: Inserindo o token
-
-Após você ter instalado as dependências, oque você precisa fazer é copiar o token do seu bot e inserir no arquivo
-config.yaml entre as "" áspas, por exemplo:
-
-```
-token: <seu token>
+```bash
+  pip install -r requirements.txt
 ```
 
 Esse processo pode ser realizado a partir da interface.
 
-### 3º Passo: Iniciando
+### 2º Passo: Interface
 
-Abra o cmd e digite:
+Para iniciar a interface do bot, digite no cmd:
 
+```bash
+  python main.py
 ```
-python bot.py
+
+### 3º Passo: Inserindo o token
+
+Para inserir o token, clique no campo Token da interface, insira e aperte Enter para salvar.
+
+![token.png](source/images/token.png)
+
+Se preferir pode copiar o token do seu bot e inserir no arquivo config.yaml, por exemplo:
+
+```yaml
+  token: <seu token>
 ```
+
+### 4º Passo: Iniciando Bot
+
+Para iniciar o Bot basta clicar no botão Ligar Bot:
+
+![turn_on_bot.png](source/images/turn_on_bot.png)
+
+Ou se já tiver uma configuração de mensagens e desejar executar o bot separadamente, digite no cmd:
+
+```bash
+  python bot.py
+```
+
+## Não tem um token?
+
+### Para vincular seu bot ao Discord, siga este passo a passo:
+
+* Acesse o site do desenvolvedor do [Discord](https://discord.com/developers) e clique em "Applications", 
+  depois selecione "New Application".
+* Dê um nome ao seu bot e clique em "Create". Você será redirecionado para um painel onde poderá adicionar mais 
+  informações, como imagem, descrição e tags.
+* No menu à esquerda, clique na opção "Bot" e, em seguida, em "Add Bot".
+
+Após a criação você deve encontrar o Token na mesma pagina.
 
 ## Customizando o bot:
-
-Para customizar seu bot é muito simples, basta executar a interface (main.py)
-e de maneira intuitiva você poderá customizar seu bot de diversas maneiras.
 
 ### Janela inicial:
 
 Na janela inicial podemos criar, editar, excluir e visualizar as mensagens que configuramos,
-podemos também executar o bot e visualizar as mensagens de retorno (logs). Ao clicar no botão de adicionar ou
-editar
-podemos visualizar nova janela.
+podemos também executar o bot e visualizar as mensagens de retorno (logs).
+
+Ao clicar no botão de adicionar ou editar podemos visualizar uma nova janela.
 
 ### Janela de edição:
 
-Nessa janela podemos criar ou editar uma mensagem, que configura como o bot deve reagir às mensagens enviadas no
+Nessa janela podemos criar ou editar uma mensagem, que configura como o Bot deve reagir às mensagens enviadas no
 servidor ou privado. Agora vamos introduzir como podem ser utilizados os cinco campos de preenchimento:
 
-* Nome: O nome que deseja salvar essa mensagem.
-* Mensagem esperada: Mensagem que será utilizada pelas condições de "expected message" e "not expected message", nesse
+* **Nome**: O nome que deseja salvar essa mensagem.
+* **Mensagem esperada**: Mensagem que será utilizada pelas condições de "expected message" e "not expected message", nesse
   campo se tivermos mais de uma mensagem, todas serão enviadas, separando uma mensagem com ¨ podemos definir mensagens
   aleatórias.
-* Resposta: São as mensagens que devemos enviar como reposta caso todas as condições forem satisfeitas.
-* Reações: O bot irá reagir com todas as reações definidas, lembrando que o limite é de 20.
-* Condições: Define condições as mensagens que deverão ser respondidas.
+* **Resposta**: São as mensagens que devemos enviar como reposta caso todas as condições forem satisfeitas.
+* **Reações**: O bot irá reagir com todas as reações definidas.
+* **Condições**: Define condições as mensagens que deverão ser respondidas.
 
 #### Configurando a resposta:
 
@@ -85,23 +109,22 @@ Podemos configurar as "formas" de resposta, como:
 * Delay na resposta.
 * Remover ou fixar a mensagem.
 
+# Para desenvolvedores:
+
 ## Desenvolvendo traduções:
 
-Para iniciar o desenvolvimento de traduções, você precisa ter o Qt Linguist instalado (O Qt Linguist deve estar na 
+Para iniciar o desenvolvimento de traduções, você precisa ter o **Qt Linguist** instalado (O Qt Linguist deve estar na 
 pasta do Qt), pois iremos utilizá-lo para traduzir cada widget da interface.
-Vamos começar gerando os arquivos .ts a partir das interfaces, utilize o comando a seguir:
+Vamos começar gerando os arquivos .ts a partir das interfaces, exemplo:
     
-```
-pyside6-lupdate -recursive -extensions py interfaces/ -ts translations/{lingua}.ts 
+```bash
+  pyside6-lupdate -recursive -extensions py interfaces/ -ts translations/pt_br.ts 
+  pyside6-lupdate -recursive -extensions py interfaces/ -ts translations/en_us.ts
 ```
 
 Agora abra o arquivo .ts gerado e traduza cada widget, após isso, compile o arquivo .ts para .qm com o comando:
 
+```bash
+  pyside6-lrelease translations/pt_br.ts
+  pyside6-lrelease translations/en_us.ts
 ```
-pyside6-lrelease translations/{lingua}.ts
-```
-
-
-## Implementações futuras:
-
-* Reação e respostas aleatórias.
