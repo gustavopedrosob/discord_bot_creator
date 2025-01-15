@@ -25,6 +25,7 @@ from core.config import instance as config
 from core.messages import messages
 from interfaces.classes.qpassword import QPassword
 from interfaces.credits.credits import CreditsWindow
+from interfaces.main.log_handler import LogHandler
 from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow
 
 logger = logging.getLogger(__name__)
@@ -42,6 +43,10 @@ class Main(QMainWindow):
         self.credits_window = CreditsWindow()
         self.bot = None
         self.bot_thread = None
+
+        log_handler = LogHandler(self)
+        log_handler.setLevel(logging.INFO)
+        logger.addHandler(log_handler)
 
         # Create the menu bar
         self.menu_bar = QMenuBar(self)
@@ -289,6 +294,7 @@ class Main(QMainWindow):
         token = self.token_widget.line_edit.text()
         config.set("token", token)
         config.save()
+        logger.info("Token salvo com sucesso!")
 
     def edit_selected_message(self):
         """Opens the NewMessage interface and loads saved information."""
