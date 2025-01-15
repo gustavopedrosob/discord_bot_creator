@@ -42,6 +42,7 @@ class MessageWindow:
 
         self.name_text = QLabel(QCoreApplication.translate("QMainWindow", "Name"))
         self.name_entry = QLineEdit()
+        self.name_entry.setMaxLength(40)
 
         reactions_line_edit = QLineEdit()
         reactions_line_edit.mousePressEvent = lambda event: raise_emoji_popup()
