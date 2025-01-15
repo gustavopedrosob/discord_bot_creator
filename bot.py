@@ -22,49 +22,50 @@ class Bot(Client):
         logger.info("Bot iniciado!")
 
     async def on_message(self, message: discord.Message):
-        logger.info(f'Identificada mensagem "{message.content}".')
+        if message.author != self.user:
+            logger.info(f'Identificada mensagem "{message.content}".')
 
-        for message_data in messages.content().values():
-            message_condition = MessageConditions(
-                message, expected_message=message_data["expected message"]
-            )
-
-            conditions_to_confirm = list(
-                map(
-                    lambda x: message_condition.string_conditions[x],
-                    message_data["conditions"],
-                )
-            )
-
-            # é importante adicionar a condição expected message se tiver alguma mensagem esperada porque, senão podem ocorrer erros inesperados.
-            if message_data["expected message"]:
-                conditions_to_confirm.append(
-                    message.content in message_data["expected message"]
+            for message_data in messages.content().values():
+                message_condition = MessageConditions(
+                    message, expected_message=message_data["expected message"]
                 )
 
-            logger.info(f"Verificando condições {conditions_to_confirm}")
-
-            if all(conditions_to_confirm):
-                if message_data["delay"]:
-                    await self.apply_delay(message_data["delay"])
-                if message_data["reply"]:
-                    await self.send_reply(
-                        message_data["reply"],
-                        message_data["reaction"],
-                        message,
-                        message_data["where reply"],
-                        message_data["where reaction"],
+                conditions_to_confirm = list(
+                    map(
+                        lambda x: message_condition.string_conditions[x],
+                        message_data["conditions"],
                     )
-                if message_data["where reaction"] == "author":
-                    await self.send_reaction(message_data["reaction"], message)
-                if message_data["pin or del"] == "delete":
-                    await self.remove_message(message)
-                if message_data["pin or del"] == "pin":
-                    await self.pin_message(message)
-                if message_data["kick or ban"] == "ban":
-                    await self.ban_member(message.author)
-                if message_data["kick or ban"] == "kick":
-                    await self.kick_member(message.author)
+                )
+
+                # é importante adicionar a condição expected message se tiver alguma mensagem esperada porque, senão podem ocorrer erros inesperados.
+                if message_data["expected message"]:
+                    conditions_to_confirm.append(
+                        message.content in message_data["expected message"]
+                    )
+
+                logger.info(f"Verificando condições {conditions_to_confirm}")
+
+                if all(conditions_to_confirm):
+                    if message_data["delay"]:
+                        await self.apply_delay(message_data["delay"])
+                    if message_data["reply"]:
+                        await self.send_reply(
+                            message_data["reply"],
+                            message_data["reaction"],
+                            message,
+                            message_data["where reply"],
+                            message_data["where reaction"],
+                        )
+                    if message_data["where reaction"] == "author":
+                        await self.send_reaction(message_data["reaction"], message)
+                    if message_data["pin or del"] == "delete":
+                        await self.remove_message(message)
+                    if message_data["pin or del"] == "pin":
+                        await self.pin_message(message)
+                    if message_data["kick or ban"] == "ban":
+                        await self.ban_member(message.author)
+                    if message_data["kick or ban"] == "kick":
+                        await self.kick_member(message.author)
 
     @staticmethod
     async def apply_delay(delay: int):
