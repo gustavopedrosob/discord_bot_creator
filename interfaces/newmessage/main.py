@@ -37,8 +37,6 @@ class MessageWindow:
         self.window.resize(1000, 800)
         self.window.setWindowTitle(QCoreApplication.translate("QMainWindow", "Message"))
 
-        self.emoji_picker_popup = QEmojiPickerPopup()
-
         left_layout = QVBoxLayout()
         mid_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
@@ -47,36 +45,39 @@ class MessageWindow:
         self.name_entry = QLineEdit()
         self.name_entry.setMaxLength(40)
 
-        reactions_line_edit = QLineEdit()
-
         conditions_combobox = QComboBox()
         conditions_combobox.addItems(conditions_keys)
-
         self.listbox_conditions = QListBox(conditions_combobox)
         collapse_conditions = QCollapseGroup(
             QCoreApplication.translate("QMainWindow", "Conditions"),
             self.listbox_conditions,
         )
         collapse_conditions.setContentsMargins(0, 0, 0, 0)
+
+        reactions_line_edit = QLineEdit()
         self.listbox_reactions = QListBox(reactions_line_edit)
-        emote_button = QColorResponsiveButton()
-        emote_button.setIcon(QIcon("source/icons/face-smile-solid.svg"))
-        emote_button.setFlat(True)
-        emote_button.clicked.connect(
-            lambda: self.__raise_emote_popup(emote_button.mapToGlobal(QPoint(0, 0)))
+        self.__add_emoji_button(
+            self.listbox_reactions.entry_layout(), reactions_line_edit
         )
-        self.listbox_reactions.entry_layout().addWidget(emote_button)
         collapse_reactions = QCollapseGroup(
             QCoreApplication.translate("QMainWindow", "Reactions"),
             self.listbox_reactions,
         )
         collapse_reactions.setContentsMargins(0, 0, 0, 0)
-        self.listbox_messages = QListBox(QLineEdit())
+
+        messages_line_edit = QLineEdit()
+        self.listbox_messages = QListBox(messages_line_edit)
+        self.__add_emoji_button(
+            self.listbox_messages.entry_layout(), messages_line_edit
+        )
         collapse_messages = QCollapseGroup(
             QCoreApplication.translate("QMainWindow", "Messages"), self.listbox_messages
         )
         collapse_messages.setContentsMargins(0, 0, 0, 0)
-        self.listbox_replies = QListBox(QLineEdit())
+
+        replies_line_edit = QLineEdit()
+        self.listbox_replies = QListBox(replies_line_edit)
+        self.__add_emoji_button(self.listbox_replies.entry_layout(), replies_line_edit)
         collapse_replies = QCollapseGroup(
             QCoreApplication.translate("QMainWindow", "Replies"), self.listbox_replies
         )
@@ -169,17 +170,30 @@ class MessageWindow:
         self.window.setLayout(vertical_layout)
 
         save_and_quit_button.clicked.connect(self.on_save_and_quit)
-        emoji_picker = self.emoji_picker_popup.emoji_picker()
-        emoji_picker.emoji_click.connect(
-            lambda text: reactions_line_edit.setText(reactions_line_edit.text() + text)
-        )
 
-    def __raise_emote_popup(self, point: QPoint):
-        self.emoji_picker_popup.move(point.x() - 500, point.y() - 500)
-        self.emoji_picker_popup.exec()
+    @staticmethod
+    def __raise_emote_popup(point: QPoint, line_edit: QLineEdit):
+        emoji_picker_popup = QEmojiPickerPopup()
+        emoji_picker = emoji_picker_popup.emoji_picker()
+        emoji_picker.emoji_click.connect(
+            lambda text: line_edit.setText(line_edit.text() + text)
+        )
+        emoji_picker_popup.move(point.x() - 500, point.y() - 500)
+        emoji_picker_popup.exec()
 
     def is_name_valid(self):
         return self.get_name() not in messages.message_names()
+
+    def __add_emoji_button(self, layout: QHBoxLayout, line_edit: QLineEdit):
+        emote_button = QColorResponsiveButton()
+        emote_button.setIcon(QIcon("source/icons/face-smile-solid.svg"))
+        emote_button.setFlat(True)
+        layout.addWidget(emote_button)
+        emote_button.clicked.connect(
+            lambda: self.__raise_emote_popup(
+                emote_button.mapToGlobal(QPoint(0, 0)), line_edit
+            )
+        )
 
     def on_save_and_quit(self):
         if not self.is_name_valid():
