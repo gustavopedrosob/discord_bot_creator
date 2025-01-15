@@ -24,7 +24,7 @@ class Bot(Client):
 
     async def on_message(self, message: discord.Message):
         if message.author != self.user:
-            logger.info(f'Identificada mensagem "{message.content}".')
+            logger.info(f'Identificada mensagem "{message.clean_content}".')
 
             for message_name, message_data in messages.content().items():
                 message_condition = MessageConditions(
@@ -72,7 +72,7 @@ class Bot(Client):
             try:
                 await message.add_reaction(reaction)
                 logger.info(
-                    f'Adicionando a reação "{code_reaction}" a mensagem "{message.content}" do autor {message.author}.'
+                    f'Adicionando a reação "{code_reaction}" a mensagem "{message.clean_content}" do autor {message.author}.'
                 )
             except discord.HTTPException:
                 print(reaction)
@@ -91,7 +91,7 @@ class Bot(Client):
             if where == "group" and message.channel.guild is not None:
                 message = await message.channel.send(reply)
                 logger.info(
-                    f'Enviando no grupo a resposta "{reply}" à mensagem "{message.content}" do autor {message.author}.'
+                    f'Enviando no grupo a resposta "{reply}" à mensagem "{message.clean_content}" do autor {message.author}.'
                 )
                 if where_reaction == "bot":
                     await self.send_reaction(reactions, message)
@@ -99,7 +99,7 @@ class Bot(Client):
                 dm_channel = await message.author.create_dm()
                 message = await dm_channel.send(reply)
                 logger.info(
-                    f'Enviando no privado a resposta "{reply}" à mensagem "{message.content}" do autor {message.author}.'
+                    f'Enviando no privado a resposta "{reply}" à mensagem "{message.clean_content}" do autor {message.author}.'
                 )
                 if where_reaction == "bot":
                     await self.send_reaction(reactions, message)
@@ -108,13 +108,15 @@ class Bot(Client):
     async def remove_message(message: discord.Message):
         await message.delete()
         logger.info(
-            f'Removendo mensagem "{message.content}" do autor {message.author}.'
+            f'Removendo mensagem "{message.clean_content}" do autor {message.author}.'
         )
 
     @staticmethod
     async def pin_message(message: discord.Message):
         await message.pin()
-        logger.info(f'Fixando mensagem "{message.content}" do autor {message.author}.')
+        logger.info(
+            f'Fixando mensagem "{message.clean_content}" do autor {message.author}.'
+        )
 
     @staticmethod
     async def kick_member(member: discord.Member):

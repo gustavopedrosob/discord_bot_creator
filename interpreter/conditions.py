@@ -74,15 +74,13 @@ class MessageConditions:
         expected_message=None,
     ):
 
-        message = message
-
         expected_message = (
             False
             if expected_message is None
             else (
-                message.content == expected_message
+                message.clean_content == expected_message
                 if type(expected_message) == str
-                else message.content in expected_message
+                else message.clean_content in expected_message
             )
         )
         not_expected_message = not expected_message
@@ -98,11 +96,11 @@ class MessageConditions:
         not_author_is_expected = not author_is_expected
         author_is_bot = message.author.bot
         not_author_is_bot = not author_is_bot
-        number_in_message = have_in(numbers, message.content)
+        number_in_message = have_in(numbers, message.clean_content)
         not_number_in_message = not number_in_message
-        symbols_in_message = have_in(symbols, message.content)
+        symbols_in_message = have_in(symbols, message.clean_content)
         not_symbols_in_message = not symbols_in_message
-        emojis_in_message = emojis.count(message.content)
+        emojis_in_message = emojis.count(message.clean_content)
         not_emojis_in_message = not emojis_in_message
 
         self.string_conditions = {
