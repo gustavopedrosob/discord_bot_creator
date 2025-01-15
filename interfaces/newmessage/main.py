@@ -20,6 +20,7 @@ from core.messages import messages
 from interfaces.classes.collapse_group import QCollapseGroup
 from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
 from interfaces.classes.emoji_picker import QEmojiPickerPopup
+from interfaces.classes.emoji_validator import QEmojiValidator
 from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
 from interpreter.conditions import conditions_keys
@@ -54,7 +55,9 @@ class MessageWindow:
         )
         collapse_conditions.setContentsMargins(0, 0, 0, 0)
 
+        emoji_validator = QEmojiValidator()
         reactions_line_edit = QLineEdit()
+        reactions_line_edit.setValidator(emoji_validator)
         self.listbox_reactions = QListBox(reactions_line_edit)
         self.__add_emoji_button(
             self.listbox_reactions.entry_layout(), reactions_line_edit
