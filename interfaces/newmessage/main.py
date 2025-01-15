@@ -307,7 +307,7 @@ class EditMessageWindow(MessageWindow):
         if self.get_name() == self.__name:
             return True
         else:
-            return self.is_name_valid()
+            return super().is_name_valid()
 
 
 class NewMessageWindow(MessageWindow):
