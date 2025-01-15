@@ -1,7 +1,7 @@
 import typing
 
-from PySide6.QtCore import Qt, QCoreApplication
-from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt, QCoreApplication, QPoint
+from PySide6.QtGui import QIcon, QMouseEvent
 from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
@@ -16,9 +16,10 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
-from core.functions import raise_emoji_popup
 from core.messages import messages
 from interfaces.classes.collapse_group import QCollapseGroup
+from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
+from interfaces.classes.emoji_picker import QEmojiPickerPopup
 from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
 from interpreter.conditions import conditions_keys
@@ -36,6 +37,8 @@ class MessageWindow:
         self.window.resize(1000, 800)
         self.window.setWindowTitle(QCoreApplication.translate("QMainWindow", "Message"))
 
+        self.emoji_picker_popup = QEmojiPickerPopup()
+
         left_layout = QVBoxLayout()
         mid_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
@@ -45,7 +48,6 @@ class MessageWindow:
         self.name_entry.setMaxLength(40)
 
         reactions_line_edit = QLineEdit()
-        reactions_line_edit.mousePressEvent = lambda event: raise_emoji_popup()
 
         conditions_combobox = QComboBox()
         conditions_combobox.addItems(conditions_keys)
@@ -57,8 +59,15 @@ class MessageWindow:
         )
         collapse_conditions.setContentsMargins(0, 0, 0, 0)
         self.listbox_reactions = QListBox(reactions_line_edit)
+        emote_button = QColorResponsiveButton()
+        emote_button.setIcon(QIcon("source/icons/face-smile-solid.svg"))
+        emote_button.setFlat(True)
+        emote_button.clicked.connect(
+            lambda: self.__raise_emote_popup(emote_button.mapToGlobal(QPoint(0, 0)))
+        )
+        self.listbox_reactions.entry_layout().addWidget(emote_button)
         collapse_reactions = QCollapseGroup(
-            QCoreApplication.translate("QMainWindow", "Conditions"),
+            QCoreApplication.translate("QMainWindow", "Reactions"),
             self.listbox_reactions,
         )
         collapse_reactions.setContentsMargins(0, 0, 0, 0)
@@ -160,6 +169,14 @@ class MessageWindow:
         self.window.setLayout(vertical_layout)
 
         save_and_quit_button.clicked.connect(self.on_save_and_quit)
+        emoji_picker = self.emoji_picker_popup.emoji_picker()
+        emoji_picker.emoji_click.connect(
+            lambda text: reactions_line_edit.setText(reactions_line_edit.text() + text)
+        )
+
+    def __raise_emote_popup(self, point: QPoint):
+        self.emoji_picker_popup.move(point.x() - 500, point.y() - 500)
+        self.emoji_picker_popup.exec()
 
     def is_name_valid(self):
         return self.get_name() not in messages.message_names()
@@ -255,6 +272,7 @@ class MessageWindow:
         result["where reply"] = self.group_where_reply.get_current_name()
         result["where reaction"] = self.group_where_react.get_current_name()
         result["delay"] = self.delay.value()
+
         return result
 
 

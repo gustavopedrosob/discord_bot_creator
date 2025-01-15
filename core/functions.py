@@ -59,10 +59,3 @@ def colorize_icon(icon: QIcon, color: str, default_size=(64, 64)) -> QIcon:
 
     # Convert the colored QPixmap back to QIcon
     return QIcon(colored_pixmap)
-
-
-def raise_emoji_popup():
-    ctypes.windll.user32.keybd_event(0x5B, 0, 0, 0)  # Press Win key
-    ctypes.windll.user32.keybd_event(0xBE, 0, 0, 0)  # Press . key
-    ctypes.windll.user32.keybd_event(0xBE, 0, 2, 0)  # Release . key
-    ctypes.windll.user32.keybd_event(0x5B, 0, 2, 0)  # Release Win key

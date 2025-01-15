@@ -2,6 +2,59 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="br_FR">
 <context>
+    <name>QEmojiPicker</name>
+    <message>
+        <location filename="../interfaces/classes/emoji_picker.py" line="134"/>
+        <source>Enter your favorite emoji</source>
+        <translation>Digite seu emoji favorito</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/classes/emoji_picker.py" line="154"/>
+        <source>Favorite</source>
+        <translation>Favorito</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/classes/emoji_picker.py" line="159"/>
+        <source>Smileys &amp; Emotion</source>
+        <translation>Carinhas &amp; Emoções</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/classes/emoji_picker.py" line="166"/>
+        <source>Animals &amp; Nature</source>
+        <translation>Animais &amp; Natureza</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/classes/emoji_picker.py" line="172"/>
+        <source>Food &amp; Drink</source>
+        <translation>Comida &amp; Bebida</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/classes/emoji_picker.py" line="178"/>
+        <source>Activities</source>
+        <translation>Atividades</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/classes/emoji_picker.py" line="184"/>
+        <source>Travel &amp; Places</source>
+        <translation>Viagem &amp; Lugares</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/classes/emoji_picker.py" line="190"/>
+        <source>Objects</source>
+        <translation>Objetos</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/classes/emoji_picker.py" line="196"/>
+        <source>Symbols</source>
+        <translation>Símbolos</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/classes/emoji_picker.py" line="202"/>
+        <source>Flags</source>
+        <translation>Bandeiras</translation>
+    </message>
+</context>
+<context>
     <name>QMainWindow</name>
     <message>
         <location filename="../interfaces/credits/credits.py" line="9"/>
@@ -105,7 +158,7 @@
     </message>
     <message>
         <location filename="../interfaces/main/main.py" line="195"/>
-        <location filename="../interfaces/newmessage/main.py" line="59"/>
+        <location filename="../interfaces/newmessage/main.py" line="68"/>
         <source>Messages</source>
         <translation>Mensagens</translation>
     </message>
@@ -162,117 +215,117 @@
         <translation>Desligar bot</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="37"/>
+        <location filename="../interfaces/newmessage/main.py" line="39"/>
         <source>Message</source>
         <translation>Mensagem</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="43"/>
+        <location filename="../interfaces/newmessage/main.py" line="47"/>
         <source>Name</source>
         <translation>Nome</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="53"/>
+        <location filename="../interfaces/newmessage/main.py" line="58"/>
         <source>Conditions</source>
         <translation>Condições</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="56"/>
+        <location filename="../interfaces/newmessage/main.py" line="63"/>
         <source>Reactions</source>
         <translation>Reações</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="62"/>
+        <location filename="../interfaces/newmessage/main.py" line="72"/>
         <source>Replies</source>
         <translation>Respostas</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="74"/>
+        <location filename="../interfaces/newmessage/main.py" line="84"/>
         <source>Action</source>
         <translation>Ação</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="77"/>
+        <location filename="../interfaces/newmessage/main.py" line="87"/>
         <source>Pin</source>
         <translation>Fixar</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="79"/>
+        <location filename="../interfaces/newmessage/main.py" line="89"/>
         <source>Delete</source>
         <translation>Deletar</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="85"/>
+        <location filename="../interfaces/newmessage/main.py" line="95"/>
         <source>Penalty</source>
         <translation>Penalidade</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="88"/>
+        <location filename="../interfaces/newmessage/main.py" line="98"/>
         <source>Kick</source>
         <translation>Expulsar</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="91"/>
+        <location filename="../interfaces/newmessage/main.py" line="101"/>
         <source>Ban</source>
         <translation>Banir</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="96"/>
+        <location filename="../interfaces/newmessage/main.py" line="106"/>
         <source>Where reply</source>
         <translation>Onde responder</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="99"/>
+        <location filename="../interfaces/newmessage/main.py" line="109"/>
         <source>Group</source>
         <translation>Grupo</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="102"/>
+        <location filename="../interfaces/newmessage/main.py" line="112"/>
         <source>Private</source>
         <translation>Privado</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="107"/>
+        <location filename="../interfaces/newmessage/main.py" line="117"/>
         <source>Where react</source>
         <translation>Onde reagir</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="109"/>
+        <location filename="../interfaces/newmessage/main.py" line="119"/>
         <source>Author</source>
         <translation>Autor</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="113"/>
+        <location filename="../interfaces/newmessage/main.py" line="123"/>
         <source>Bot</source>
         <translation>Bot</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="117"/>
+        <location filename="../interfaces/newmessage/main.py" line="127"/>
         <source>Delay</source>
         <translation>Delay</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="123"/>
+        <location filename="../interfaces/newmessage/main.py" line="133"/>
         <source>Save and quit</source>
         <translation>Salvar e sair</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="159"/>
+        <location filename="../interfaces/newmessage/main.py" line="173"/>
         <source>Name already exists</source>
         <translation>Nome já existe</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="166"/>
+        <location filename="../interfaces/newmessage/main.py" line="180"/>
         <source>You can&apos;t set a message with a name that already exists.</source>
         <translation>Você não pode definir uma mensagem com um nome que já existe.</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="172"/>
+        <location filename="../interfaces/newmessage/main.py" line="186"/>
         <source>Opposite conditions</source>
         <translation>Condições opostas</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="179"/>
+        <location filename="../interfaces/newmessage/main.py" line="193"/>
         <source>You can&apos;t have opposite conditions, please remove them.</source>
         <translation>Você não pode ter condições opostas, por favor remova elas.</translation>
     </message>
