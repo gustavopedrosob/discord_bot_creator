@@ -98,16 +98,19 @@ class Bot(Client):
             reply = Variable(message).apply_variable(reply)
             if where == "group":
                 message = await message.channel.send(reply)
+                logger.info(
+                    f'Enviando no grupo a resposta "{reply}" à mensagem "{message.content}" do autor {message.author}.'
+                )
                 if where_reaction == "bot":
                     await self.send_reaction(reactions, message)
             elif where == "private":
                 dm_channel = await message.author.create_dm()
                 message = await dm_channel.send(reply)
+                logger.info(
+                    f'Enviando no privado a resposta "{reply}" à mensagem "{message.content}" do autor {message.author}.'
+                )
                 if where_reaction == "bot":
                     await self.send_reaction(reactions, message)
-            logger.info(
-                f'Enviando a resposta "{reply}" à mensagem "{message.content}" do autor {message.author}.'
-            )
 
     @staticmethod
     async def remove_message(message: discord.Message):
