@@ -1,7 +1,7 @@
 import typing
 
-from PySide6.QtCore import Qt, QCoreApplication, QPoint
-from PySide6.QtGui import QIcon, QMouseEvent
+from PySide6.QtCore import Qt, QCoreApplication, QPoint, QRegularExpression
+from PySide6.QtGui import QIcon, QMouseEvent, QRegularExpressionValidator
 from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
@@ -44,7 +44,11 @@ class MessageWindow:
 
         self.name_text = QLabel(QCoreApplication.translate("QMainWindow", "Name"))
         self.name_entry = QLineEdit()
+        name_entry_validator = QRegularExpressionValidator(
+            QRegularExpression(r"[\w ]*")
+        )
         self.name_entry.setMaxLength(40)
+        self.name_entry.setValidator(name_entry_validator)
 
         conditions_combobox = QComboBox()
         conditions_combobox.addItems(conditions_keys)
