@@ -1,5 +1,5 @@
 import discord
-import emoji
+import emojis
 
 from core.functions import have_in
 
@@ -102,7 +102,7 @@ class MessageConditions:
         not_number_in_message = not number_in_message
         symbols_in_message = have_in(symbols, message.content)
         not_symbols_in_message = not symbols_in_message
-        emojis_in_message = emoji.emoji_count(message.content) > 0
+        emojis_in_message = emojis.count(message.content)
         not_emojis_in_message = not emojis_in_message
 
         self.string_conditions = {

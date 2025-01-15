@@ -3,7 +3,6 @@ import logging
 import typing
 
 import discord
-import emoji
 from discord import Intents, Client
 
 from core.config import instance as config
@@ -54,7 +53,7 @@ class Bot(Client):
             try:
                 await message.add_reaction(reaction)
                 logger.info(
-                    f'Adicionando a reação "{code_reaction}" a mensagem "{emoji.demojize(message.content)}" do autor {message.author}.'
+                    f'Adicionando a reação "{code_reaction}" a mensagem "{message.content}" do autor {message.author}.'
                 )
             except discord.HTTPException:
                 print(reaction)
@@ -80,22 +79,20 @@ class Bot(Client):
                 if where_reaction == "bot":
                     await self.send_reaction(reactions, message)
             logger.info(
-                f'Enviando a resposta "{reply}" à mensagem "{emoji.demojize(message.content)}" do autor {message.author}.'
+                f'Enviando a resposta "{reply}" à mensagem "{message.content}" do autor {message.author}.'
             )
 
     @staticmethod
     async def remove_message(message: discord.Message):
         await message.delete()
         logger.info(
-            f'Removendo mensagem "{emoji.demojize(message.content)}" do autor {message.author}.'
+            f'Removendo mensagem "{message.content}" do autor {message.author}.'
         )
 
     @staticmethod
     async def pin_message(message: discord.Message):
         await message.pin()
-        logger.info(
-            f'Fixando mensagem "{emoji.demojize(message.content)}" do autor {message.author}.'
-        )
+        logger.info(f'Fixando mensagem "{message.content}" do autor {message.author}.')
 
     @staticmethod
     async def kick_member(member: discord.Member):

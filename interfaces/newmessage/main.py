@@ -1,6 +1,5 @@
 import typing
 
-import emoji
 from PySide6.QtCore import Qt, QCoreApplication
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
@@ -17,7 +16,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
-from core.functions import have_in, raise_emoji_popup
+from core.functions import raise_emoji_popup
 from core.messages import messages
 from interfaces.classes.collapse_group import QCollapseGroup
 from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
