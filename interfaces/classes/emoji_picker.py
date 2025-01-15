@@ -27,23 +27,10 @@ class QEmojiButton(QPushButton):
 
     def __init__(self, emoji: Emoji):
         super().__init__(emoji.emoji)
-        self.__favorite = False
         self.__emoji = emoji
-        self.on_remove_favorite = QAction()
-        self.on_remove_favorite.setText("Remove Favorite")
-        self.on_favorite = QAction()
-        self.on_favorite.setText("Favorite")
         self.setStyleSheet("padding: 0; background-color: transparent;")
         self.setFlat(True)
         self.setFont(self.font)
-        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        self.customContextMenuRequested.connect(self.__context_menu_event)
-
-    def favorite(self) -> bool:
-        return self.__favorite
-
-    def set_favorite(self, favorite: bool):
-        self.__favorite = favorite
 
     def emoji(self) -> Emoji:
         return self.__emoji
@@ -53,14 +40,6 @@ class QEmojiButton(QPushButton):
             if emoji_alias in emoji_alias_2:
                 return True
         return False
-
-    def __context_menu_event(self, position: QPoint):
-        context_menu = QMenu()
-        if self.favorite():
-            context_menu.addAction(self.on_remove_favorite)
-        else:
-            context_menu.addAction(self.on_favorite)
-        context_menu.exec(self.mapToGlobal(position))
 
 
 class QEmojiGrid(QWidget):
@@ -149,11 +128,6 @@ class QEmojiPicker(QWidget):
         self.__vertical_layout.addWidget(self.__scroll_area)
         self.__vertical_layout.addWidget(self.__current_emoji_label)
         self.setLayout(self.__vertical_layout)
-        self.add_category(
-            "Favorite",
-            QIcon("source/icons/star-solid.svg"),
-            QCoreApplication.translate("QEmojiPicker", "Favorite"),
-        )
         self.add_category(
             "Smileys & Emotion",
             QIcon("source/icons/face-smile-solid.svg"),
@@ -250,39 +224,12 @@ class QEmojiPicker(QWidget):
         emoji = emoji_button.emoji()
         emoji_button.enterEvent = lambda event: self.__mouse_enter_emoji(emoji)
         emoji_button.leaveEvent = lambda event: self.__mouse_leave_emoji()
-        emoji_button.on_favorite.triggered.connect(
-            lambda event: self.add_favorite(emoji)
-        )
-        emoji_button.on_remove_favorite.triggered.connect(
-            lambda event: self.remove_favorite(emoji)
-        )
         emoji_button.pressed.connect(lambda: self.emoji_click.emit(emoji.emoji))
-
-    def add_favorite(self, emoji: Emoji):
-        emoji_button = self.emoji_button(emoji)
-        if not emoji_button.favorite():
-            favorite_emoji_grid = self.emoji_grid("Favorite")
-            favorite_emoji_button = QEmojiButton(emoji_button.emoji())
-            favorite_emoji_grid.add_emoji(favorite_emoji_button)
-            self.__bind_emoji_button(favorite_emoji_button)
-            favorite_emoji_button.set_favorite(True)
-            emoji_button.set_favorite(True)
-            favorite_emoji_grid.filter(self.__line_edit.text())
-
-    def remove_favorite(self, emoji: Emoji):
-        favorite_emoji_grid = self.emoji_grid("Favorite")
-        favorite_emoji_button = favorite_emoji_grid.get_emoji(emoji)
-        favorite_emoji_button.deleteLater()
-        favorite_emoji_grid.update()
-        emoji_button = self.emoji_button(emoji)
-        if emoji_button:
-            emoji_button.set_favorite(False)
 
     def emoji_button(self, emoji: Emoji) -> typing.Optional[QEmojiButton]:
         for category in self.__categories.keys():
-            if category != "Favorite":
-                emoji_grid = self.emoji_grid(category)
-                return emoji_grid.get_emoji(emoji)
+            emoji_grid = self.emoji_grid(category)
+            return emoji_grid.get_emoji(emoji)
 
     def __mouse_enter_emoji(self, emoji: Emoji):
         aliases = " ".join(map(lambda alias: f":{alias}:", emoji.aliases))
