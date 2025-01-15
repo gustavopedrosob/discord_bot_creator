@@ -183,5 +183,6 @@ class IntegratedBot(Bot):
 
 
 if __name__ == "__main__":
+    messages.load()
     bot = Bot()
     bot.run()
