@@ -167,6 +167,7 @@ class Main(QMainWindow):
             QCoreApplication.translate("QMainWindow", "No logs at moment")
         )
         self.logs_text_edit.setReadOnly(True)
+        self.logs_text_edit.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
         # Command Entry Frame
         self.cmd_combobox = QComboBox()
