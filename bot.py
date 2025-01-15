@@ -1,7 +1,8 @@
 import asyncio
 import logging
 import discord
-from discord import Intents, Client
+from discord import Intents, Client, GroupChannel
+from discord.abc import GuildChannel
 
 from core.config import instance as config
 from core.functions import random_choose
@@ -87,7 +88,7 @@ class Bot(Client):
         for reply in replies:
             reply = random_choose(reply)
             reply = Variable(message).apply_variable(reply)
-            if where == "group":
+            if where == "group" and message.channel.guild is not None:
                 message = await message.channel.send(reply)
                 logger.info(
                     f'Enviando no grupo a resposta "{reply}" à mensagem "{message.content}" do autor {message.author}.'
