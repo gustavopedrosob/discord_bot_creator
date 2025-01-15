@@ -33,7 +33,7 @@ class MessageWindow:
         )
         self.window.setWindowIcon(QIcon("source/icons/window-icon.svg"))
         self.window.setMinimumSize(800, 600)
-        self.window.resize(800, 600)
+        self.window.resize(1000, 800)
         self.window.setWindowTitle(QCoreApplication.translate("QMainWindow", "Message"))
 
         left_layout = QVBoxLayout()

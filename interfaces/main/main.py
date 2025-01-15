@@ -36,7 +36,7 @@ class Main(QMainWindow):
         super().__init__()
         self.setWindowTitle("Bot Discord Easy Creator")
         self.setMinimumSize(800, 600)
-        self.resize(800, 600)
+        self.resize(1000, 800)
         self.setWindowIcon(QIcon("source/icons/window-icon.svg"))
 
         self.message_window = None
