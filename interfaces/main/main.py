@@ -179,7 +179,7 @@ class Main(QMainWindow):
         # Token Entry Frame
         self.token_widget = QPassword()
         self.token_widget.line_edit.setText(config.get("token"))
-        self.token_widget.line_edit.returnPressed.connect(self.update_token)
+        self.token_widget.line_edit.textEdited.connect(self.update_token)
 
         # Execute Bot Button
         self.switch_bot_button = QPushButton(
@@ -294,7 +294,6 @@ class Main(QMainWindow):
         token = self.token_widget.line_edit.text()
         config.set("token", token)
         config.save()
-        logger.info("Token salvo com sucesso!")
 
     def edit_selected_message(self):
         """Opens the NewMessage interface and loads saved information."""
