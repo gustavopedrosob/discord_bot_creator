@@ -9,6 +9,7 @@ class QCollapseGroup(QWidget):
         super().__init__()
         self.__collapsed = False
         self.__widget = widget
+        self.__widget.setContentsMargins(0, 0, 0, 0)
         self.__collapse_button = QColorResponsiveButton()
         self.__collapse_button.setIcon(QIcon("source/icons/angle-down-solid.svg"))
         self.__collapse_button.setFlat(True)
@@ -21,6 +22,7 @@ class QCollapseGroup(QWidget):
         self.__header_layout.addWidget(self.__label)
         self.__header_layout.setStretch(1, True)
         self.__layout = QVBoxLayout()
+        self.__layout.setSpacing(0)
         self.__layout.addLayout(self.__header_layout)
         self.__layout.addWidget(widget)
         self.setLayout(self.__layout)

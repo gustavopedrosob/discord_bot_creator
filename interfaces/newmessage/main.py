@@ -55,19 +55,23 @@ class MessageWindow:
             QCoreApplication.translate("QMainWindow", "Conditions"),
             self.listbox_conditions,
         )
+        collapse_conditions.setContentsMargins(0, 0, 0, 0)
         self.listbox_reactions = QListBox(reactions_line_edit)
         collapse_reactions = QCollapseGroup(
             QCoreApplication.translate("QMainWindow", "Conditions"),
             self.listbox_reactions,
         )
+        collapse_reactions.setContentsMargins(0, 0, 0, 0)
         self.listbox_messages = QListBox(QLineEdit())
         collapse_messages = QCollapseGroup(
             QCoreApplication.translate("QMainWindow", "Messages"), self.listbox_messages
         )
+        collapse_messages.setContentsMargins(0, 0, 0, 0)
         self.listbox_replies = QListBox(QLineEdit())
         collapse_replies = QCollapseGroup(
             QCoreApplication.translate("QMainWindow", "Replies"), self.listbox_replies
         )
+        collapse_messages.setContentsMargins(0, 0, 0, 0)
 
         for widget in (
             collapse_conditions,
@@ -76,6 +80,9 @@ class MessageWindow:
             collapse_replies,
         ):
             left_layout.addWidget(widget)
+
+        left_layout.setSpacing(0)
+        left_layout.setContentsMargins(0, 0, 0, 0)
 
         self.group_pin_or_del = QCheckBoxGroup(
             QLabel(QCoreApplication.translate("QMainWindow", "Action"))
