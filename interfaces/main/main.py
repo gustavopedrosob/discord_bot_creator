@@ -423,7 +423,7 @@ class Main(QMainWindow):
         self.switch_bot_button.clicked.connect(self.turn_off_bot)
 
     def turn_off_bot(self):
-        self.bot.client.loop.create_task(self.bot.client.close())
+        self.bot.loop.create_task(self.bot.close())
         self.bot_thread.join()
         self.switch_bot_button.setText(
             QCoreApplication.translate("QMainWindow", "Turn on bot")
