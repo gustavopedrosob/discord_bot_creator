@@ -1,7 +1,5 @@
 import asyncio
 import logging
-import typing
-
 import discord
 from discord import Intents, Client
 
@@ -27,18 +25,46 @@ class Bot(Client):
         logger.info(f'Identificada mensagem "{message.content}".')
 
         for message_data in messages.content().values():
-            await self.message_and_reply(
-                message=message,
-                conditions=message_data["conditions"],
-                expected_message=message_data["expected message"],
-                reply=message_data["reply"],
-                reaction=message_data["reaction"],
-                delay=message_data["delay"],
-                pin_or_del=message_data["pin or del"],
-                kick_or_ban=message_data["kick or ban"],
-                where_reply=message_data["where reply"],
-                where_reaction=message_data["where reaction"],
+            message_condition = MessageConditions(
+                message, expected_message=message_data["expected message"]
             )
+
+            conditions_to_confirm = list(
+                map(
+                    lambda x: message_condition.string_conditions[x],
+                    message_data["conditions"],
+                )
+            )
+
+            # é importante adicionar a condição expected message se tiver alguma mensagem esperada porque, senão podem ocorrer erros inesperados.
+            if message_data["expected message"]:
+                conditions_to_confirm.append(
+                    message.content in message_data["expected message"]
+                )
+
+            logger.info(f"Verificando condições {conditions_to_confirm}")
+
+            if all(conditions_to_confirm):
+                if message_data["delay"]:
+                    await self.apply_delay(message_data["delay"])
+                if message_data["reply"]:
+                    await self.send_reply(
+                        message_data["reply"],
+                        message_data["reaction"],
+                        message,
+                        message_data["where reply"],
+                        message_data["where reaction"],
+                    )
+                if message_data["where reaction"] == "author":
+                    await self.send_reaction(message_data["reaction"], message)
+                if message_data["pin or del"] == "delete":
+                    await self.remove_message(message)
+                if message_data["pin or del"] == "pin":
+                    await self.pin_message(message)
+                if message_data["kick or ban"] == "ban":
+                    await self.ban_member(message.author)
+                if message_data["kick or ban"] == "kick":
+                    await self.kick_member(message.author)
 
     @staticmethod
     async def apply_delay(delay: int):
@@ -103,52 +129,6 @@ class Bot(Client):
     async def ban_member(member: discord.Member):
         await member.ban()
         logger.info(f'Banindo jogador "{member.name}".')
-
-    async def message_and_reply(
-        self,
-        message: discord.Message,
-        conditions: list[str],
-        expected_message: list[str],
-        reply: list[list[str]],
-        reaction: list[list[str]],
-        delay: int,
-        pin_or_del: typing.Optional[str],
-        kick_or_ban: typing.Optional[str],
-        where_reply: typing.Optional[str],
-        where_reaction: typing.Optional[str],
-    ):
-
-        message_condition = MessageConditions(
-            message, expected_message=expected_message
-        )
-
-        conditions_to_confirm = list(
-            map(lambda x: message_condition.string_conditions[x], conditions)
-        )
-
-        # é importante adicionar a condição expected message se tiver alguma mensagem esperada porque, senão podem ocorrer erros inesperados.
-        if expected_message:
-            conditions_to_confirm.append(message.content in expected_message)
-
-        logger.info(f"Verificando condições {conditions_to_confirm}")
-
-        if all(conditions_to_confirm):
-            if delay:
-                await self.apply_delay(delay)
-            if reply:
-                await self.send_reply(
-                    reply, reaction, message, where_reply, where_reaction
-                )
-            if where_reaction == "author":
-                await self.send_reaction(reaction, message)
-            if pin_or_del == "delete":
-                await self.remove_message(message)
-            if pin_or_del == "pin":
-                await self.pin_message(message)
-            if kick_or_ban == "ban":
-                await self.ban_member(message.author)
-            if kick_or_ban == "kick":
-                await self.kick_member(message.author)
 
 
 class IntegratedBot(Bot):
