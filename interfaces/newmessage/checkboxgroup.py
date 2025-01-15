@@ -1,3 +1,5 @@
+import typing
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QGridLayout, QWidget, QLabel, QCheckBox
 
@@ -35,5 +37,5 @@ class QCheckBoxGroup(QWidget):
     def get_current_name(self) -> str:
         return self.__current_name
 
-    def get_checkbox(self, name: str) -> QCheckBox:
-        return self.__checkboxes[name]
+    def get_checkbox(self, name: str) -> typing.Optional[QCheckBox]:
+        return self.__checkboxes.get(name)
