@@ -180,7 +180,7 @@ class Main(QMainWindow):
         self.token_widget = QPassword()
         self.token_widget.line_edit.setText(config.get("token"))
         self.token_widget.line_edit.textEdited.connect(self.update_token)
-        self.token_widget.line_edit.setMaxLength(70)
+        self.token_widget.line_edit.setMaxLength(100)
 
         # Execute Bot Button
         self.switch_bot_button = QPushButton(
