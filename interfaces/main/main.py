@@ -276,7 +276,7 @@ class Main(QMainWindow):
 
     def __turn_on_bot(self):
         self.bot = IntegratedBot(self)
-        self.bot.run()
+        self.bot.run(config.get("token"))
 
     def start_turn_on_bot_thread(self):
         self.bot_thread = Thread(target=self.__turn_on_bot)
