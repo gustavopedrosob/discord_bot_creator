@@ -415,6 +415,7 @@ class Main(QMainWindow):
 
     def log(self, message):
         self.logs_text_edit.insertPlainText(message)
+        self.logs_text_edit.update()
 
     def change_init_bot_button(self):
         self.switch_bot_button.setText(
