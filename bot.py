@@ -1,9 +1,7 @@
 import asyncio
 import logging
 import discord
-from discord import Intents, Client, GroupChannel
-from discord.abc import GuildChannel
-
+from discord import Intents, Client
 from core.config import instance as config
 from core.functions import random_choose
 from core.messages import messages
@@ -89,20 +87,20 @@ class Bot(Client):
             reply = random_choose(reply)
             reply = Variable(message).apply_variable(reply)
             if where == "group" and message.channel.guild is not None:
-                message = await message.channel.send(reply)
                 logger.info(
                     f'Enviando no grupo a resposta "{reply}" à mensagem "{message.clean_content}" do autor {message.author}.'
                 )
+                reply_message = await message.channel.send(reply)
                 if where_reaction == "bot":
-                    await self.send_reaction(reactions, message)
+                    await self.send_reaction(reactions, reply_message)
             elif where == "private":
-                dm_channel = await message.author.create_dm()
-                message = await dm_channel.send(reply)
                 logger.info(
                     f'Enviando no privado a resposta "{reply}" à mensagem "{message.clean_content}" do autor {message.author}.'
                 )
+                dm_channel = await message.author.create_dm()
+                reply_message = await dm_channel.send(reply)
                 if where_reaction == "bot":
-                    await self.send_reaction(reactions, message)
+                    await self.send_reaction(reactions, reply_message)
 
     @staticmethod
     async def remove_message(message: discord.Message):
