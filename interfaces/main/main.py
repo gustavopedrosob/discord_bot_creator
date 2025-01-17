@@ -1,4 +1,5 @@
 import logging
+import os
 import webbrowser
 from threading import Thread
 
@@ -18,11 +19,12 @@ from PySide6.QtWidgets import (
     QComboBox,
     QMessageBox,
     QListWidgetItem,
+    QFileDialog,
 )
 
 from bot import IntegratedBot
 from core.config import instance as config
-from core.messages import messages
+from core.messages import messages, Messages
 from interfaces.classes.qpassword import QPassword
 from interfaces.credits.credits import CreditsWindow
 from interfaces.main.log_handler import LogHandler
@@ -81,6 +83,7 @@ class Main(QMainWindow):
         language_menu.addAction(portuguese_action)
 
         load_action = QAction(QCoreApplication.translate("QMainWindow", "Load"), self)
+        load_action.triggered.connect(self.load_dialog)
         save_action = QAction(QCoreApplication.translate("QMainWindow", "Save"), self)
         exit_action = QAction(QCoreApplication.translate("QMainWindow", "Exit"), self)
         exit_action.triggered.connect(self.close)
@@ -247,7 +250,17 @@ class Main(QMainWindow):
 
         main_layout.setStretch(1, 1)
 
-        self.load_messages()
+        self.load_messages(config.get("file"))
+
+    def load_dialog(self):
+        file_name, file_extension = QFileDialog.getOpenFileName(
+            self,
+            QCoreApplication.translate("QMainWindow", "Open Image"),
+            os.getcwd(),
+            "JSON Files (*.json)",
+        )
+        if file_name:
+            self.load_messages(file_name)
 
     def new_message(self):
         if self.message_window:
@@ -410,11 +423,29 @@ class Main(QMainWindow):
         messages.clear()
         messages.save()
 
-    def load_messages(self):
-        """Loads all messages from "message and reply.json" and inserts them into the messages list."""
-        messages.load()
-        for message_name in messages.message_names():
-            self.messages_list_widget.addItem(message_name)
+    def load_messages(self, path: str):
+        """
+        Loads all messages from file in path and inserts them into the messages list.
+        If it's an invalid file raises a warning window.
+        Saves the file path on config file if it's valid.
+        """
+        temp_messages = Messages()
+        temp_messages.load(path)
+        if temp_messages.is_valid():
+            messages.replace(temp_messages)
+            self.messages_list_widget.clear()
+            for message_name in messages.message_names():
+                self.messages_list_widget.addItem(message_name)
+            config.set("file", path)
+            config.save()
+        else:
+            QMessageBox.warning(
+                self,
+                QCoreApplication.translate("QMainWindow", "Invalid file"),
+                QCoreApplication.translate("QMainWindow", "This file can't be loaded."),
+                QMessageBox.StandardButton.Ok,
+                QMessageBox.StandardButton.NoButton,
+            )
 
     def log(self, message):
         self.logs_text_edit.insertPlainText(message)
