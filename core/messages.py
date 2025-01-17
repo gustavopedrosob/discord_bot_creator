@@ -1,17 +1,18 @@
 import json
 import typing
+from pathlib import Path
 
 
 class Messages:
     def __init__(self):
         self.__content = {}
 
-    def load(self, path: str):
+    def load(self, path: Path):
         with open(path, "r") as json_file:
             self.__content = json.load(json_file)
 
-    def save(self):
-        with open("source/message and reply.json", "w") as file:
+    def save(self, path: Path):
+        with open(path, "w") as file:
             file.write(json.dumps(self.__content))
 
     def set(self, message: str, data: dict):

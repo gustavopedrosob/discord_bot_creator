@@ -1,6 +1,8 @@
 import logging
 import os
+import typing
 import webbrowser
+from pathlib import Path
 from threading import Thread
 
 from PySide6.QtCore import QPoint, QCoreApplication
@@ -36,7 +38,9 @@ logger = logging.getLogger(__name__)
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Bot Discord Easy Creator")
+        file = Path(config.get("file"))
+
+        self.set_window_title(file)
         self.setMinimumSize(800, 600)
         self.resize(1000, 800)
         self.setWindowIcon(QIcon("source/icons/window-icon.svg"))
@@ -86,10 +90,14 @@ class Main(QMainWindow):
         load_action.triggered.connect(self.load_dialog)
         save_action = QAction(QCoreApplication.translate("QMainWindow", "Save"), self)
         save_action.triggered.connect(self.save)
+        save_as_action = QAction(
+            QCoreApplication.translate("QMainWindow", "Save as"), self
+        )
+        save_as_action.triggered.connect(self.save_as_dialog)
         exit_action = QAction(QCoreApplication.translate("QMainWindow", "Exit"), self)
         exit_action.triggered.connect(self.close)
 
-        for action in [load_action, save_action, exit_action]:
+        for action in [load_action, save_action, save_as_action, exit_action]:
             file_menu.addAction(action)
 
         credits_action = QAction(
@@ -251,19 +259,33 @@ class Main(QMainWindow):
 
         main_layout.setStretch(1, 1)
 
-        self.load_messages(config.get("file"))
+        if file.name == "":
+            pass
+        elif file.exists() and file.is_file():
+            self.load_messages(file)
+        else:
+            self.file_dont_exists_message_box()
+            config.set("file", "")
+            config.save()
+            print(file.name)
+
+    def set_window_title(self, file: typing.Optional[Path] = None):
+        title = "Bot Discord Easy Creator"
+        if file and file.exists():
+            title = f"Bot Discord Easy Creator - {file.name}"
+        self.setWindowTitle(title)
 
     def load_dialog(self):
-        file_name, file_extension = QFileDialog.getOpenFileName(
+        file_path, file_extension = QFileDialog.getOpenFileName(
             self,
             QCoreApplication.translate("QMainWindow", "Open File"),
             os.getcwd(),
             "JSON Files (*.json)",
         )
-        if file_name:
-            self.load_messages(file_name)
+        if file_path:
+            self.load_messages(Path(file_path))
 
-    def save(self):
+    def saved_successfully_message_box(self):
         warning = QMessageBox(self)
         warning.setWindowTitle(QCoreApplication.translate("QMainWindow", "Saving"))
         warning.setText(
@@ -273,7 +295,36 @@ class Main(QMainWindow):
             )
         )
         warning.exec()
+
+    def save(self):
         messages.save()
+        self.saved_successfully_message_box()
+
+    def file_dont_exists_message_box(self):
+        warning = QMessageBox(self)
+        warning.setWindowTitle(QCoreApplication.translate("QMainWindow", "Warning"))
+        warning.setText(
+            QCoreApplication.translate(
+                "QMainWindow",
+                "The file don't exists anymore.",
+            )
+        )
+        warning.exec()
+
+    def save_as_dialog(self):
+        file_path, file_extension = QFileDialog.getSaveFileName(
+            self,
+            QCoreApplication.translate("QMainWindow", "Save File"),
+            os.getcwd(),
+            "JSON Files (*.json)",
+        )
+        if file_path:
+            config.set("file", file_path)
+            config.save()
+            path = Path(file_path)
+            messages.save(path)
+            self.set_window_title(path)
+            self.saved_successfully_message_box()
 
     def new_message(self):
         if self.message_window:
@@ -436,7 +487,7 @@ class Main(QMainWindow):
         messages.clear()
         messages.save()
 
-    def load_messages(self, path: str):
+    def load_messages(self, path: Path):
         """
         Loads all messages from file in path and inserts them into the messages list.
         If it's an invalid file raises a warning window.
@@ -449,8 +500,9 @@ class Main(QMainWindow):
             self.messages_list_widget.clear()
             for message_name in messages.message_names():
                 self.messages_list_widget.addItem(message_name)
-            config.set("file", path)
+            config.set("file", str(path))
             config.save()
+            self.set_window_title(path)
         else:
             QMessageBox.warning(
                 self,
