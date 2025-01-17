@@ -85,6 +85,7 @@ class Main(QMainWindow):
         load_action = QAction(QCoreApplication.translate("QMainWindow", "Load"), self)
         load_action.triggered.connect(self.load_dialog)
         save_action = QAction(QCoreApplication.translate("QMainWindow", "Save"), self)
+        save_action.triggered.connect(self.save)
         exit_action = QAction(QCoreApplication.translate("QMainWindow", "Exit"), self)
         exit_action.triggered.connect(self.close)
 
@@ -261,6 +262,18 @@ class Main(QMainWindow):
         )
         if file_name:
             self.load_messages(file_name)
+
+    def save(self):
+        warning = QMessageBox(self)
+        warning.setWindowTitle(QCoreApplication.translate("QMainWindow", "Saving"))
+        warning.setText(
+            QCoreApplication.translate(
+                "QMainWindow",
+                "The file has been saved successfully.",
+            )
+        )
+        warning.exec()
+        messages.save()
 
     def new_message(self):
         if self.message_window:
