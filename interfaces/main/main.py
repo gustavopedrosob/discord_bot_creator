@@ -255,7 +255,7 @@ class Main(QMainWindow):
     def load_dialog(self):
         file_name, file_extension = QFileDialog.getOpenFileName(
             self,
-            QCoreApplication.translate("QMainWindow", "Open Image"),
+            QCoreApplication.translate("QMainWindow", "Open File"),
             os.getcwd(),
             "JSON Files (*.json)",
         )
