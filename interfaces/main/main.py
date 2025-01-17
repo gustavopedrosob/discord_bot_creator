@@ -80,9 +80,14 @@ class Main(QMainWindow):
         language_menu.addAction(english_action)
         language_menu.addAction(portuguese_action)
 
-        # Create actions
+        load_action = QAction(QCoreApplication.translate("QMainWindow", "Load"), self)
+        save_action = QAction(QCoreApplication.translate("QMainWindow", "Save"), self)
         exit_action = QAction(QCoreApplication.translate("QMainWindow", "Exit"), self)
         exit_action.triggered.connect(self.close)
+
+        for action in [load_action, save_action, exit_action]:
+            file_menu.addAction(action)
+
         credits_action = QAction(
             QCoreApplication.translate("QMainWindow", "Credits"), self
         )
@@ -139,9 +144,6 @@ class Main(QMainWindow):
             self.remove_all_message_action,
         ]:
             self.addAction(action)
-
-        # Add actions to the menus
-        file_menu.addAction(exit_action)
 
         for action in [
             discord_applications,
