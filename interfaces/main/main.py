@@ -84,13 +84,13 @@ class Main(QMainWindow):
         language_menu.addAction(portuguese_action)
 
         load_action = QAction(QCoreApplication.translate("QMainWindow", "Load"), self)
-        load_action.triggered.connect(self.load_dialog)
+        load_action.triggered.connect(self.on_load_action)
         save_action = QAction(QCoreApplication.translate("QMainWindow", "Save"), self)
         save_action.triggered.connect(self.on_save_action)
         save_as_action = QAction(
             QCoreApplication.translate("QMainWindow", "Save as"), self
         )
-        save_as_action.triggered.connect(self.save_as_dialog)
+        save_as_action.triggered.connect(self.on_save_as_action)
         exit_action = QAction(QCoreApplication.translate("QMainWindow", "Exit"), self)
         exit_action.triggered.connect(self.close)
 
@@ -275,7 +275,7 @@ class Main(QMainWindow):
             title = f"Bot Discord Easy Creator - {file.name}"
         self.setWindowTitle(title)
 
-    def load_dialog(self):
+    def on_load_action(self):
         file_path, file_extension = QFileDialog.getOpenFileName(
             self,
             QCoreApplication.translate("QMainWindow", "Open File"),
@@ -301,12 +301,12 @@ class Main(QMainWindow):
     def on_save_action(self):
         file = Path(config.get("file"))
         if file.name == "":
-            self.save_as_dialog()
+            self.on_save_as_action()
         elif file.exists() and file.is_file():
             self.save()
         else:
             self.file_dont_exists_message_box()
-            self.save_as_dialog()
+            self.on_save_as_action()
 
     def save(self):
         messages.save(Path(config.get("file")))
@@ -323,7 +323,7 @@ class Main(QMainWindow):
         )
         warning.exec()
 
-    def save_as_dialog(self):
+    def on_save_as_action(self):
         file_path, file_extension = QFileDialog.getSaveFileName(
             self,
             QCoreApplication.translate("QMainWindow", "Save File"),
