@@ -73,6 +73,7 @@ class MessageWindow:
         collapse_reactions.setContentsMargins(0, 0, 0, 0)
 
         messages_line_edit = QLineEdit()
+        messages_line_edit.setMaxLength(2000)
         self.listbox_messages = QListBox(messages_line_edit)
         self.__add_emoji_button(
             self.listbox_messages.entry_layout(), messages_line_edit
@@ -83,6 +84,7 @@ class MessageWindow:
         collapse_messages.setContentsMargins(0, 0, 0, 0)
 
         replies_line_edit = QLineEdit()
+        replies_line_edit.setMaxLength(2000)
         self.listbox_replies = QListBox(replies_line_edit)
         self.__add_emoji_button(self.listbox_replies.entry_layout(), replies_line_edit)
         collapse_replies = QCollapseGroup(
