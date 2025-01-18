@@ -283,7 +283,9 @@ class Main(QMainWindow):
             "JSON Files (*.json)",
         )
         if file_path:
-            self.load_messages(Path(file_path))
+            file = Path(file_path)
+            self.load_messages(file)
+            self.set_window_title(file)
 
     def saved_successfully_message_box(self):
         warning = QMessageBox(self)
