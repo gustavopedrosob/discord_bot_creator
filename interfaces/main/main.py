@@ -38,9 +38,6 @@ logger = logging.getLogger(__name__)
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
-        file = Path(config.get("file"))
-
-        self.set_window_title(file)
         self.setMinimumSize(800, 600)
         self.resize(1000, 800)
         self.setWindowIcon(QIcon("source/icons/window-icon.svg"))
@@ -89,7 +86,7 @@ class Main(QMainWindow):
         load_action = QAction(QCoreApplication.translate("QMainWindow", "Load"), self)
         load_action.triggered.connect(self.load_dialog)
         save_action = QAction(QCoreApplication.translate("QMainWindow", "Save"), self)
-        save_action.triggered.connect(self.save)
+        save_action.triggered.connect(self.on_save_action)
         save_as_action = QAction(
             QCoreApplication.translate("QMainWindow", "Save as"), self
         )
@@ -259,15 +256,18 @@ class Main(QMainWindow):
 
         main_layout.setStretch(1, 1)
 
+        file = Path(config.get("file"))
+
         if file.name == "":
-            pass
+            self.set_window_title()
         elif file.exists() and file.is_file():
             self.load_messages(file)
+            self.set_window_title(file)
         else:
             self.file_dont_exists_message_box()
             config.set("file", "")
             config.save()
-            print(file.name)
+            self.set_window_title()
 
     def set_window_title(self, file: typing.Optional[Path] = None):
         title = "Bot Discord Easy Creator"
@@ -296,8 +296,18 @@ class Main(QMainWindow):
         )
         warning.exec()
 
+    def on_save_action(self):
+        file = Path(config.get("file"))
+        if file.name == "":
+            self.save_as_dialog()
+        elif file.exists() and file.is_file():
+            self.save()
+        else:
+            self.file_dont_exists_message_box()
+            self.save_as_dialog()
+
     def save(self):
-        messages.save()
+        messages.save(Path(config.get("file")))
         self.saved_successfully_message_box()
 
     def file_dont_exists_message_box(self):
@@ -399,15 +409,15 @@ class Main(QMainWindow):
             new_message_name = old_message_name
         messages.delete(old_message_name)
         messages.set(new_message_name, message_data)
-        messages.save()
         self.__get_list_item_message(old_message_name).setText(new_message_name)
+        self.on_save_action()
 
     def accepted_new_message(self, message_name: str, message_data: dict):
         if not message_name:
             message_name = messages.new_id()
         messages.set(message_name, message_data)
-        messages.save()
         self.messages_list_widget.addItem(message_name)
+        self.on_save_action()
 
     def __get_selected_message(self) -> int:
         return self.messages_list_widget.selectedIndexes()[0].row()
@@ -502,7 +512,6 @@ class Main(QMainWindow):
                 self.messages_list_widget.addItem(message_name)
             config.set("file", str(path))
             config.save()
-            self.set_window_title(path)
         else:
             QMessageBox.warning(
                 self,
