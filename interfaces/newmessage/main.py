@@ -37,6 +37,7 @@ from interpreter.conditions import conditions_keys
 class QMessageTextEdit(QResponsiveTextEdit):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.setMaximumHeight(400)
         self.__validator = None
 
     def validator(self) -> typing.Optional[QValidator]:

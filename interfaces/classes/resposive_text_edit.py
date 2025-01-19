@@ -1,21 +1,35 @@
+import typing
+
 from PySide6.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget
 
 
 class QResponsiveTextEdit(QTextEdit):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.adjust_height()
-        self.textChanged.connect(self.adjust_height)
+        self.__maximum_height = None
+        self.__adjust_height()
+        self.textChanged.connect(self.__adjust_height)
 
-    def adjust_height(self):
-        self.setFixedHeight(
+    def __adjust_height(self):
+        height = (
             int(self.document().size().height())
             + self.contentsMargins().top()
             + self.contentsMargins().bottom()
         )
+        maxh = self.maximumHeight()
+        if maxh is None:
+            self.setFixedHeight(height)
+        elif height <= maxh:
+            self.setFixedHeight(height)
+
+    def maximumHeight(self) -> typing.Optional[int]:
+        return self.__maximum_height
+
+    def setMaximumHeight(self, maxh: typing.Optional[int]):
+        self.__maximum_height = maxh
 
     def resizeEvent(self, e):
-        self.adjust_height()
+        self.__adjust_height()
         super().resizeEvent(e)
 
 
@@ -26,6 +40,7 @@ class MainWindow(QWidget):
 
         self.text_edit = QResponsiveTextEdit()
         self.text_edit.setPlaceholderText("Digite algo...")
+        # self.text_edit.setMaximumHeight(500)
 
         layout = QVBoxLayout()
         layout.addWidget(self.text_edit)
