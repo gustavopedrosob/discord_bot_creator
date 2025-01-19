@@ -1,7 +1,13 @@
 import typing
 
-from PySide6.QtCore import Qt, QCoreApplication, QPoint, QRegularExpression
-from PySide6.QtGui import QIcon, QMouseEvent, QRegularExpressionValidator
+from PySide6.QtCore import Qt, QCoreApplication, QPoint, QRegularExpression, QMimeData
+from PySide6.QtGui import (
+    QIcon,
+    QMouseEvent,
+    QRegularExpressionValidator,
+    QKeyEvent,
+    QValidator,
+)
 from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
@@ -14,6 +20,7 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QCheckBox,
     QMessageBox,
+    QTextEdit,
 )
 
 from core.messages import messages
@@ -21,9 +28,50 @@ from interfaces.classes.collapse_group import QCollapseGroup
 from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
 from interfaces.classes.emoji_picker import QEmojiPickerPopup
 from interfaces.classes.emoji_validator import QEmojiValidator
+from interfaces.classes.resposive_text_edit import QResponsiveTextEdit
 from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
 from interpreter.conditions import conditions_keys
+
+
+class QMessageTextEdit(QResponsiveTextEdit):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__validator = None
+
+    def validator(self) -> typing.Optional[QValidator]:
+        return self.__validator
+
+    def set_validator(self, validator: QValidator):
+        self.__validator = validator
+
+    def insertFromMimeData(self, source: QMimeData):
+        if source.hasText():
+            text = source.text()
+            validator = self.validator()
+            if validator and validator.validate(text, 0) not in (
+                QValidator.State.Intermediate,
+                QValidator.State.Acceptable,
+            ):
+                return
+            self.insertPlainText(text)
+
+    def keyPressEvent(self, e: QKeyEvent):
+        if e.modifiers() == Qt.KeyboardModifier.NoModifier and e.key() not in (
+            Qt.Key.Key_Return,
+            Qt.Key.Key_Enter,
+            Qt.Key.Key_Backspace,
+        ):
+            text = self.toPlainText() + e.text()
+            validator = self.validator()
+            if validator and validator.validate(text, 0) not in (
+                QValidator.State.Intermediate,
+                QValidator.State.Acceptable,
+            ):
+                return
+            super().keyPressEvent(e)
+        else:
+            super().keyPressEvent(e)
 
 
 class MessageWindow:
@@ -60,8 +108,8 @@ class MessageWindow:
         collapse_conditions.setContentsMargins(0, 0, 0, 0)
 
         emoji_validator = QEmojiValidator()
-        reactions_line_edit = QLineEdit()
-        reactions_line_edit.setValidator(emoji_validator)
+        reactions_line_edit = QMessageTextEdit()
+        reactions_line_edit.set_validator(emoji_validator)
         self.listbox_reactions = QListBox(reactions_line_edit)
         self.__add_emoji_button(
             self.listbox_reactions.entry_layout(), reactions_line_edit
@@ -72,8 +120,8 @@ class MessageWindow:
         )
         collapse_reactions.setContentsMargins(0, 0, 0, 0)
 
-        messages_line_edit = QLineEdit()
-        messages_line_edit.setMaxLength(2000)
+        messages_line_edit = QMessageTextEdit()
+        # messages_line_edit.setMaxLength(2000)
         self.listbox_messages = QListBox(messages_line_edit)
         self.__add_emoji_button(
             self.listbox_messages.entry_layout(), messages_line_edit
@@ -83,8 +131,8 @@ class MessageWindow:
         )
         collapse_messages.setContentsMargins(0, 0, 0, 0)
 
-        replies_line_edit = QLineEdit()
-        replies_line_edit.setMaxLength(2000)
+        replies_line_edit = QMessageTextEdit()
+        # replies_line_edit.setMaxLength(2000)
         self.listbox_replies = QListBox(replies_line_edit)
         self.__add_emoji_button(self.listbox_replies.entry_layout(), replies_line_edit)
         collapse_replies = QCollapseGroup(
@@ -181,11 +229,11 @@ class MessageWindow:
         save_and_quit_button.clicked.connect(self.on_save_and_quit)
 
     @staticmethod
-    def __raise_emote_popup(point: QPoint, line_edit: QLineEdit):
+    def __raise_emote_popup(point: QPoint, line_edit: QTextEdit):
         emoji_picker_popup = QEmojiPickerPopup()
         emoji_picker = emoji_picker_popup.emoji_picker()
         emoji_picker.emoji_click.connect(
-            lambda text: line_edit.setText(line_edit.text() + text)
+            lambda text: line_edit.setPlainText(line_edit.toPlainText() + text)
         )
         emoji_picker_popup.move(point.x() - 500, point.y() - 500)
         emoji_picker_popup.exec()
@@ -193,7 +241,9 @@ class MessageWindow:
     def is_name_valid(self):
         return self.get_name() not in messages.message_names()
 
-    def __add_emoji_button(self, layout: QHBoxLayout, line_edit: QLineEdit):
+    def __add_emoji_button(
+        self, layout: QHBoxLayout, line_edit: typing.Union[QLineEdit, QTextEdit]
+    ):
         emote_button = QColorResponsiveButton()
         emote_button.setIcon(QIcon("source/icons/face-smile-solid.svg"))
         emote_button.setFlat(True)

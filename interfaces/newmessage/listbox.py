@@ -12,13 +12,14 @@ from PySide6.QtWidgets import (
     QMenu,
     QHBoxLayout,
     QWidget,
+    QTextEdit,
 )
 
 from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
 
 
 class QListBox(QWidget):
-    def __init__(self, line_edit: typing.Union[QLineEdit, QComboBox]):
+    def __init__(self, line_edit: typing.Union[QLineEdit, QComboBox, QTextEdit]):
         super().__init__()
         self.__list = QListWidget()
         self.__add_button = QColorResponsiveButton()
@@ -38,14 +39,15 @@ class QListBox(QWidget):
     def __add_item(self):
         if isinstance(self.__line_edit, QComboBox):
             text = self.__line_edit.currentText()
-            if text:
-                self.__list.addItem(QListWidgetItem(text))
-                self.__line_edit.clearEditText()
+            self.__line_edit.clearEditText()
+        elif isinstance(self.__line_edit, QTextEdit):
+            text = self.__line_edit.toPlainText()
+            self.__line_edit.clear()
         else:
             text = self.__line_edit.text()
-            if text:
-                self.__list.addItem(QListWidgetItem(text))
-                self.__line_edit.clear()
+            self.__line_edit.clear()
+        if text:
+            self.__list.addItem(QListWidgetItem(text))
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_Delete:
