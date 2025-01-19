@@ -55,7 +55,9 @@ class QMessageTextEdit(QResponsiveTextEdit):
                 QValidator.State.Acceptable,
             ):
                 return
-            self.insertPlainText(text)
+            mime_data = QMimeData()
+            mime_data.setText(source.text())
+            super().insertFromMimeData(mime_data)
 
     def keyPressEvent(self, e: QKeyEvent):
         if e.modifiers() == Qt.KeyboardModifier.NoModifier and e.key() not in (

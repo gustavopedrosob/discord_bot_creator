@@ -21,6 +21,8 @@ class QResponsiveTextEdit(QTextEdit):
             self.setFixedHeight(height)
         elif height <= maxh:
             self.setFixedHeight(height)
+        else:
+            self.setFixedHeight(self.maximumHeight())
 
     def maximumHeight(self) -> typing.Optional[int]:
         return self.__maximum_height
@@ -31,6 +33,10 @@ class QResponsiveTextEdit(QTextEdit):
     def resizeEvent(self, e):
         self.__adjust_height()
         super().resizeEvent(e)
+
+    def insertFromMimeData(self, source):
+        super().insertFromMimeData(source)
+        self.__adjust_height()
 
 
 class MainWindow(QWidget):
