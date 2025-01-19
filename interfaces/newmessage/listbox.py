@@ -29,7 +29,9 @@ class QListBox(QWidget):
         self.__line_edit = line_edit
         self.__horizontal_layout = QHBoxLayout()
         self.__horizontal_layout.addWidget(self.__line_edit)
-        self.__horizontal_layout.addWidget(self.__add_button)
+        self.__horizontal_layout.addWidget(
+            self.__add_button, alignment=Qt.AlignmentFlag.AlignTop
+        )
         self.__horizontal_layout.setStretch(0, True)
         self.__layout = QVBoxLayout()
         self.__layout.addWidget(self.__list)

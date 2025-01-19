@@ -248,7 +248,7 @@ class MessageWindow:
         emote_button = QColorResponsiveButton()
         emote_button.setIcon(QIcon("source/icons/face-smile-solid.svg"))
         emote_button.setFlat(True)
-        layout.addWidget(emote_button)
+        layout.addWidget(emote_button, alignment=Qt.AlignmentFlag.AlignTop)
         emote_button.clicked.connect(
             lambda: self.__raise_emote_popup(
                 emote_button.mapToGlobal(QPoint(0, 0)), line_edit
