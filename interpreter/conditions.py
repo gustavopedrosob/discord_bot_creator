@@ -10,8 +10,6 @@ conditions_keys = [
     "not mention someone",
     "mention everyone",
     "not mention everyone",
-    "pinned",
-    "not pinned",
     "author is expected",
     "not author is expected",
     "author is bot",
@@ -88,8 +86,6 @@ class MessageConditions:
         not_mention_someone = not mention_someone
         mention_everyone = message.mention_everyone
         not_mention_everyone = not mention_everyone
-        pinned = message.pinned
-        not_pinned = not pinned
         author_is_expected = (
             False if expected_author == None else message.author == expected_author
         )
@@ -110,8 +106,6 @@ class MessageConditions:
             "not mention someone": not_mention_someone,
             "mention everyone": mention_everyone,
             "not mention everyone": not_mention_everyone,
-            "pinned": pinned,
-            "not pinned": not_pinned,
             "author is expected": author_is_expected,
             "not author is expected": not_author_is_expected,
             "author is bot": author_is_bot,
