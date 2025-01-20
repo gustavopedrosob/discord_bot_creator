@@ -26,37 +26,14 @@ from PySide6.QtWidgets import (
 
 from bot import IntegratedBot
 from core.config import instance as config
-from core.functions import adjust_brightness
 from core.messages import messages, Messages
+from interfaces.classes.color_button import QColorButton
 from interfaces.classes.qpassword import QPassword
 from interfaces.credits.credits import CreditsWindow
 from interfaces.main.log_handler import LogHandler
 from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow
 
 logger = logging.getLogger(__name__)
-
-
-class QColorButton(QPushButton):
-    def __init__(self, text: str, color: str):
-        super().__init__()
-        self.setText(text)
-        self.setStyleSheet(
-            """
-            QPushButton {
-                background-color: %s;
-                color: white;
-                padding: 5px;
-                border-radius: 5px;
-            }
-            QPushButton:hover {
-                background-color: %s;
-            }
-            """
-            % (color, adjust_brightness(color, 10))
-        )
-
-    def setText(self, text: str):
-        super().setText(f" {text}")
 
 
 class Main(QMainWindow):
