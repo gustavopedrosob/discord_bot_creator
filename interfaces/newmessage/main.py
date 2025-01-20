@@ -1,6 +1,13 @@
 import typing
 
-from PySide6.QtCore import Qt, QCoreApplication, QPoint, QRegularExpression, QMimeData
+from PySide6.QtCore import (
+    Qt,
+    QCoreApplication,
+    QPoint,
+    QRegularExpression,
+    QMimeData,
+    QT_TR_NOOP,
+)
 from PySide6.QtGui import (
     QIcon,
     QMouseEvent,
@@ -21,6 +28,7 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QMessageBox,
     QTextEdit,
+    QListWidgetItem,
 )
 
 from core.messages import messages
@@ -31,7 +39,6 @@ from interfaces.classes.emoji_validator import QEmojiValidator
 from interfaces.classes.resposive_text_edit import QResponsiveTextEdit
 from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
-from interpreter.conditions import conditions_keys
 
 
 class QMessageTextEdit(QResponsiveTextEdit):
@@ -101,9 +108,61 @@ class MessageWindow:
         self.name_entry.setMaxLength(40)
         self.name_entry.setValidator(name_entry_validator)
 
-        conditions_combobox = QComboBox()
-        conditions_combobox.addItems(conditions_keys)
-        self.listbox_conditions = QListBox(conditions_combobox)
+        self._translated_conditions = {
+            "expected message": QCoreApplication.translate(
+                "Conditions", "expected message"
+            ),
+            "not expected message": QCoreApplication.translate(
+                "Conditions", "not expected message"
+            ),
+            "mention someone": QCoreApplication.translate(
+                "Conditions", "mention someone"
+            ),
+            "not mention someone": QCoreApplication.translate(
+                "Conditions", "not mention someone"
+            ),
+            "mention everyone": QCoreApplication.translate(
+                "Conditions", "mention everyone"
+            ),
+            "not mention everyone": QCoreApplication.translate(
+                "Conditions", "not mention everyone"
+            ),
+            "author is expected": QCoreApplication.translate(
+                "Conditions", "author is expected"
+            ),
+            "not author is expected": QCoreApplication.translate(
+                "Conditions", "not author is expected"
+            ),
+            "author is bot": QCoreApplication.translate("Conditions", "author is bot"),
+            "not author is bot": QCoreApplication.translate(
+                "Conditions", "not author is bot"
+            ),
+            "number in message": QCoreApplication.translate(
+                "Conditions", "number in message"
+            ),
+            "not number in message": QCoreApplication.translate(
+                "Conditions", "not number in message"
+            ),
+            "symbols in message": QCoreApplication.translate(
+                "Conditions", "symbols in message"
+            ),
+            "not symbols in message": QCoreApplication.translate(
+                "Conditions", "not symbols in message"
+            ),
+            "emojis in message": QCoreApplication.translate(
+                "Conditions", "emojis in message"
+            ),
+            "not emojis in message": QCoreApplication.translate(
+                "Conditions", "not emojis in message"
+            ),
+        }
+
+        self.conditions_combobox = QComboBox()
+        for condition, translated_condition in self._translated_conditions.items():
+            self.conditions_combobox.addItem(translated_condition, condition)
+
+        self.listbox_conditions = QListBox(self.conditions_combobox)
+        self.listbox_conditions.add_button().clicked.connect(self.__on_add_condition)
         collapse_conditions = QCollapseGroup(
             QCoreApplication.translate("QMainWindow", "Conditions"),
             self.listbox_conditions,
@@ -114,6 +173,9 @@ class MessageWindow:
         reactions_line_edit = QMessageTextEdit()
         reactions_line_edit.set_validator(emoji_validator)
         self.listbox_reactions = QListBox(reactions_line_edit)
+        self.listbox_reactions.add_button().clicked.connect(
+            lambda: self.insert_on_listbox(self.listbox_reactions, reactions_line_edit)
+        )
         self.__add_emoji_button(
             self.listbox_reactions.entry_layout(), reactions_line_edit
         )
@@ -124,8 +186,10 @@ class MessageWindow:
         collapse_reactions.setContentsMargins(0, 0, 0, 0)
 
         messages_line_edit = QMessageTextEdit()
-        # messages_line_edit.setMaxLength(2000)
         self.listbox_messages = QListBox(messages_line_edit)
+        self.listbox_messages.add_button().clicked.connect(
+            lambda: self.insert_on_listbox(self.listbox_messages, messages_line_edit)
+        )
         self.__add_emoji_button(
             self.listbox_messages.entry_layout(), messages_line_edit
         )
@@ -135,8 +199,10 @@ class MessageWindow:
         collapse_messages.setContentsMargins(0, 0, 0, 0)
 
         replies_line_edit = QMessageTextEdit()
-        # replies_line_edit.setMaxLength(2000)
         self.listbox_replies = QListBox(replies_line_edit)
+        self.listbox_replies.add_button().clicked.connect(
+            lambda: self.insert_on_listbox(self.listbox_replies, replies_line_edit)
+        )
         self.__add_emoji_button(self.listbox_replies.entry_layout(), replies_line_edit)
         collapse_replies = QCollapseGroup(
             QCoreApplication.translate("QMainWindow", "Replies"), self.listbox_replies
@@ -241,6 +307,18 @@ class MessageWindow:
         emoji_picker_popup.move(point.x() - 500, point.y() - 500)
         emoji_picker_popup.exec()
 
+    def _add_condition(self, condition: str):
+        translated_condition = self._translated_conditions[condition]
+        item = QListWidgetItem()
+        item.setText(translated_condition)
+        item.setData(Qt.ItemDataRole.UserRole, condition)
+        self.listbox_conditions.add_item(item)
+
+    def __on_add_condition(self):
+        index = self.conditions_combobox.currentIndex()
+        condition = self.conditions_combobox.itemData(index, Qt.ItemDataRole.UserRole)
+        self._add_condition(condition)
+
     def is_name_valid(self):
         return self.get_name() not in messages.message_names()
 
@@ -288,7 +366,7 @@ class MessageWindow:
             self.window.accept()
 
     def __has_opposite_conditions(self) -> bool:
-        conditions = self.listbox_conditions.get_items_text()
+        conditions = self.listbox_conditions.get_items_userdata()
         for condition in conditions:
             opposite_condition = (
                 condition[4:] if condition.startswith("not ") else f"not {condition}"
@@ -315,18 +393,12 @@ class MessageWindow:
             del_checkbox.setDisabled(False)
 
     @staticmethod
-    def insert_on_listbox(
-        listbox: QListWidget, entry: typing.Union[QLineEdit, QComboBox], limit: int = 0
-    ):
-        """insere um valor na listbox especificada e apaga o conteúdo da entry especificada,
-        se um limite for especificado ele vai checar se o limite da listbox não foi atingido
-        """
-        value = entry.text() if isinstance(entry, QLineEdit) else entry.currentText()
-        if value:
-            listbox_length = listbox.count()
-            if not listbox_length > limit or limit == 0:
-                listbox.addItem(value)
-                entry.clear()
+    def insert_on_listbox(listbox: QListBox, text_edit: QResponsiveTextEdit):
+        """Insere um valor na listbox especificada e apaga o conteúdo da entry especificada"""
+        text = text_edit.toPlainText()
+        if text:
+            listbox.add_item(text)
+            text_edit.clear()
 
     @staticmethod
     def remove_selected_on_listbox(listbox: QListWidget):
@@ -342,7 +414,7 @@ class MessageWindow:
         result["reaction"] = list(
             map(lambda reactions: list(reactions), reactions_list)
         )
-        result["conditions"] = self.listbox_conditions.get_items_text()
+        result["conditions"] = self.listbox_conditions.get_items_userdata()
         result["pin or del"] = self.group_pin_or_del.get_current_name()
         result["kick or ban"] = self.group_kick_or_ban.get_current_name()
         result["where reply"] = self.group_where_reply.get_current_name()
@@ -378,7 +450,8 @@ class EditMessageWindow(MessageWindow):
                 )
             )
 
-        self.listbox_conditions.add_items(data["conditions"])
+        for condition in data["conditions"]:
+            self._add_condition(condition)
 
         pin_or_del = self.group_pin_or_del.get_checkbox(data["pin or del"])
         if pin_or_del:

@@ -3,25 +3,6 @@ import emojis
 
 from core.functions import have_in
 
-conditions_keys = [
-    "expected message",
-    "not expected message",
-    "mention someone",
-    "not mention someone",
-    "mention everyone",
-    "not mention everyone",
-    "author is expected",
-    "not author is expected",
-    "author is bot",
-    "not author is bot",
-    "number in message",
-    "not number in message",
-    "symbols in message",
-    "not symbols in message",
-    "emojis in message",
-    "not emojis in message",
-]
-
 symbols = [
     "'",
     '"',

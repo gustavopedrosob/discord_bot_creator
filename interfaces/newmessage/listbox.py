@@ -24,7 +24,6 @@ class QListBox(QWidget):
         self.__list = QListWidget()
         self.__add_button = QColorResponsiveButton()
         self.__add_button.setIcon(QIcon("source/icons/plus-solid"))
-        self.__add_button.clicked.connect(self.__add_item)
         self.__add_button.setFlat(True)
         self.__line_edit = line_edit
         self.__horizontal_layout = QHBoxLayout()
@@ -38,25 +37,10 @@ class QListBox(QWidget):
         self.__layout.addLayout(self.__horizontal_layout)
         self.setLayout(self.__layout)
 
-    def __add_item(self):
-        if isinstance(self.__line_edit, QComboBox):
-            text = self.__line_edit.currentText()
-            self.__line_edit.clearEditText()
-        elif isinstance(self.__line_edit, QTextEdit):
-            text = self.__line_edit.toPlainText()
-            self.__line_edit.clear()
-        else:
-            text = self.__line_edit.text()
-            self.__line_edit.clear()
-        if text:
-            self.__list.addItem(QListWidgetItem(text))
-
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_Delete:
             for item in self.__list.selectedItems():
                 self.__list.takeItem(self.__list.row(item))
-        elif event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
-            self.__add_item()
         else:
             super().keyPressEvent(event)
 
@@ -66,14 +50,23 @@ class QListBox(QWidget):
     def get_items_text(self) -> typing.List[str]:
         return [self.__list.item(i).text() for i in range(self.__list.count())]
 
-    def add_item(self, item: str):
-        self.__list.addItem(item)
+    def get_items_userdata(self) -> typing.List[str]:
+        return [
+            self.__list.item(i).data(Qt.ItemDataRole.UserRole)
+            for i in range(self.__list.count())
+        ]
+
+    def add_item(self, *args):
+        self.__list.addItem(*args)
 
     def add_items(self, items: typing.List[str]):
         self.__list.addItems(items)
 
     def entry_layout(self) -> QHBoxLayout:
         return self.__horizontal_layout
+
+    def add_button(self) -> QColorResponsiveButton:
+        return self.__add_button
 
     def contextMenuEvent(self, event):
         if self.__is_selecting():
