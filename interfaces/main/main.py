@@ -446,7 +446,6 @@ class Main(QMainWindow):
         selected_message = self.__get_selected_message_text()
         self.messages_list_widget.takeItem(selected_row)
         messages.delete(selected_message)
-        messages.save()
 
     def confirm_remove_selected_message(self):
         """Asks the user if they want to remove the selected message."""
@@ -497,7 +496,6 @@ class Main(QMainWindow):
         """Removes all messages from the list."""
         self.messages_list_widget.clear()
         messages.clear()
-        messages.save()
 
     def load_messages(self, path: Path):
         """
