@@ -70,6 +70,7 @@ class Main(QMainWindow):
         self.credits_window = CreditsWindow()
         self.bot = None
         self.bot_thread = None
+        self.bot_on = False
 
         log_handler = LogHandler(self)
         log_handler.setLevel(logging.INFO)
@@ -467,6 +468,7 @@ class Main(QMainWindow):
         )
 
     def set_switch_bot_button(self, on: bool):
+        self.bot_on = on
         self.turn_on_bot_button.setHidden(on)
         self.turn_off_bot_button.setHidden(not on)
 
@@ -575,3 +577,8 @@ class Main(QMainWindow):
             context_menu.addAction(self.remove_selected_message_action)
         context_menu.addAction(self.remove_all_message_action)
         context_menu.exec(self.messages_list_widget.mapToGlobal(position))
+
+    def closeEvent(self, event):
+        if self.bot_on:
+            self.turn_off_bot()
+        super().closeEvent(event)
