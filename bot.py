@@ -142,6 +142,6 @@ class IntegratedBot(Bot):
 
 
 if __name__ == "__main__":
-    messages.load()
+    messages.load(config.get("file"))
     bot = Bot()
     bot.run(config.get("token"))
