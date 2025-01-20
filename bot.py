@@ -8,7 +8,9 @@ from core.messages import messages
 from interfaces.main.log_handler import LogHandler
 from interpreter.conditions import MessageConditions
 from interpreter.variable import Variable
+from PySide6.QtCore import QCoreApplication
 
+translate = QCoreApplication.translate
 logger = logging.getLogger(__name__)
 
 
@@ -18,11 +20,11 @@ class Bot(Client):
 
     @staticmethod
     async def on_ready():
-        logger.info("Bot iniciado!")
+        logger.info(translate("Bot", "Bot start"))
 
     async def on_message(self, message: discord.Message):
         if message.author != self.user:
-            logger.info(f'Identificada mensagem "{message.clean_content}".')
+            logger.info(translate("Bot", "New message") % message.clean_content)
 
             for message_name, message_data in messages.content().items():
                 message_condition = MessageConditions(
@@ -32,7 +34,8 @@ class Bot(Client):
                     message_data["conditions"]
                 )
                 logger.info(
-                    f"Verificando condições da mensagem {message_name}: {conditions_to_confirm}"
+                    translate("Bot", "Validating conditions")
+                    % (message_name, conditions_to_confirm)
                 )
 
                 if all(conditions_to_confirm.values()):
@@ -59,7 +62,7 @@ class Bot(Client):
 
     @staticmethod
     async def apply_delay(delay: int):
-        logger.info(f"Aguardando delay de {delay} segundos para a proxima execução!")
+        logger.info(translate("Bot", "Delay") % delay)
         await asyncio.sleep(delay)
 
     @staticmethod
@@ -70,7 +73,8 @@ class Bot(Client):
             try:
                 await message.add_reaction(reaction)
                 logger.info(
-                    f'Adicionando a reação "{code_reaction}" a mensagem "{message.clean_content}" do autor {message.author}.'
+                    translate("Bot", "New reaction")
+                    % (code_reaction, message.clean_content, message.author)
                 )
             except discord.HTTPException:
                 print(reaction)
@@ -88,14 +92,16 @@ class Bot(Client):
             reply = Variable(message).apply_variable(reply)
             if where == "group" and message.channel.guild is not None:
                 logger.info(
-                    f'Enviando no grupo a resposta "{reply}" à mensagem "{message.clean_content}" do autor {message.author}.'
+                    translate("Bot", "Group reply")
+                    % (reply, message.clean_content, message.author)
                 )
                 reply_message = await message.channel.send(reply)
                 if where_reaction == "bot":
                     await self.send_reaction(reactions, reply_message)
             elif where == "private":
                 logger.info(
-                    f'Enviando no privado a resposta "{reply}" à mensagem "{message.clean_content}" do autor {message.author}.'
+                    translate("Bot", "Private reply")
+                    % (reply, message.clean_content, message.author)
                 )
                 dm_channel = await message.author.create_dm()
                 reply_message = await dm_channel.send(reply)
@@ -106,25 +112,25 @@ class Bot(Client):
     async def remove_message(message: discord.Message):
         await message.delete()
         logger.info(
-            f'Removendo mensagem "{message.clean_content}" do autor {message.author}.'
+            translate("Bot", "Remove message") % (message.clean_content, message.author)
         )
 
     @staticmethod
     async def pin_message(message: discord.Message):
         await message.pin()
         logger.info(
-            f'Fixando mensagem "{message.clean_content}" do autor {message.author}.'
+            translate("Bot", "Pin message") % (message.clean_content, message.author)
         )
 
     @staticmethod
     async def kick_member(member: discord.Member):
         await member.kick()
-        logger.info(f'Expulsando jogador "{member.name}".')
+        translate("Bot", "Kick member") % member.name
 
     @staticmethod
     async def ban_member(member: discord.Member):
         await member.ban()
-        logger.info(f'Banindo jogador "{member.name}".')
+        translate("Bot", "Ban member") % member.name
 
 
 class IntegratedBot(Bot):
@@ -137,7 +143,7 @@ class IntegratedBot(Bot):
         logger.addHandler(log_handler)
 
     async def on_ready(self):
-        logger.info("Bot iniciado!")
+        await super().on_ready()
         self.app.set_switch_bot_button(True)
 
 
