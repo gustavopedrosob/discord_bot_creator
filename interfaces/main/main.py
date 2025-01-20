@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (
 
 from bot import IntegratedBot
 from core.config import instance as config
+from core.functions import adjust_brightness
 from core.messages import messages, Messages
 from interfaces.classes.qpassword import QPassword
 from interfaces.credits.credits import CreditsWindow
@@ -33,6 +34,29 @@ from interfaces.main.log_handler import LogHandler
 from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow
 
 logger = logging.getLogger(__name__)
+
+
+class QColorButton(QPushButton):
+    def __init__(self, text: str, color: str):
+        super().__init__()
+        self.setText(text)
+        self.setStyleSheet(
+            """
+            QPushButton {
+                background-color: %s;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
+            }
+            QPushButton:hover {
+                background-color: %s;
+            }
+            """
+            % (color, adjust_brightness(color, 10))
+        )
+
+    def setText(self, text: str):
+        super().setText(f" {text}")
 
 
 class Main(QMainWindow):
@@ -195,17 +219,25 @@ class Main(QMainWindow):
         self.token_widget.line_edit.setMaxLength(100)
 
         # Execute Bot Button
-        self.switch_bot_button = QPushButton(
-            QCoreApplication.translate("QMainWindow", "Turn on bot")
+        self.turn_on_bot_button = QColorButton(
+            QCoreApplication.translate("QMainWindow", "Turn on bot"), "#3e92cc"
         )
-        self.switch_bot_button.clicked.connect(self.start_turn_on_bot_thread)
+        self.turn_on_bot_button.setIcon(QIcon("source/icons/play-solid.svg"))
+        self.turn_on_bot_button.clicked.connect(self.start_turn_on_bot_thread)
+        self.turn_off_bot_button = QColorButton(
+            QCoreApplication.translate("QMainWindow", "Turn off bot"), "#d8315b"
+        )
+        self.turn_off_bot_button.setIcon(QIcon("source/icons/stop-solid.svg"))
+        self.turn_off_bot_button.clicked.connect(self.turn_off_bot)
+        self.set_switch_bot_button(False)
 
         # Adding Widgets to Right Frame
         right_frame.addWidget(self.logs_text_edit)
         right_frame.addWidget(self.cmd_combobox)
         right_frame.addWidget(QLabel("Token:"))
         right_frame.addWidget(self.token_widget)
-        right_frame.addWidget(self.switch_bot_button)
+        right_frame.addWidget(self.turn_on_bot_button)
+        right_frame.addWidget(self.turn_off_bot_button)
 
         # Left Frame for Messages
         left_frame = QVBoxLayout()
@@ -434,6 +466,10 @@ class Main(QMainWindow):
             )
         )
 
+    def set_switch_bot_button(self, on: bool):
+        self.turn_on_bot_button.setHidden(on)
+        self.turn_off_bot_button.setHidden(not on)
+
     def __get_selected_message_text(self) -> str:
         return self.messages_list_widget.selectedItems()[0].text()
 
@@ -525,21 +561,10 @@ class Main(QMainWindow):
         self.logs_text_edit.insertPlainText(message)
         self.logs_text_edit.update()
 
-    def change_init_bot_button(self):
-        self.switch_bot_button.setText(
-            QCoreApplication.translate("QMainWindow", "Turn off bot")
-        )
-        self.switch_bot_button.clicked.disconnect(self.start_turn_on_bot_thread)
-        self.switch_bot_button.clicked.connect(self.turn_off_bot)
-
     def turn_off_bot(self):
         self.bot.loop.create_task(self.bot.close())
         self.bot_thread.join()
-        self.switch_bot_button.setText(
-            QCoreApplication.translate("QMainWindow", "Turn on bot")
-        )
-        self.switch_bot_button.clicked.disconnect(self.turn_off_bot)
-        self.switch_bot_button.clicked.connect(self.start_turn_on_bot_thread)
+        self.set_switch_bot_button(False)
         logger.info("Bot desligado!")
 
     def message_context_menu_event(self, position: QPoint):

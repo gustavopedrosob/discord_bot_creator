@@ -138,7 +138,7 @@ class IntegratedBot(Bot):
 
     async def on_ready(self):
         logger.info("Bot iniciado!")
-        self.app.change_init_bot_button()
+        self.app.set_switch_bot_button(True)
 
 
 if __name__ == "__main__":
