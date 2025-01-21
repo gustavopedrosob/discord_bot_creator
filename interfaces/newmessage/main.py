@@ -42,6 +42,9 @@ from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
 
 
+translate = QCoreApplication.translate
+
+
 class QMessageTextEdit(QResponsiveTextEdit):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -95,13 +98,13 @@ class MessageWindow:
         self.window.setWindowIcon(QIcon("source/icons/window-icon.svg"))
         self.window.setMinimumSize(800, 600)
         self.window.resize(1000, 800)
-        self.window.setWindowTitle(QCoreApplication.translate("QMainWindow", "Message"))
+        self.window.setWindowTitle(translate("QMainWindow", "Message"))
 
         left_layout = QVBoxLayout()
         mid_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
 
-        self.name_text = QLabel(QCoreApplication.translate("QMainWindow", "Name"))
+        self.name_text = QLabel(translate("QMainWindow", "Name"))
         self.name_entry = QLineEdit()
         name_entry_validator = QRegularExpressionValidator(
             QRegularExpression(r"[\w ]*")
@@ -110,52 +113,22 @@ class MessageWindow:
         self.name_entry.setValidator(name_entry_validator)
 
         self._translated_conditions = {
-            "expected message": QCoreApplication.translate(
-                "Conditions", "expected message"
-            ),
-            "not expected message": QCoreApplication.translate(
-                "Conditions", "not expected message"
-            ),
-            "mention someone": QCoreApplication.translate(
-                "Conditions", "mention someone"
-            ),
-            "not mention someone": QCoreApplication.translate(
-                "Conditions", "not mention someone"
-            ),
-            "mention everyone": QCoreApplication.translate(
-                "Conditions", "mention everyone"
-            ),
-            "not mention everyone": QCoreApplication.translate(
-                "Conditions", "not mention everyone"
-            ),
-            "author is expected": QCoreApplication.translate(
-                "Conditions", "author is expected"
-            ),
-            "not author is expected": QCoreApplication.translate(
-                "Conditions", "not author is expected"
-            ),
-            "author is bot": QCoreApplication.translate("Conditions", "author is bot"),
-            "not author is bot": QCoreApplication.translate(
-                "Conditions", "not author is bot"
-            ),
-            "number in message": QCoreApplication.translate(
-                "Conditions", "number in message"
-            ),
-            "not number in message": QCoreApplication.translate(
-                "Conditions", "not number in message"
-            ),
-            "symbols in message": QCoreApplication.translate(
-                "Conditions", "symbols in message"
-            ),
-            "not symbols in message": QCoreApplication.translate(
-                "Conditions", "not symbols in message"
-            ),
-            "emojis in message": QCoreApplication.translate(
-                "Conditions", "emojis in message"
-            ),
-            "not emojis in message": QCoreApplication.translate(
-                "Conditions", "not emojis in message"
-            ),
+            "expected message": translate("Conditions", "expected message"),
+            "not expected message": translate("Conditions", "not expected message"),
+            "mention someone": translate("Conditions", "mention someone"),
+            "not mention someone": translate("Conditions", "not mention someone"),
+            "mention everyone": translate("Conditions", "mention everyone"),
+            "not mention everyone": translate("Conditions", "not mention everyone"),
+            "author is expected": translate("Conditions", "author is expected"),
+            "not author is expected": translate("Conditions", "not author is expected"),
+            "author is bot": translate("Conditions", "author is bot"),
+            "not author is bot": translate("Conditions", "not author is bot"),
+            "number in message": translate("Conditions", "number in message"),
+            "not number in message": translate("Conditions", "not number in message"),
+            "symbols in message": translate("Conditions", "symbols in message"),
+            "not symbols in message": translate("Conditions", "not symbols in message"),
+            "emojis in message": translate("Conditions", "emojis in message"),
+            "not emojis in message": translate("Conditions", "not emojis in message"),
         }
 
         self.conditions_combobox = QComboBox()
@@ -165,7 +138,7 @@ class MessageWindow:
         self.listbox_conditions = QListBox(self.conditions_combobox)
         self.listbox_conditions.add_button().clicked.connect(self.__on_add_condition)
         collapse_conditions = QCollapseGroup(
-            QCoreApplication.translate("QMainWindow", "Conditions"),
+            translate("QMainWindow", "Conditions"),
             self.listbox_conditions,
         )
         collapse_conditions.setContentsMargins(0, 0, 0, 0)
@@ -181,7 +154,7 @@ class MessageWindow:
             self.listbox_reactions.entry_layout(), reactions_line_edit
         )
         collapse_reactions = QCollapseGroup(
-            QCoreApplication.translate("QMainWindow", "Reactions"),
+            translate("QMainWindow", "Reactions"),
             self.listbox_reactions,
         )
         collapse_reactions.setContentsMargins(0, 0, 0, 0)
@@ -195,7 +168,7 @@ class MessageWindow:
             self.listbox_messages.entry_layout(), messages_line_edit
         )
         collapse_messages = QCollapseGroup(
-            QCoreApplication.translate("QMainWindow", "Messages"), self.listbox_messages
+            translate("QMainWindow", "Messages"), self.listbox_messages
         )
         collapse_messages.setContentsMargins(0, 0, 0, 0)
 
@@ -206,7 +179,7 @@ class MessageWindow:
         )
         self.__add_emoji_button(self.listbox_replies.entry_layout(), replies_line_edit)
         collapse_replies = QCollapseGroup(
-            QCoreApplication.translate("QMainWindow", "Replies"), self.listbox_replies
+            translate("QMainWindow", "Replies"), self.listbox_replies
         )
         collapse_messages.setContentsMargins(0, 0, 0, 0)
 
@@ -222,56 +195,54 @@ class MessageWindow:
         left_layout.setContentsMargins(0, 0, 0, 0)
 
         self.group_pin_or_del = QCheckBoxGroup(
-            QLabel(QCoreApplication.translate("QMainWindow", "Action"))
+            QLabel(translate("QMainWindow", "Action"))
         )
         self.group_pin_or_del.add_checkbox(
-            "pin", QCheckBox(QCoreApplication.translate("QMainWindow", "Pin"))
+            "pin", QCheckBox(translate("QMainWindow", "Pin"))
         )
-        del_checkbox = QCheckBox(QCoreApplication.translate("QMainWindow", "Delete"))
+        del_checkbox = QCheckBox(translate("QMainWindow", "Delete"))
         del_checkbox.checkStateChanged.connect(self.__del_checked)
         self.group_pin_or_del.add_checkbox("delete", del_checkbox)
         right_layout.addWidget(self.group_pin_or_del)
 
         self.group_kick_or_ban = QCheckBoxGroup(
-            QLabel(QCoreApplication.translate("QMainWindow", "Penalty"))
+            QLabel(translate("QMainWindow", "Penalty"))
         )
         self.group_kick_or_ban.add_checkbox(
-            "kick", QCheckBox(QCoreApplication.translate("QMainWindow", "Kick"))
+            "kick", QCheckBox(translate("QMainWindow", "Kick"))
         )
         self.group_kick_or_ban.add_checkbox(
-            "ban", QCheckBox(QCoreApplication.translate("QMainWindow", "Ban"))
+            "ban", QCheckBox(translate("QMainWindow", "Ban"))
         )
         right_layout.addWidget(self.group_kick_or_ban)
 
         self.group_where_reply = QCheckBoxGroup(
-            QLabel(QCoreApplication.translate("QMainWindow", "Where reply"))
+            QLabel(translate("QMainWindow", "Where reply"))
         )
         self.group_where_reply.add_checkbox(
-            "group", QCheckBox(QCoreApplication.translate("QMainWindow", "Group"))
+            "group", QCheckBox(translate("QMainWindow", "Group"))
         )
         self.group_where_reply.add_checkbox(
-            "private", QCheckBox(QCoreApplication.translate("QMainWindow", "Private"))
+            "private", QCheckBox(translate("QMainWindow", "Private"))
         )
         right_layout.addWidget(self.group_where_reply)
 
         self.group_where_react = QCheckBoxGroup(
-            QLabel(QCoreApplication.translate("QMainWindow", "Where react"))
+            QLabel(translate("QMainWindow", "Where react"))
         )
-        author_checkbox = QCheckBox(QCoreApplication.translate("QMainWindow", "Author"))
+        author_checkbox = QCheckBox(translate("QMainWindow", "Author"))
         author_checkbox.checkStateChanged.connect(self.__author_checked)
         self.group_where_react.add_checkbox("author", author_checkbox)
         self.group_where_react.add_checkbox(
-            "bot", QCheckBox(QCoreApplication.translate("QMainWindow", "Bot"))
+            "bot", QCheckBox(translate("QMainWindow", "Bot"))
         )
         right_layout.addWidget(self.group_where_react)
 
-        delay_label = QLabel(QCoreApplication.translate("QMainWindow", "Delay"))
+        delay_label = QLabel(translate("QMainWindow", "Delay"))
         self.delay = QSpinBox()
 
         # Save and quit button
-        save_and_quit_button = QPushButton(
-            QCoreApplication.translate("QMainWindow", "Save and quit")
-        )
+        save_and_quit_button = QPushButton(translate("QMainWindow", "Save and quit"))
         save_and_quit_button.setAutoDefault(False)
         save_and_quit_button.setDefault(False)
 
@@ -339,12 +310,10 @@ class MessageWindow:
     def on_save_and_quit(self):
         if not self.is_name_valid():
             message_box = QMessageBox()
-            message_box.setWindowTitle(
-                QCoreApplication.translate("QMainWindow", "Name already exists")
-            )
+            message_box.setWindowTitle(translate("QMainWindow", "Name already exists"))
             message_box.setWindowIcon(QIcon("source/icons/window-icon.svg"))
             message_box.setText(
-                QCoreApplication.translate(
+                translate(
                     "QMainWindow",
                     "You can't set a message with a name that already exists.",
                 )
@@ -352,12 +321,10 @@ class MessageWindow:
             message_box.exec()
         elif self.__has_opposite_conditions():
             message_box = QMessageBox()
-            message_box.setWindowTitle(
-                QCoreApplication.translate("QMainWindow", "Opposite conditions")
-            )
+            message_box.setWindowTitle(translate("QMainWindow", "Opposite conditions"))
             message_box.setWindowIcon(QIcon("source/icons/window-icon.svg"))
             message_box.setText(
-                QCoreApplication.translate(
+                translate(
                     "QMainWindow",
                     "You can't have opposite conditions, please remove them.",
                 )

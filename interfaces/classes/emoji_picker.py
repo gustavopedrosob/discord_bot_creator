@@ -21,6 +21,9 @@ from interfaces.classes.collapse_group import QCollapseGroup
 from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
 
 
+translate = QCoreApplication.translate
+
+
 class QEmojiButton(QPushButton):
     font = QFont()
     font.setPointSize(20)
@@ -110,7 +113,7 @@ class QEmojiPicker(QWidget):
         self.__line_edit = QLineEdit()
         self.__line_edit.setFont(self.line_edit_font)
         self.__line_edit.setPlaceholderText(
-            QCoreApplication.translate("QEmojiPicker", "Enter your favorite emoji")
+            translate("QEmojiPicker", "Enter your favorite emoji")
         )
         self.__line_edit.textEdited.connect(self.__line_edited)
         self.__categories = {}
@@ -131,50 +134,50 @@ class QEmojiPicker(QWidget):
         self.add_category(
             "Smileys & Emotion",
             QIcon("source/icons/face-smile-solid.svg"),
-            QCoreApplication.translate("QEmojiPicker", "Smileys & Emotion"),
+            translate("QEmojiPicker", "Smileys & Emotion"),
         )
         self.__insert_emojis("Smileys & Emotion")
         self.__insert_emojis("People & Body", "Smileys & Emotion")
         self.add_category(
             "Animals & Nature",
             QIcon("source/icons/leaf-solid.svg"),
-            QCoreApplication.translate("QEmojiPicker", "Animals & Nature"),
+            translate("QEmojiPicker", "Animals & Nature"),
         )
         self.__insert_emojis("Animals & Nature")
         self.add_category(
             "Food & Drink",
             QIcon("source/icons/bowl-food-solid.svg"),
-            QCoreApplication.translate("QEmojiPicker", "Food & Drink"),
+            translate("QEmojiPicker", "Food & Drink"),
         )
         self.__insert_emojis("Food & Drink")
         self.add_category(
             "Activities",
             QIcon("source/icons/gamepad-solid.svg"),
-            QCoreApplication.translate("QEmojiPicker", "Activities"),
+            translate("QEmojiPicker", "Activities"),
         )
         self.__insert_emojis("Activities")
         self.add_category(
             "Travel & Places",
             QIcon("source/icons/bicycle-solid.svg"),
-            QCoreApplication.translate("QEmojiPicker", "Travel & Places"),
+            translate("QEmojiPicker", "Travel & Places"),
         )
         self.__insert_emojis("Travel & Places")
         self.add_category(
             "Objects",
             QIcon("source/icons/lightbulb-solid.svg"),
-            QCoreApplication.translate("QEmojiPicker", "Objects"),
+            translate("QEmojiPicker", "Objects"),
         )
         self.__insert_emojis("Objects")
         self.add_category(
             "Symbols",
             QIcon("source/icons/heart-solid.svg"),
-            QCoreApplication.translate("QEmojiPicker", "Symbols"),
+            translate("QEmojiPicker", "Symbols"),
         )
         self.__insert_emojis("Symbols")
         self.add_category(
             "Flags",
             QIcon("source/icons/flag-solid.svg"),
-            QCoreApplication.translate("QEmojiPicker", "Flags"),
+            translate("QEmojiPicker", "Flags"),
         )
         self.__insert_emojis("Flags")
 

@@ -34,6 +34,7 @@ from interfaces.main.log_handler import LogHandler
 from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow
 
 logger = logging.getLogger(__name__)
+translate = QCoreApplication.translate
 
 
 class Main(QMainWindow):
@@ -58,10 +59,10 @@ class Main(QMainWindow):
         self.setMenuBar(self.menu_bar)
 
         # Create menus
-        file_menu = QMenu(QCoreApplication.translate("QMainWindow", "File"), self)
-        config_menu = QMenu(QCoreApplication.translate("QMainWindow", "Config"), self)
-        edit_menu = QMenu(QCoreApplication.translate("QMainWindow", "Edit"), self)
-        help_menu = QMenu(QCoreApplication.translate("QMainWindow", "Help"), self)
+        file_menu = QMenu(translate("QMainWindow", "File"), self)
+        config_menu = QMenu(translate("QMainWindow", "Config"), self)
+        edit_menu = QMenu(translate("QMainWindow", "Edit"), self)
+        help_menu = QMenu(translate("QMainWindow", "Help"), self)
 
         # Add menus to the menu bar
         self.menu_bar.addMenu(file_menu)
@@ -69,81 +70,65 @@ class Main(QMainWindow):
         self.menu_bar.addMenu(edit_menu)
         self.menu_bar.addMenu(help_menu)
 
-        language_menu = QMenu(
-            QCoreApplication.translate("QMainWindow", "Language"), self
-        )
+        language_menu = QMenu(translate("QMainWindow", "Language"), self)
         config_menu.addMenu(language_menu)
 
-        english_action = QAction(
-            QCoreApplication.translate("QMainWindow", "English"), self
-        )
+        english_action = QAction(translate("QMainWindow", "English"), self)
         english_action.triggered.connect(lambda: self.set_language("en_us"))
-        portuguese_action = QAction(
-            QCoreApplication.translate("QMainWindow", "Portuguese"), self
-        )
+        portuguese_action = QAction(translate("QMainWindow", "Portuguese"), self)
         portuguese_action.triggered.connect(lambda: self.set_language("pt_br"))
         language_menu.addAction(english_action)
         language_menu.addAction(portuguese_action)
 
-        load_action = QAction(QCoreApplication.translate("QMainWindow", "Load"), self)
+        load_action = QAction(translate("QMainWindow", "Load"), self)
         load_action.triggered.connect(self.on_load_action)
-        save_action = QAction(QCoreApplication.translate("QMainWindow", "Save"), self)
+        save_action = QAction(translate("QMainWindow", "Save"), self)
         save_action.triggered.connect(self.on_save_action)
-        save_as_action = QAction(
-            QCoreApplication.translate("QMainWindow", "Save as"), self
-        )
+        save_as_action = QAction(translate("QMainWindow", "Save as"), self)
         save_as_action.triggered.connect(self.on_save_as_action)
-        exit_action = QAction(QCoreApplication.translate("QMainWindow", "Exit"), self)
+        exit_action = QAction(translate("QMainWindow", "Exit"), self)
         exit_action.triggered.connect(self.close)
 
         for action in [load_action, save_action, save_as_action, exit_action]:
             file_menu.addAction(action)
 
-        credits_action = QAction(
-            QCoreApplication.translate("QMainWindow", "Credits"), self
-        )
+        credits_action = QAction(translate("QMainWindow", "Credits"), self)
         credits_action.triggered.connect(self.credits_window.window.show)
-        project_action = QAction(
-            QCoreApplication.translate("QMainWindow", "Project"), self
-        )
+        project_action = QAction(translate("QMainWindow", "Project"), self)
         project_action.triggered.connect(
             lambda: webbrowser.open(
                 "https://github.com/gustavopedrosob/bot_discord_easy_creator"
             )
         )
-        report_action = QAction(
-            QCoreApplication.translate("QMainWindow", "Report bug"), self
-        )
+        report_action = QAction(translate("QMainWindow", "Report bug"), self)
         report_action.triggered.connect(
             lambda: webbrowser.open(
                 "https://github.com/gustavopedrosob/bot_discord_easy_creator/issues/new"
             )
         )
         discord_applications = QAction(
-            QCoreApplication.translate("QMainWindow", "Discord applications"), self
+            translate("QMainWindow", "Discord applications"), self
         )
         discord_applications.triggered.connect(
             lambda: webbrowser.open("https://discord.com/developers/applications/")
         )
-        self.new_message_action = QAction(
-            QCoreApplication.translate("QMainWindow", "New message"), self
-        )
+        self.new_message_action = QAction(translate("QMainWindow", "New message"), self)
         self.new_message_action.triggered.connect(self.new_message)
         self.new_message_action.setShortcut("Ctrl+N")
         self.edit_message_action = QAction(
-            QCoreApplication.translate("QMainWindow", "Edit message"), self
+            translate("QMainWindow", "Edit message"), self
         )
         self.edit_message_action.triggered.connect(self.edit_selected_message)
         self.edit_message_action.setShortcut("Ctrl+E")
         self.remove_selected_message_action = QAction(
-            QCoreApplication.translate("QMainWindow", "Remove message"), self
+            translate("QMainWindow", "Remove message"), self
         )
         self.remove_selected_message_action.triggered.connect(
             self.confirm_remove_selected_message
         )
         self.remove_selected_message_action.setShortcut("Delete")
         self.remove_all_message_action = QAction(
-            QCoreApplication.translate("QMainWindow", "Remove all messages"), self
+            translate("QMainWindow", "Remove all messages"), self
         )
         self.remove_all_message_action.triggered.connect(self.confirm_remove_messages)
         self.remove_all_message_action.setShortcut("Ctrl+Delete")
@@ -177,7 +162,7 @@ class Main(QMainWindow):
         right_frame = QVBoxLayout()
         self.logs_text_edit = QTextEdit()
         self.logs_text_edit.setPlaceholderText(
-            QCoreApplication.translate("QMainWindow", "No logs at moment")
+            translate("QMainWindow", "No logs at moment")
         )
         self.logs_text_edit.setReadOnly(True)
         self.logs_text_edit.setFocusPolicy(Qt.FocusPolicy.NoFocus)
@@ -198,12 +183,12 @@ class Main(QMainWindow):
 
         # Execute Bot Button
         self.turn_on_bot_button = QColorButton(
-            QCoreApplication.translate("QMainWindow", "Turn on bot"), "#3e92cc"
+            translate("QMainWindow", "Turn on bot"), "#3e92cc"
         )
         self.turn_on_bot_button.setIcon(QIcon("source/icons/play-solid.svg"))
         self.turn_on_bot_button.clicked.connect(self.start_turn_on_bot_thread)
         self.turn_off_bot_button = QColorButton(
-            QCoreApplication.translate("QMainWindow", "Turn off bot"), "#d8315b"
+            translate("QMainWindow", "Turn off bot"), "#d8315b"
         )
         self.turn_off_bot_button.setIcon(QIcon("source/icons/stop-solid.svg"))
         self.turn_off_bot_button.clicked.connect(self.turn_off_bot)
@@ -220,7 +205,7 @@ class Main(QMainWindow):
         # Left Frame for Messages
         left_frame = QVBoxLayout()
 
-        message_label = QLabel(QCoreApplication.translate("QMainWindow", "Messages"))
+        message_label = QLabel(translate("QMainWindow", "Messages"))
 
         self.messages_list_widget = QListWidget()
         self.messages_list_widget.setContextMenuPolicy(
@@ -230,24 +215,16 @@ class Main(QMainWindow):
             self.message_context_menu_event
         )
 
-        new_message_button = QPushButton(
-            QCoreApplication.translate("QMainWindow", "New")
-        )
+        new_message_button = QPushButton(translate("QMainWindow", "New"))
         new_message_button.clicked.connect(self.new_message)
 
-        edit_messages_button = QPushButton(
-            QCoreApplication.translate("QMainWindow", "Edit")
-        )
+        edit_messages_button = QPushButton(translate("QMainWindow", "Edit"))
         edit_messages_button.clicked.connect(self.edit_selected_message)
 
-        remove_message_button = QPushButton(
-            QCoreApplication.translate("QMainWindow", "Remove")
-        )
+        remove_message_button = QPushButton(translate("QMainWindow", "Remove"))
         remove_message_button.clicked.connect(self.confirm_remove_selected_message)
 
-        remove_all_message_button = QPushButton(
-            QCoreApplication.translate("QMainWindow", "Remove all")
-        )
+        remove_all_message_button = QPushButton(translate("QMainWindow", "Remove all"))
         remove_all_message_button.clicked.connect(self.confirm_remove_messages)
 
         # Adding Widgets to Left Frame
@@ -288,7 +265,7 @@ class Main(QMainWindow):
     def on_load_action(self):
         file_path, file_extension = QFileDialog.getOpenFileName(
             self,
-            QCoreApplication.translate("QMainWindow", "Open File"),
+            translate("QMainWindow", "Open File"),
             os.getcwd(),
             "JSON Files (*.json)",
         )
@@ -299,9 +276,9 @@ class Main(QMainWindow):
 
     def saved_successfully_message_box(self):
         warning = QMessageBox(self)
-        warning.setWindowTitle(QCoreApplication.translate("QMainWindow", "Saving"))
+        warning.setWindowTitle(translate("QMainWindow", "Saving"))
         warning.setText(
-            QCoreApplication.translate(
+            translate(
                 "QMainWindow",
                 "The file has been saved successfully.",
             )
@@ -324,9 +301,9 @@ class Main(QMainWindow):
 
     def file_dont_exists_message_box(self):
         warning = QMessageBox(self)
-        warning.setWindowTitle(QCoreApplication.translate("QMainWindow", "Warning"))
+        warning.setWindowTitle(translate("QMainWindow", "Warning"))
         warning.setText(
-            QCoreApplication.translate(
+            translate(
                 "QMainWindow",
                 "The file don't exists anymore.",
             )
@@ -336,7 +313,7 @@ class Main(QMainWindow):
     def on_save_as_action(self):
         file_path, file_extension = QFileDialog.getSaveFileName(
             self,
-            QCoreApplication.translate("QMainWindow", "Save File"),
+            translate("QMainWindow", "Save File"),
             os.getcwd(),
             "JSON Files (*.json)",
         )
@@ -361,9 +338,9 @@ class Main(QMainWindow):
 
     def set_language(self, language: str):
         warning = QMessageBox(self)
-        warning.setWindowTitle(QCoreApplication.translate("QMainWindow", "Warning"))
+        warning.setWindowTitle(translate("QMainWindow", "Warning"))
         warning.setText(
-            QCoreApplication.translate(
+            translate(
                 "QMainWindow",
                 "You need to restart the application to apply the changes.",
             )
@@ -466,11 +443,9 @@ class Main(QMainWindow):
         """Asks the user if they want to remove the selected message."""
         if self.__is_selecting_message():
             dialog = QMessageBox(self)
-            dialog.setWindowTitle(
-                QCoreApplication.translate("QMainWindow", "Remove message")
-            )
+            dialog.setWindowTitle(translate("QMainWindow", "Remove message"))
             dialog.setText(
-                QCoreApplication.translate(
+                translate(
                     "QMainWindow", "Are you sure you want to remove this message?"
                 )
             )
@@ -478,9 +453,9 @@ class Main(QMainWindow):
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
             )
             yes_button = dialog.button(QMessageBox.StandardButton.Yes)
-            yes_button.setText(QCoreApplication.translate("QMainWindow", "Yes"))
+            yes_button.setText(translate("QMainWindow", "Yes"))
             no_button = dialog.button(QMessageBox.StandardButton.No)
-            no_button.setText(QCoreApplication.translate("QMainWindow", "No"))
+            no_button.setText(translate("QMainWindow", "No"))
             dialog.setDefaultButton(QMessageBox.StandardButton.No)
             dialog.accepted.connect(self.remove_selected_message)
             dialog.exec()
@@ -488,21 +463,17 @@ class Main(QMainWindow):
     def confirm_remove_messages(self):
         """Asks the user if they want to remove all messages."""
         dialog = QMessageBox(self)
-        dialog.setWindowTitle(
-            QCoreApplication.translate("QMainWindow", "Remove all messages")
-        )
+        dialog.setWindowTitle(translate("QMainWindow", "Remove all messages"))
         dialog.setText(
-            QCoreApplication.translate(
-                "QMainWindow", "Are you sure you want to remove all messages?"
-            )
+            translate("QMainWindow", "Are you sure you want to remove all messages?")
         )
         dialog.setStandardButtons(
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         yes_button = dialog.button(QMessageBox.StandardButton.Yes)
-        yes_button.setText(QCoreApplication.translate("QMainWindow", "Yes"))
+        yes_button.setText(translate("QMainWindow", "Yes"))
         no_button = dialog.button(QMessageBox.StandardButton.No)
-        no_button.setText(QCoreApplication.translate("QMainWindow", "No"))
+        no_button.setText(translate("QMainWindow", "No"))
         dialog.setDefaultButton(QMessageBox.StandardButton.No)
         dialog.accepted.connect(self.remove_messages)
         dialog.exec()
@@ -530,8 +501,8 @@ class Main(QMainWindow):
         else:
             QMessageBox.warning(
                 self,
-                QCoreApplication.translate("QMainWindow", "Invalid file"),
-                QCoreApplication.translate("QMainWindow", "This file can't be loaded."),
+                translate("QMainWindow", "Invalid file"),
+                translate("QMainWindow", "This file can't be loaded."),
                 QMessageBox.StandardButton.Ok,
                 QMessageBox.StandardButton.NoButton,
             )
