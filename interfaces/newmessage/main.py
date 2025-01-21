@@ -6,11 +6,9 @@ from PySide6.QtCore import (
     QPoint,
     QRegularExpression,
     QMimeData,
-    QT_TR_NOOP,
 )
 from PySide6.QtGui import (
     QIcon,
-    QMouseEvent,
     QRegularExpressionValidator,
     QKeyEvent,
     QValidator,
@@ -98,13 +96,13 @@ class MessageWindow:
         self.window.setWindowIcon(QIcon("source/icons/window-icon.svg"))
         self.window.setMinimumSize(800, 600)
         self.window.resize(1000, 800)
-        self.window.setWindowTitle(translate("QMainWindow", "Message"))
+        self.window.setWindowTitle(translate("MessageWindow", "Message"))
 
         left_layout = QVBoxLayout()
         mid_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
 
-        self.name_text = QLabel(translate("QMainWindow", "Name"))
+        self.name_text = QLabel(translate("MessageWindow", "Name"))
         self.name_entry = QLineEdit()
         name_entry_validator = QRegularExpressionValidator(
             QRegularExpression(r"[\w ]*")
@@ -138,7 +136,7 @@ class MessageWindow:
         self.listbox_conditions = QListBox(self.conditions_combobox)
         self.listbox_conditions.add_button().clicked.connect(self.__on_add_condition)
         collapse_conditions = QCollapseGroup(
-            translate("QMainWindow", "Conditions"),
+            translate("MessageWindow", "Conditions"),
             self.listbox_conditions,
         )
         collapse_conditions.setContentsMargins(0, 0, 0, 0)
@@ -154,7 +152,7 @@ class MessageWindow:
             self.listbox_reactions.entry_layout(), reactions_line_edit
         )
         collapse_reactions = QCollapseGroup(
-            translate("QMainWindow", "Reactions"),
+            translate("MessageWindow", "Reactions"),
             self.listbox_reactions,
         )
         collapse_reactions.setContentsMargins(0, 0, 0, 0)
@@ -168,7 +166,7 @@ class MessageWindow:
             self.listbox_messages.entry_layout(), messages_line_edit
         )
         collapse_messages = QCollapseGroup(
-            translate("QMainWindow", "Messages"), self.listbox_messages
+            translate("MessageWindow", "Messages"), self.listbox_messages
         )
         collapse_messages.setContentsMargins(0, 0, 0, 0)
 
@@ -179,7 +177,7 @@ class MessageWindow:
         )
         self.__add_emoji_button(self.listbox_replies.entry_layout(), replies_line_edit)
         collapse_replies = QCollapseGroup(
-            translate("QMainWindow", "Replies"), self.listbox_replies
+            translate("MessageWindow", "Replies"), self.listbox_replies
         )
         collapse_messages.setContentsMargins(0, 0, 0, 0)
 
@@ -195,54 +193,54 @@ class MessageWindow:
         left_layout.setContentsMargins(0, 0, 0, 0)
 
         self.group_pin_or_del = QCheckBoxGroup(
-            QLabel(translate("QMainWindow", "Action"))
+            QLabel(translate("MessageWindow", "Action"))
         )
         self.group_pin_or_del.add_checkbox(
-            "pin", QCheckBox(translate("QMainWindow", "Pin"))
+            "pin", QCheckBox(translate("MessageWindow", "Pin"))
         )
-        del_checkbox = QCheckBox(translate("QMainWindow", "Delete"))
+        del_checkbox = QCheckBox(translate("MessageWindow", "Delete"))
         del_checkbox.checkStateChanged.connect(self.__del_checked)
         self.group_pin_or_del.add_checkbox("delete", del_checkbox)
         right_layout.addWidget(self.group_pin_or_del)
 
         self.group_kick_or_ban = QCheckBoxGroup(
-            QLabel(translate("QMainWindow", "Penalty"))
+            QLabel(translate("MessageWindow", "Penalty"))
         )
         self.group_kick_or_ban.add_checkbox(
-            "kick", QCheckBox(translate("QMainWindow", "Kick"))
+            "kick", QCheckBox(translate("MessageWindow", "Kick"))
         )
         self.group_kick_or_ban.add_checkbox(
-            "ban", QCheckBox(translate("QMainWindow", "Ban"))
+            "ban", QCheckBox(translate("MessageWindow", "Ban"))
         )
         right_layout.addWidget(self.group_kick_or_ban)
 
         self.group_where_reply = QCheckBoxGroup(
-            QLabel(translate("QMainWindow", "Where reply"))
+            QLabel(translate("MessageWindow", "Where reply"))
         )
         self.group_where_reply.add_checkbox(
-            "group", QCheckBox(translate("QMainWindow", "Group"))
+            "group", QCheckBox(translate("MessageWindow", "Group"))
         )
         self.group_where_reply.add_checkbox(
-            "private", QCheckBox(translate("QMainWindow", "Private"))
+            "private", QCheckBox(translate("MessageWindow", "Private"))
         )
         right_layout.addWidget(self.group_where_reply)
 
         self.group_where_react = QCheckBoxGroup(
-            QLabel(translate("QMainWindow", "Where react"))
+            QLabel(translate("MessageWindow", "Where react"))
         )
-        author_checkbox = QCheckBox(translate("QMainWindow", "Author"))
+        author_checkbox = QCheckBox(translate("MessageWindow", "Author"))
         author_checkbox.checkStateChanged.connect(self.__author_checked)
         self.group_where_react.add_checkbox("author", author_checkbox)
         self.group_where_react.add_checkbox(
-            "bot", QCheckBox(translate("QMainWindow", "Bot"))
+            "bot", QCheckBox(translate("MessageWindow", "Bot"))
         )
         right_layout.addWidget(self.group_where_react)
 
-        delay_label = QLabel(translate("QMainWindow", "Delay"))
+        delay_label = QLabel(translate("MessageWindow", "Delay"))
         self.delay = QSpinBox()
 
         # Save and quit button
-        save_and_quit_button = QPushButton(translate("QMainWindow", "Save and quit"))
+        save_and_quit_button = QPushButton(translate("MessageWindow", "Save and quit"))
         save_and_quit_button.setAutoDefault(False)
         save_and_quit_button.setDefault(False)
 
@@ -310,22 +308,26 @@ class MessageWindow:
     def on_save_and_quit(self):
         if not self.is_name_valid():
             message_box = QMessageBox()
-            message_box.setWindowTitle(translate("QMainWindow", "Name already exists"))
+            message_box.setWindowTitle(
+                translate("MessageWindow", "Name already exists")
+            )
             message_box.setWindowIcon(QIcon("source/icons/window-icon.svg"))
             message_box.setText(
                 translate(
-                    "QMainWindow",
+                    "MessageWindow",
                     "You can't set a message with a name that already exists.",
                 )
             )
             message_box.exec()
         elif self.__has_opposite_conditions():
             message_box = QMessageBox()
-            message_box.setWindowTitle(translate("QMainWindow", "Opposite conditions"))
+            message_box.setWindowTitle(
+                translate("MessageWindow", "Opposite conditions")
+            )
             message_box.setWindowIcon(QIcon("source/icons/window-icon.svg"))
             message_box.setText(
                 translate(
-                    "QMainWindow",
+                    "MessageWindow",
                     "You can't have opposite conditions, please remove them.",
                 )
             )
