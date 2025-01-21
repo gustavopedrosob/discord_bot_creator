@@ -248,6 +248,11 @@ class QEmojiPicker(QWidget):
     def __mouse_leave_emoji(self):
         self.__current_emoji_label.clear()
 
+    def reset(self):
+        self.__line_edit.clear()
+        self.__line_edited()
+        self.__scroll_area.verticalScrollBar().setValue(0)
+
 
 class QEmojiPickerPopup(QDialog):
     def __init__(self):

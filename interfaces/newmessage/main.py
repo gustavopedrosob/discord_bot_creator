@@ -275,6 +275,7 @@ class MessageWindow:
 
         emoji_picker = self.emoji_picker_popup.emoji_picker()
         emoji_picker.emoji_click.connect(append_emoji)
+        emoji_picker.reset()
         self.emoji_picker_popup.move(point.x() - 500, point.y() - 500)
         self.emoji_picker_popup.exec()
         self.emoji_picker_popup.hideEvent = emoji_picker.emoji_click.disconnect(
