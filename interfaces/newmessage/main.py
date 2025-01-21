@@ -30,6 +30,7 @@ from PySide6.QtWidgets import (
     QTextEdit,
     QListWidgetItem,
 )
+from emojis import emojis
 
 from core.messages import messages
 from interfaces.classes.collapse_group import QCollapseGroup
@@ -412,7 +413,7 @@ class MessageWindow:
         result["reply"] = list(map(lambda replies: replies.split("¨"), reply_list))
         reactions_list = self.listbox_reactions.get_items_text()
         result["reaction"] = list(
-            map(lambda reactions: list(reactions), reactions_list)
+            map(lambda reactions: list(emojis.get(reactions)), reactions_list)
         )
         result["conditions"] = self.listbox_conditions.get_items_userdata()
         result["pin or del"] = self.group_pin_or_del.get_current_name()
