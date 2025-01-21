@@ -98,6 +98,8 @@ class MessageWindow:
         self.window.resize(1000, 800)
         self.window.setWindowTitle(translate("MessageWindow", "Message"))
 
+        self.emoji_picker_popup = QEmojiPickerPopup()
+
         left_layout = QVBoxLayout()
         mid_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
@@ -267,15 +269,17 @@ class MessageWindow:
 
         save_and_quit_button.clicked.connect(self.on_save_and_quit)
 
-    @staticmethod
-    def __raise_emote_popup(point: QPoint, line_edit: QTextEdit):
-        emoji_picker_popup = QEmojiPickerPopup()
-        emoji_picker = emoji_picker_popup.emoji_picker()
-        emoji_picker.emoji_click.connect(
-            lambda text: line_edit.setPlainText(line_edit.toPlainText() + text)
+    def __raise_emoji_popup(self, point: QPoint, line_edit: QTextEdit):
+        def append_emoji(text):
+            return line_edit.setPlainText(line_edit.toPlainText() + text)
+
+        emoji_picker = self.emoji_picker_popup.emoji_picker()
+        emoji_picker.emoji_click.connect(append_emoji)
+        self.emoji_picker_popup.move(point.x() - 500, point.y() - 500)
+        self.emoji_picker_popup.exec()
+        self.emoji_picker_popup.hideEvent = emoji_picker.emoji_click.disconnect(
+            append_emoji
         )
-        emoji_picker_popup.move(point.x() - 500, point.y() - 500)
-        emoji_picker_popup.exec()
 
     def _add_condition(self, condition: str):
         translated_condition = self._translated_conditions[condition]
@@ -300,7 +304,7 @@ class MessageWindow:
         emote_button.setFlat(True)
         layout.addWidget(emote_button, alignment=Qt.AlignmentFlag.AlignTop)
         emote_button.clicked.connect(
-            lambda: self.__raise_emote_popup(
+            lambda: self.__raise_emoji_popup(
                 emote_button.mapToGlobal(QPoint(0, 0)), line_edit
             )
         )
