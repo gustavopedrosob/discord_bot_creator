@@ -6,7 +6,7 @@ from pathlib import Path
 from threading import Thread
 
 from PySide6.QtCore import QPoint, QCoreApplication
-from PySide6.QtGui import QIcon, QAction, Qt
+from PySide6.QtGui import QIcon, QAction, Qt, QCursor
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -511,7 +511,9 @@ class Main(QMainWindow):
 
     def turn_off_bot(self):
         self.bot.loop.create_task(self.bot.close())
+        self.setCursor(Qt.CursorShape.WaitCursor)
         self.bot_thread.join()
+        self.setCursor(Qt.CursorShape.ArrowCursor)
         self.set_switch_bot_button(False)
         logger.info("Bot desligado!")
 
