@@ -530,7 +530,6 @@ class Main(QMainWindow):
         self.bot_thread.join()
         self.setCursor(Qt.CursorShape.ArrowCursor)
         self.set_switch_bot_button(False)
-        logger.info("Bot desligado!")
 
     def message_context_menu_event(self, position: QPoint):
         context_menu = QMenu(self)

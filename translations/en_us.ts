@@ -58,6 +58,11 @@
         <source>Ban member</source>
         <translation>Banning member &quot;%s&quot;.</translation>
     </message>
+    <message>
+        <location filename="../bot.py" line="137"/>
+        <source>Bot close</source>
+        <translation>Bot finished!</translation>
+    </message>
 </context>
 <context>
     <name>Conditions</name>

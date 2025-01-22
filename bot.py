@@ -132,6 +132,10 @@ class Bot(Client):
         await member.ban()
         translate("Bot", "Ban member") % member.name
 
+    async def close(self) -> None:
+        await super().close()
+        logger.info(translate("Bot", "Bot close"))
+
 
 class IntegratedBot(Bot):
     def __init__(self, app):
