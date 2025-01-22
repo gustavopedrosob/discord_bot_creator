@@ -6,7 +6,7 @@ from pathlib import Path
 from threading import Thread
 
 from PySide6.QtCore import QPoint, QCoreApplication
-from PySide6.QtGui import QIcon, QAction, Qt, QCursor
+from PySide6.QtGui import QIcon, QAction, Qt
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -80,6 +80,8 @@ class Main(QMainWindow):
         language_menu.addAction(english_action)
         language_menu.addAction(portuguese_action)
 
+        new_action = QAction(translate("MainWindow", "New file"), self)
+        new_action.triggered.connect(self.on_new_action)
         load_action = QAction(translate("MainWindow", "Load"), self)
         load_action.triggered.connect(self.on_load_action)
         save_action = QAction(translate("MainWindow", "Save"), self)
@@ -89,7 +91,13 @@ class Main(QMainWindow):
         exit_action = QAction(translate("MainWindow", "Exit"), self)
         exit_action.triggered.connect(self.close)
 
-        for action in [load_action, save_action, save_as_action, exit_action]:
+        for action in [
+            new_action,
+            load_action,
+            save_action,
+            save_as_action,
+            exit_action,
+        ]:
             file_menu.addAction(action)
 
         credits_action = QAction(translate("MainWindow", "Credits"), self)
@@ -261,6 +269,13 @@ class Main(QMainWindow):
         if file and file.exists():
             title = f"Bot Discord Easy Creator - {file.name}"
         self.setWindowTitle(title)
+
+    def on_new_action(self):
+        config.set("file", "")
+        config.save()
+        messages.clear()
+        self.set_window_title()
+        self.messages_list_widget.clear()
 
     def on_load_action(self):
         file_path, file_extension = QFileDialog.getOpenFileName(
