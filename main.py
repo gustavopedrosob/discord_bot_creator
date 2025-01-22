@@ -5,16 +5,19 @@ from PySide6.QtCore import QTranslator
 from PySide6.QtWidgets import QApplication
 from core.config import instance as config
 from interfaces.main.main import Main
+import locale
 
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(message)s",
-        datefmt="%d/%m/%Y %H:%M:%S",
+        datefmt="%x %X",
     )
     app = QApplication(sys.argv)
+    lang = config.get("language")
+    locale.setlocale(locale.LC_ALL, lang)
     translator = QTranslator()
-    translator.load(f"translations/{config.get("language")}.qm")
+    translator.load(f"translations/{lang}.qm")
     app.installTranslator(translator)
     window = Main()
     window.show()

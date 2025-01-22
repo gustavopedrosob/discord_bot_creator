@@ -8,6 +8,5 @@ class LogHandler(logging.Handler):
         self.__app = app
 
     def emit(self, record: logging.LogRecord):
-        self.__app.log(
-            f"{datetime.fromtimestamp(record.created).strftime("%d/%m/%Y %H:%M:%S")} - {record.getMessage()}\n"
-        )
+        date = datetime.fromtimestamp(record.created)
+        self.__app.log(f"{date.strftime("%x %X")} - {record.getMessage()}\n")
