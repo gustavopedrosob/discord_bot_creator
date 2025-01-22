@@ -5,23 +5,23 @@ from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QVBoxLayout,
     QListWidget,
-    QLabel,
     QLineEdit,
-    QListWidgetItem,
     QComboBox,
     QMenu,
     QHBoxLayout,
     QWidget,
     QTextEdit,
+    QScrollArea,
 )
 
 from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
 
 
-class QListBox(QWidget):
+class QListBox(QScrollArea):
     def __init__(self, line_edit: typing.Union[QLineEdit, QComboBox, QTextEdit]):
         super().__init__()
         self.__list = QListWidget()
+        self.__list.setMinimumHeight(85)
         self.__add_button = QColorResponsiveButton()
         self.__add_button.setIcon(QIcon("source/icons/plus-solid"))
         self.__add_button.setFlat(True)
@@ -32,10 +32,13 @@ class QListBox(QWidget):
             self.__add_button, alignment=Qt.AlignmentFlag.AlignTop
         )
         self.__horizontal_layout.setStretch(0, True)
-        self.__layout = QVBoxLayout()
+        self.setWidgetResizable(True)
+        content_widget = QWidget()
+        self.__layout = QVBoxLayout(content_widget)
+        self.setWidget(content_widget)
         self.__layout.addWidget(self.__list)
         self.__layout.addLayout(self.__horizontal_layout)
-        self.setLayout(self.__layout)
+        self.setWidget(content_widget)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_Delete:
