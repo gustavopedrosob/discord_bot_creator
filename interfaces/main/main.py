@@ -414,14 +414,12 @@ class Main(QMainWindow):
         messages.delete(old_message_name)
         messages.set(new_message_name, message_data)
         self.__get_list_item_message(old_message_name).setText(new_message_name)
-        self.on_save_action()
 
     def accepted_new_message(self, message_name: str, message_data: dict):
         if not message_name:
             message_name = messages.new_id()
         messages.set(message_name, message_data)
         self.messages_list_widget.addItem(message_name)
-        self.on_save_action()
 
     def __get_selected_message(self) -> int:
         return self.messages_list_widget.selectedIndexes()[0].row()

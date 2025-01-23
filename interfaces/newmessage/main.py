@@ -32,6 +32,7 @@ from emojis import emojis
 
 from core.messages import messages
 from interfaces.classes.collapse_group import QCollapseGroup
+from interfaces.classes.color_button import QColorButton
 from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
 from interfaces.classes.emoji_picker import QEmojiPickerPopup
 from interfaces.classes.emoji_validator import QEmojiValidator
@@ -241,10 +242,14 @@ class MessageWindow:
         delay_label = QLabel(translate("MessageWindow", "Delay"))
         self.delay = QSpinBox()
 
-        # Save and quit button
-        save_and_quit_button = QPushButton(translate("MessageWindow", "Save and quit"))
-        save_and_quit_button.setAutoDefault(False)
-        save_and_quit_button.setDefault(False)
+        confirm = QPushButton(translate("MessageWindow", "Confirm"))
+
+        confirm_and_save = QColorButton(
+            translate("MessageWindow", "Confirm and save"), "#3DCC61"
+        )
+        confirm_and_save.setAutoDefault(False)
+        confirm_and_save.setDefault(False)
+        confirm_and_save.setIcon(QIcon("source/icons/floppy-disk-solid.svg"))
 
         for widget in (
             delay_label,
@@ -253,7 +258,8 @@ class MessageWindow:
             right_layout.addWidget(widget)
 
         right_layout.addStretch()
-        right_layout.addWidget(save_and_quit_button)
+        right_layout.addWidget(confirm)
+        right_layout.addWidget(confirm_and_save)
 
         horizontal_layout = QHBoxLayout()
         horizontal_layout.addLayout(left_layout)
@@ -267,7 +273,8 @@ class MessageWindow:
 
         self.window.setLayout(vertical_layout)
 
-        save_and_quit_button.clicked.connect(self.on_save_and_quit)
+        confirm.clicked.connect(self.on_confirm)
+        confirm_and_save.clicked.connect(self.on_confirm_and_save)
 
     def __raise_emoji_popup(self, point: QPoint, line_edit: QTextEdit):
         def append_emoji(text):
@@ -310,7 +317,7 @@ class MessageWindow:
             )
         )
 
-    def on_save_and_quit(self):
+    def on_confirm(self):
         if not self.is_name_valid():
             message_box = QMessageBox()
             message_box.setWindowTitle(
@@ -339,6 +346,10 @@ class MessageWindow:
             message_box.exec()
         else:
             self.window.accept()
+
+    def on_confirm_and_save(self):
+        self.on_confirm()
+        self.app.on_save_action()
 
     def __has_opposite_conditions(self) -> bool:
         conditions = self.listbox_conditions.get_items_userdata()
