@@ -410,25 +410,13 @@ class EditMessageWindow(MessageWindow):
         self.__name = name
         self.name_entry.setText(name)
 
-        expected_messages = data["expected message"]
-        if expected_messages:
-            self.listbox_messages.add_items(expected_messages)
+        self.listbox_messages.add_items(data["expected message"])
 
-        replies = data["reply"]
-        if replies:
-            for reply in replies:
-                (self.listbox_replies.add_item("¨".join(reply)))
+        for reply in data["reply"]:
+            self.listbox_replies.add_item("¨".join(reply))
 
-        reactions_list = data["reaction"]
-        if reactions_list:
-            list(
-                map(
-                    lambda reactions: self.listbox_reactions.add_item(
-                        "".join(reactions)
-                    ),
-                    reactions_list,
-                )
-            )
+        for reaction in data["reaction"]:
+            self.listbox_reactions.add_item("".join(reaction))
 
         for condition in data["conditions"]:
             self._add_condition(condition)
