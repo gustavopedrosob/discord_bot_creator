@@ -366,17 +366,11 @@ class MessageWindow:
 
     def __del_checked(self, check_state: int):
         author_checkbox = self.group_where_react.get_checkbox("author")
-        if check_state == Qt.CheckState.Checked:
-            author_checkbox.setDisabled(True)
-        else:
-            author_checkbox.setDisabled(False)
+        author_checkbox.setDisabled(check_state == Qt.CheckState.Checked)
 
     def __author_checked(self, check_state: int):
         del_checkbox = self.group_pin_or_del.get_checkbox("delete")
-        if check_state == Qt.CheckState.Checked:
-            del_checkbox.setDisabled(True)
-        else:
-            del_checkbox.setDisabled(False)
+        del_checkbox.setDisabled(check_state == Qt.CheckState.Checked)
 
     @staticmethod
     def insert_on_listbox(listbox: QListBox, text_edit: QResponsiveTextEdit):
