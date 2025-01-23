@@ -120,8 +120,6 @@ class MessageWindow:
             "not mention someone": translate("Conditions", "not mention someone"),
             "mention everyone": translate("Conditions", "mention everyone"),
             "not mention everyone": translate("Conditions", "not mention everyone"),
-            "author is expected": translate("Conditions", "author is expected"),
-            "not author is expected": translate("Conditions", "not author is expected"),
             "author is bot": translate("Conditions", "author is bot"),
             "not author is bot": translate("Conditions", "not author is bot"),
             "number in message": translate("Conditions", "number in message"),

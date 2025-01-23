@@ -49,7 +49,6 @@ class MessageConditions:
     def __init__(
         self,
         message: discord.Message,
-        expected_author: discord.Member = None,
         expected_message=None,
     ):
 
@@ -67,10 +66,6 @@ class MessageConditions:
         not_mention_someone = not mention_someone
         mention_everyone = message.mention_everyone
         not_mention_everyone = not mention_everyone
-        author_is_expected = (
-            False if expected_author == None else message.author == expected_author
-        )
-        not_author_is_expected = not author_is_expected
         author_is_bot = message.author.bot
         not_author_is_bot = not author_is_bot
         number_in_message = have_in(numbers, message.clean_content)
@@ -87,8 +82,6 @@ class MessageConditions:
             "not mention someone": not_mention_someone,
             "mention everyone": mention_everyone,
             "not mention everyone": not_mention_everyone,
-            "author is expected": author_is_expected,
-            "not author is expected": not_author_is_expected,
             "author is bot": author_is_bot,
             "not author is bot": not_author_is_bot,
             "number in message": number_in_message,
