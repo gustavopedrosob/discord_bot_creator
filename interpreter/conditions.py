@@ -1,76 +1,27 @@
 import discord
 import emojis
 
-from core.functions import have_in
-
-symbols = [
-    "'",
-    '"',
-    "!",
-    "@",
-    "#",
-    "$",
-    "%",
-    "¨",
-    "&",
-    "*",
-    "(",
-    ")",
-    "-",
-    "_",
-    "+",
-    "=",
-    "§",
-    "`",
-    "´",
-    "[",
-    "{",
-    "ª",
-    "~",
-    "^",
-    "]",
-    "}",
-    "º",
-    ",",
-    ".",
-    "<",
-    ">",
-    ":",
-    ";",
-    "?",
-    "/",
-    "°",
-    "|",
-]
-numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+from core.functions import has_number, has_symbols
 
 
 class MessageConditions:
     def __init__(
         self,
         message: discord.Message,
-        expected_message=None,
+        expected_message: list[str],
     ):
 
-        expected_message = (
-            False
-            if expected_message is None
-            else (
-                message.clean_content == expected_message
-                if type(expected_message) == str
-                else message.clean_content in expected_message
-            )
-        )
+        expected_message = message.clean_content in expected_message
         not_expected_message = not expected_message
-        mention_someone = True if len(message.mentions) >= 1 else False
+        mention_someone = len(message.mentions) >= 1
         not_mention_someone = not mention_someone
         mention_everyone = message.mention_everyone
         not_mention_everyone = not mention_everyone
         author_is_bot = message.author.bot
         not_author_is_bot = not author_is_bot
-        number_in_message = have_in(numbers, message.clean_content)
+        number_in_message = has_number(message.clean_content)
         not_number_in_message = not number_in_message
-        symbols_in_message = have_in(symbols, message.clean_content)
+        symbols_in_message = has_symbols(message.clean_content)
         not_symbols_in_message = not symbols_in_message
         emojis_in_message = emojis.count(message.clean_content)
         not_emojis_in_message = not emojis_in_message

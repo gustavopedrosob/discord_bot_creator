@@ -1,27 +1,20 @@
-import ctypes
+import re
 from datetime import datetime
-
 from PySide6.QtCore import QSettings
 from PySide6.QtGui import QPixmap, Qt, QPainter, QColor, QIcon
+from random import choice
 
 
-def random_choose(lista: list):
-    from random import choice
-
-    return choice(lista)
+def random_choose(array: list):
+    return choice(array)
 
 
-def have_in(lista: list, string: str, reverse=False) -> bool:
-    if not reverse:
-        for x in lista:
-            if x in string:
-                return True
-        return False
-    else:
-        for x in lista:
-            if string in x:
-                return True
-        return False
+def has_number(string: str) -> bool:
+    return any(char.isnumeric() for char in string)
+
+
+def has_symbols(string: str) -> bool:
+    return bool(re.search(r"[-!$%^&*()_+|~=`{}\[\]:\";'<>?,./\\´§¨#@ªº°]", string))
 
 
 def get_time(string: str):
