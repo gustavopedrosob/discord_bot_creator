@@ -2,11 +2,6 @@ import re
 from datetime import datetime
 from PySide6.QtCore import QSettings
 from PySide6.QtGui import QPixmap, Qt, QPainter, QColor, QIcon
-from random import choice
-
-
-def random_choose(array: list):
-    return choice(array)
 
 
 def has_number(string: str) -> bool:

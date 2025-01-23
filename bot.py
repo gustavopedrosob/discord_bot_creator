@@ -1,9 +1,10 @@
 import asyncio
 import logging
+import random
+
 import discord
 from discord import Intents, Client
 from core.config import instance as config
-from core.functions import random_choose
 from core.messages import messages
 from interfaces.main.log_handler import LogHandler
 from interpreter.conditions import MessageConditions
@@ -69,7 +70,7 @@ class Bot(Client):
     async def send_reaction(reactions: list[list[str]], message: discord.Message):
         for reaction in reactions:
             code_reaction = reaction
-            reaction = random_choose(reaction)
+            reaction = random.choice(reaction)
             try:
                 await message.add_reaction(reaction)
                 logger.info(
@@ -88,7 +89,7 @@ class Bot(Client):
         where_reaction: str,
     ):
         for reply in replies:
-            reply = random_choose(reply)
+            reply = random.choice(reply)
             reply = Variable(message).apply_variable(reply)
             if where == "group" and message.channel.guild is not None:
                 logger.info(
