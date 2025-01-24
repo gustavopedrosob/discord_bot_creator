@@ -108,7 +108,7 @@ class MessageWindow:
         self.name_text = QLabel(translate("MessageWindow", "Name"))
         self.name_entry = QLineEdit()
         name_entry_validator = QRegularExpressionValidator(
-            QRegularExpression(r"[\w ]*")
+            QRegularExpression(r"[A-zÀ-ú0-9 ]*")
         )
         self.name_entry.setMaxLength(40)
         self.name_entry.setValidator(name_entry_validator)
