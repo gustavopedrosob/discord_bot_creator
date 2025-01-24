@@ -107,6 +107,12 @@ class MessageWindow:
 
         self.name_text = QLabel(translate("MessageWindow", "Name"))
         self.name_entry = QLineEdit()
+        self.name_entry.setToolTip(
+            translate(
+                "MessageWindow",
+                "The name can include letters (with accents), numbers, and spaces. Example: 'John123'.",
+            )
+        )
         name_entry_validator = QRegularExpressionValidator(
             QRegularExpression(r"[A-zÀ-ú0-9 ]*")
         )
