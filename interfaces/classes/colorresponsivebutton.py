@@ -17,4 +17,6 @@ class QColorResponsiveButton(QPushButton):
     def setIcon(self, icon):
         if is_dark_mode():
             icon = colorize_icon(icon, "#FFFFFF")
+        else:
+            icon = colorize_icon(icon, "#000000")
         super().setIcon(icon)
