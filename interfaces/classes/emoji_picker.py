@@ -1,4 +1,5 @@
 import typing
+from idlelib.configdialog import font_sample_text
 
 from PySide6.QtCore import QPoint, QCoreApplication, QSize, Signal
 from PySide6.QtGui import QIcon, QFont, QAction, Qt
@@ -102,9 +103,11 @@ class QEmojiGrid(QWidget):
 
 class QEmojiPicker(QWidget):
     emoji_click = Signal(str)
-    bottom_font = QFont()
-    bottom_font.setBold(True)
-    bottom_font.setPointSize(16)
+    emoji_font = QFont()
+    emoji_font.setPointSize(16)
+    aliases_emoji_font = QFont()
+    aliases_emoji_font.setBold(True)
+    aliases_emoji_font.setPointSize(13)
     line_edit_font = QFont()
     line_edit_font.setPointSize(12)
 
@@ -117,19 +120,25 @@ class QEmojiPicker(QWidget):
         )
         self.__line_edit.textEdited.connect(self.__line_edited)
         self.__categories = {}
-        self.__current_emoji_label = QLabel()
-        self.__current_emoji_label.setFont(self.bottom_font)
+        self.__emoji_label = QLabel()
+        self.__emoji_label.setFont(self.emoji_font)
+        self.__aliases_emoji_label = QLabel()
+        self.__aliases_emoji_label.setFont(self.aliases_emoji_font)
         self.__menu_horizontal_layout = QHBoxLayout()
         self.__scroll_area = QScrollArea()
         self.__scroll_area.setWidgetResizable(True)
         content_widget = QWidget()
         self.__collapse_groups_layout = QVBoxLayout(content_widget)
         self.__scroll_area.setWidget(content_widget)
+        self.__emoji_layout = QHBoxLayout()
+        self.__emoji_layout.addWidget(self.__emoji_label)
+        self.__emoji_layout.addWidget(self.__aliases_emoji_label)
+        self.__emoji_layout.setStretch(1, True)
         self.__vertical_layout = QVBoxLayout()
         self.__vertical_layout.addLayout(self.__menu_horizontal_layout)
         self.__vertical_layout.addWidget(self.__line_edit)
         self.__vertical_layout.addWidget(self.__scroll_area)
-        self.__vertical_layout.addWidget(self.__current_emoji_label)
+        self.__vertical_layout.addLayout(self.__emoji_layout)
         self.setLayout(self.__vertical_layout)
         self.add_category(
             "Smileys & Emotion",
@@ -236,7 +245,8 @@ class QEmojiPicker(QWidget):
 
     def __mouse_enter_emoji(self, emoji: Emoji):
         aliases = " ".join(map(lambda alias: f":{alias}:", emoji.aliases))
-        self.__current_emoji_label.setText(f"{emoji.emoji} {aliases}")
+        self.__emoji_label.setText(emoji.emoji)
+        self.__aliases_emoji_label.setText(aliases)
 
     def __line_edited(self):
         for category in self.__categories.keys():
@@ -246,7 +256,8 @@ class QEmojiPicker(QWidget):
             collapse_group.set_collapse(emoji_grid.all_hidden())
 
     def __mouse_leave_emoji(self):
-        self.__current_emoji_label.clear()
+        self.__emoji_label.clear()
+        self.__aliases_emoji_label.clear()
 
     def reset(self):
         self.__line_edit.clear()
