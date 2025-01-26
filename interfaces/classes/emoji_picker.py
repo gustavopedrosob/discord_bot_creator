@@ -40,10 +40,9 @@ class QEmojiButton(QPushButton):
         return self.__emoji
 
     def has_in_aliases(self, emoji_alias: str) -> bool:
-        for emoji_alias_2 in self.__emoji.aliases:
-            if emoji_alias in emoji_alias_2:
-                return True
-        return False
+        return any(
+            emoji_alias in emoji_alias_2 for emoji_alias_2 in self.__emoji.aliases
+        )
 
 
 class QEmojiGrid(QWidget):
