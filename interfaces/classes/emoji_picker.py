@@ -252,7 +252,9 @@ class QEmojiPicker(QWidget):
             emoji_grid = self.emoji_grid(category)
             emoji_grid.filter(self.__line_edit.text())
             collapse_group = self.collapse_group(category)
-            collapse_group.set_collapse(emoji_grid.all_hidden())
+            all_hidden = emoji_grid.all_hidden()
+            collapse_group.set_collapse(all_hidden)
+            collapse_group.setHidden(all_hidden)
 
     def __mouse_leave_emoji(self):
         self.__emoji_label.clear()
