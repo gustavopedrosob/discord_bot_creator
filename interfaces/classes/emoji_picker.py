@@ -142,8 +142,6 @@ class QEmojiGrid(QWidget):
 
 class QEmojiPicker(QWidget, EmojiUtils):
     emoji_click = Signal(str)
-    emoji_font = QFont()
-    emoji_font.setPointSize(16)
     aliases_emoji_font = QFont()
     aliases_emoji_font.setBold(True)
     aliases_emoji_font.setPointSize(13)
@@ -162,7 +160,6 @@ class QEmojiPicker(QWidget, EmojiUtils):
         self.__emoji_label = QLabel()
         self.__emoji_label.setFixedSize(QSize(32, 32))
         self.__emoji_label.setScaledContents(True)
-        self.__emoji_label.setFont(self.emoji_font)
         self.__aliases_emoji_label = QLabel()
         self.__aliases_emoji_label.setFont(self.aliases_emoji_font)
         self.__menu_horizontal_layout = QHBoxLayout()
