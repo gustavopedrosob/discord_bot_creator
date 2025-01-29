@@ -1,8 +1,8 @@
 import typing
-from idlelib.configdialog import font_sample_text
+from pathlib import Path
 
-from PySide6.QtCore import QPoint, QCoreApplication, QSize, Signal
-from PySide6.QtGui import QIcon, QFont, QAction, Qt
+from PySide6.QtCore import QCoreApplication, QSize, Signal
+from PySide6.QtGui import QIcon, QFont, Qt, QPixmap, QImage
 from PySide6.QtWidgets import (
     QVBoxLayout,
     QScrollArea,
@@ -11,7 +11,6 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QGridLayout,
-    QMenu,
     QPushButton,
     QDialog,
 )
@@ -25,16 +24,57 @@ from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
 translate = QCoreApplication.translate
 
 
-class QEmojiButton(QPushButton):
-    font = QFont()
-    font.setPointSize(20)
+class EmojiUtils:
+    @staticmethod
+    def _to_code_point(surrogate_pair_str, delimiter="-"):
+        # Convert the string into a list of UTF-16 code units
+        code_units = [ord(char) for char in surrogate_pair_str]
 
+        # Process the code units in pairs (high surrogate + low surrogate)
+        code_points = []
+        i = 0
+        while i < len(code_units):
+            high_surrogate = code_units[i]
+            low_surrogate = code_units[i + 1] if i + 1 < len(code_units) else None
+
+            # Check if the current pair is a valid surrogate pair
+            if 0xD800 <= high_surrogate <= 0xDBFF and 0xDC00 <= low_surrogate <= 0xDFFF:
+                # Calculate the code point
+                code_point = (
+                    ((high_surrogate - 0xD800) << 10)
+                    + (low_surrogate - 0xDC00)
+                    + 0x10000
+                )
+                code_points.append(hex(code_point)[2:])  # Remove the '0x' prefix
+                i += 2  # Move to the next pair
+            else:
+                # If not a surrogate pair, treat it as a regular code point
+                code_points.append(hex(high_surrogate)[2:])
+                i += 1
+
+        # Join the code points with the specified delimiter
+        return delimiter.join(code_points)
+
+    @classmethod
+    def _get_icon_path(cls, emoji: Emoji) -> str:
+        file_name = cls._to_code_point(emoji.emoji)
+        path = Path(f"source/emojis/{file_name}.png")
+        if path.exists():
+            return str(path)
+        else:
+            file_name = "-".join(file_name.split("-")[:-1])
+            return f"source/emojis/{file_name}.png"
+
+
+class QEmojiButton(QPushButton, EmojiUtils):
     def __init__(self, emoji: Emoji):
-        super().__init__(emoji.emoji)
+        super().__init__()
         self.__emoji = emoji
+        self.setIcon(QIcon(self._get_icon_path(emoji)))
+        self.setFixedSize(QSize(40, 40))
+        self.setIconSize(QSize(36, 36))
         self.setStyleSheet("padding: 0; background-color: transparent;")
         self.setFlat(True)
-        self.setFont(self.font)
 
     def emoji(self) -> Emoji:
         return self.__emoji
@@ -100,7 +140,7 @@ class QEmojiGrid(QWidget):
         return index // 9, index % 9
 
 
-class QEmojiPicker(QWidget):
+class QEmojiPicker(QWidget, EmojiUtils):
     emoji_click = Signal(str)
     emoji_font = QFont()
     emoji_font.setPointSize(16)
@@ -120,6 +160,8 @@ class QEmojiPicker(QWidget):
         self.__line_edit.textEdited.connect(self.__line_edited)
         self.__categories = {}
         self.__emoji_label = QLabel()
+        self.__emoji_label.setFixedSize(QSize(32, 32))
+        self.__emoji_label.setScaledContents(True)
         self.__emoji_label.setFont(self.emoji_font)
         self.__aliases_emoji_label = QLabel()
         self.__aliases_emoji_label.setFont(self.aliases_emoji_font)
@@ -244,7 +286,7 @@ class QEmojiPicker(QWidget):
 
     def __mouse_enter_emoji(self, emoji: Emoji):
         aliases = " ".join(map(lambda alias: f":{alias}:", emoji.aliases))
-        self.__emoji_label.setText(emoji.emoji)
+        self.__emoji_label.setPixmap(QPixmap(self._get_icon_path(emoji)))
         self.__aliases_emoji_label.setText(aliases)
 
     def __line_edited(self):
