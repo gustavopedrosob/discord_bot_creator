@@ -230,6 +230,8 @@ class QEmojiPicker(QWidget, EmojiUtils):
 
     def add_category(self, category: str, icon: QIcon, title: str):
         shortcut_button = QColorResponsiveButton()
+        shortcut_button.setFixedSize(QSize(30, 30))
+        shortcut_button.setIconSize(QSize(22, 22))
         shortcut_button.setFlat(True)
         shortcut_button.setIcon(icon)
         shortcut_button.clicked.connect(lambda: self.__collapse_all_but(category))
