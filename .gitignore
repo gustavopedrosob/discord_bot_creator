@@ -4,3 +4,4 @@ __pycache__
 log.txt
 source/config.json
 config.yaml
+build

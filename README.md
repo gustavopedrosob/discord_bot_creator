@@ -28,7 +28,7 @@ de executar o bot.
 Abra o cmd e digite:
 
 ```bash
-  pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 Esse processo pode ser realizado a partir da interface.
@@ -38,7 +38,7 @@ Esse processo pode ser realizado a partir da interface.
 Para iniciar a interface do bot, digite no cmd:
 
 ```bash
-  python main.py
+python main.py
 ```
 
 ### 3º Passo: Inserindo o token
@@ -50,7 +50,7 @@ Para inserir o token, clique no campo Token da interface, insira e aperte Enter 
 Se preferir pode copiar o token do seu bot e inserir no arquivo config.yaml, por exemplo:
 
 ```yaml
-  token: <seu token>
+token: <seu token>
 ```
 
 ### 4º Passo: Iniciando Bot
@@ -62,7 +62,7 @@ Para iniciar o Bot basta clicar no botão Ligar Bot:
 Ou se já tiver uma configuração de mensagens e desejar executar o bot separadamente, digite no cmd:
 
 ```bash
-  python bot.py
+python bot.py
 ```
 
 ## Não tem um token?
@@ -118,13 +118,21 @@ pasta do Qt), pois iremos utilizá-lo para traduzir cada widget da interface.
 Vamos começar gerando os arquivos .ts a partir das interfaces, exemplo:
     
 ```bash
-  pyside6-lupdate -recursive -extensions py ./ -ts translations/pt_br.ts 
-  pyside6-lupdate -recursive -extensions py ./ -ts translations/en_us.ts
+pyside6-lupdate -recursive -extensions py ./ -ts translations/pt_br.ts 
+pyside6-lupdate -recursive -extensions py ./ -ts translations/en_us.ts
 ```
 
 Agora abra o arquivo .ts gerado e traduza cada widget, após isso, compile o arquivo .ts para .qm com o comando:
 
 ```bash
-  pyside6-lrelease translations/pt_br.ts
-  pyside6-lrelease translations/en_us.ts
+pyside6-lrelease translations/pt_br.ts
+pyside6-lrelease translations/en_us.ts
 ```
+
+## Compilando:
+
+Para compilar o programa, basta executar o seguinte comando:
+```bash
+python setup.py build
+```
+Mais configurações podem ser realizadas no setup.py.
