@@ -364,11 +364,6 @@ class Main(QMainWindow):
         config.set("language", language)
         config.save()
 
-    @staticmethod
-    def get_token():
-        """Returns the current token saved in the "config.json" file."""
-        return config.get("token")
-
     def __turn_on_bot(self):
         self.bot = IntegratedBot(self)
         self.bot.run(config.get("token"))
