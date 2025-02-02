@@ -217,12 +217,15 @@ class Main(QMainWindow):
         self.update_bot_button()
 
         # Adding Widgets to Right Frame
-        right_frame.addWidget(self.logs_text_edit)
-        right_frame.addWidget(self.cmd_combobox)
-        right_frame.addWidget(QLabel("Token:"))
-        right_frame.addWidget(self.token_widget)
-        right_frame.addWidget(self.turn_on_bot_button)
-        right_frame.addWidget(self.turn_off_bot_button)
+        for widget in [
+            self.logs_text_edit,
+            self.cmd_combobox,
+            QLabel("Token:"),
+            self.token_widget,
+            self.turn_on_bot_button,
+            self.turn_off_bot_button,
+        ]:
+            right_frame.addWidget(widget)
 
         # Left Frame for Messages
         left_frame = QVBoxLayout()
@@ -250,12 +253,15 @@ class Main(QMainWindow):
         remove_all_message_button.clicked.connect(self.confirm_remove_messages)
 
         # Adding Widgets to Left Frame
-        left_frame.addWidget(message_label)
-        left_frame.addWidget(self.messages_list_widget)
-        left_frame.addWidget(new_message_button)
-        left_frame.addWidget(edit_messages_button)
-        left_frame.addWidget(remove_message_button)
-        left_frame.addWidget(remove_all_message_button)
+        for widget in [
+            message_label,
+            self.messages_list_widget,
+            new_message_button,
+            edit_messages_button,
+            remove_message_button,
+            remove_all_message_button,
+        ]:
+            left_frame.addWidget(widget)
 
         left_frame.setContentsMargins(0, 0, 10, 0)
         right_frame.setContentsMargins(10, 0, 0, 0)
