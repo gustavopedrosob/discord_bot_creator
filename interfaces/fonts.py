@@ -1,1 +1,0 @@
-arial = ("Arial",12)
