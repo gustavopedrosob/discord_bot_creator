@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
     QScrollArea,
 )
 
-from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
+from interfaces.classes.color_responsive_button import QColorResponsiveButton
 
 
 class QListBox(QScrollArea):

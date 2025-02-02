@@ -27,7 +27,7 @@ from bot import IntegratedBot
 from core.config import instance as config
 from core.messages import messages, Messages
 from interfaces.classes.color_button import QColorButton
-from interfaces.classes.qpassword import QPassword
+from interfaces.classes.password import QPassword
 from interfaces.credits.credits import CreditsWindow
 from interfaces.main.log_handler import log_handler
 from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow

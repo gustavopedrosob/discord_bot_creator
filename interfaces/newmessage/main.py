@@ -33,11 +33,11 @@ from emojis import emojis
 from core.messages import messages
 from interfaces.classes.collapse_group import QCollapseGroup
 from interfaces.classes.color_button import QColorButton
-from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
+from interfaces.classes.color_responsive_button import QColorResponsiveButton
 from interfaces.classes.emoji_picker import QEmojiPickerPopup
 from interfaces.classes.emoji_validator import QEmojiValidator
 from interfaces.classes.resposive_text_edit import QResponsiveTextEdit
-from interfaces.newmessage.checkboxgroup import QCheckBoxGroup
+from interfaces.newmessage.checkbox_group import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
 
 

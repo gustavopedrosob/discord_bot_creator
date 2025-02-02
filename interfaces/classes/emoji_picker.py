@@ -18,7 +18,7 @@ from emojis import emojis
 from emojis.db import Emoji
 
 from interfaces.classes.collapse_group import QCollapseGroup
-from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
+from interfaces.classes.color_responsive_button import QColorResponsiveButton
 
 
 translate = QCoreApplication.translate

@@ -1,7 +1,7 @@
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel
 
-from interfaces.classes.colorresponsivebutton import QColorResponsiveButton
+from interfaces.classes.color_responsive_button import QColorResponsiveButton
 
 
 class QCollapseGroup(QWidget):
