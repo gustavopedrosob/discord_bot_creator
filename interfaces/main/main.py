@@ -3,9 +3,8 @@ import os
 import typing
 import webbrowser
 from pathlib import Path
-from threading import Thread
 
-from PySide6.QtCore import QPoint, QCoreApplication
+from PySide6.QtCore import QPoint, QCoreApplication, QThread, Signal
 from PySide6.QtGui import QIcon, QAction, Qt
 from PySide6.QtWidgets import (
     QWidget,
@@ -30,11 +29,28 @@ from core.messages import messages, Messages
 from interfaces.classes.color_button import QColorButton
 from interfaces.classes.qpassword import QPassword
 from interfaces.credits.credits import CreditsWindow
-from interfaces.main.log_handler import LogHandler
+from interfaces.main.log_handler import log_handler
 from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow
 
+
 logger = logging.getLogger(__name__)
+logger.addHandler(log_handler)
 translate = QCoreApplication.translate
+
+
+class QBotThread(QThread):
+    bot_ready = Signal()
+
+    def __init__(self):
+        super().__init__()
+        self.__bot = None
+
+    def run(self):
+        self.__bot = IntegratedBot(self)
+        self.__bot.run(config.get("token"))
+
+    def close(self):
+        self.__bot.loop.create_task(self.__bot.close())
 
 
 class Main(QMainWindow):
@@ -46,13 +62,11 @@ class Main(QMainWindow):
 
         self.message_window = None
         self.credits_window = CreditsWindow()
-        self.bot = None
-        self.bot_thread = None
-        self.bot_on = False
+        self.bot_thread = QBotThread()
+        self.bot_thread.finished.connect(self.on_bot_thread_finished)
+        self.bot_thread.bot_ready.connect(self.on_bot_ready)
 
-        log_handler = LogHandler(self)
-        log_handler.setLevel(logging.INFO)
-        logger.addHandler(log_handler)
+        log_handler.set_app(self)
 
         # Create the menu bar
         self.menu_bar = QMenuBar(self)
@@ -200,7 +214,7 @@ class Main(QMainWindow):
         )
         self.turn_off_bot_button.setIcon(QIcon("source/icons/stop-solid.svg"))
         self.turn_off_bot_button.clicked.connect(self.turn_off_bot)
-        self.set_switch_bot_button(False)
+        self.update_bot_button()
 
         # Adding Widgets to Right Frame
         right_frame.addWidget(self.logs_text_edit)
@@ -364,13 +378,13 @@ class Main(QMainWindow):
         config.set("language", language)
         config.save()
 
-    def __turn_on_bot(self):
-        self.bot = IntegratedBot(self)
-        self.bot.run(config.get("token"))
-
     def start_turn_on_bot_thread(self):
-        self.bot_thread = Thread(target=self.__turn_on_bot)
         self.bot_thread.start()
+        self.turn_on_bot_button.setDisabled(True)
+
+    def on_bot_ready(self):
+        self.turn_on_bot_button.setDisabled(False)
+        self.update_bot_button()
 
     def entry_command(self):
         """Handles commands for the bot's log entry."""
@@ -429,8 +443,8 @@ class Main(QMainWindow):
             )
         )
 
-    def set_switch_bot_button(self, on: bool):
-        self.bot_on = on
+    def update_bot_button(self):
+        on = self.bot_thread.isRunning()
         self.turn_on_bot_button.setHidden(on)
         self.turn_off_bot_button.setHidden(not on)
 
@@ -518,11 +532,12 @@ class Main(QMainWindow):
         self.logs_text_edit.update()
 
     def turn_off_bot(self):
-        self.bot.loop.create_task(self.bot.close())
-        self.setCursor(Qt.CursorShape.WaitCursor)
-        self.bot_thread.join()
-        self.setCursor(Qt.CursorShape.ArrowCursor)
-        self.set_switch_bot_button(False)
+        self.bot_thread.close()
+        self.turn_off_bot_button.setDisabled(True)
+
+    def on_bot_thread_finished(self):
+        self.turn_off_bot_button.setDisabled(False)
+        self.update_bot_button()
 
     def message_context_menu_event(self, position: QPoint):
         context_menu = QMenu(self)
@@ -534,6 +549,6 @@ class Main(QMainWindow):
         context_menu.exec(self.messages_list_widget.mapToGlobal(position))
 
     def closeEvent(self, event):
-        if self.bot_on:
+        if self.bot_thread.isRunning():
             self.turn_off_bot()
         super().closeEvent(event)

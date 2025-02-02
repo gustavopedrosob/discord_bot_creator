@@ -6,13 +6,14 @@ import discord
 from discord import Intents, Client
 from core.config import instance as config
 from core.messages import messages
-from interfaces.main.log_handler import LogHandler
+from interfaces.main.log_handler import log_handler
 from interpreter.conditions import MessageConditions
 from interpreter.variable import Variable
 from PySide6.QtCore import QCoreApplication
 
 translate = QCoreApplication.translate
 logger = logging.getLogger(__name__)
+logger.addHandler(log_handler)
 
 
 class Bot(Client):
@@ -133,23 +134,19 @@ class Bot(Client):
         await member.ban()
         translate("Bot", "Ban member") % member.name
 
-    async def close(self) -> None:
+    async def close(self):
         await super().close()
         logger.info(translate("Bot", "Bot close"))
 
 
 class IntegratedBot(Bot):
-    def __init__(self, app):
-        self.app = app
+    def __init__(self, thread_executor):
+        self.thread_executor = thread_executor
         super().__init__()
-
-        log_handler = LogHandler(self.app)
-        log_handler.setLevel(logging.INFO)
-        logger.addHandler(log_handler)
 
     async def on_ready(self):
         await super().on_ready()
-        self.app.set_switch_bot_button(True)
+        self.thread_executor.bot_ready.emit()
 
 
 if __name__ == "__main__":

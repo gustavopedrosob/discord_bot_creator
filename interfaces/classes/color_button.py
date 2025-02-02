@@ -7,6 +7,9 @@ class QColorButton(QPushButton):
     def __init__(self, text: str, color: str):
         super().__init__()
         self.setText(text)
+        hover_color = adjust_brightness(color, 15)
+        pressed_color = adjust_brightness(color, -15)
+        disabled_color = adjust_brightness(color, -30)
         self.setStyleSheet(
             """
             QPushButton {
@@ -21,8 +24,11 @@ class QColorButton(QPushButton):
             QPushButton:pressed {
                 background-color: %s;
             }
+            QPushButton:disabled {
+                background-color: %s;
+            }
             """
-            % (color, adjust_brightness(color, 15), adjust_brightness(color, -15))
+            % (color, hover_color, pressed_color, disabled_color)
         )
 
     def setText(self, text: str):
