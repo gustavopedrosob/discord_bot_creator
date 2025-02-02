@@ -16,10 +16,11 @@ class QCollapseGroup(QWidget):
         self.__collapse_button.clicked.connect(
             lambda: self.set_collapse(not self.__collapsed)
         )
-        self.__label = QLabel(" " + title)
+        self.__label = QLabel(title)
         self.__header_layout = QHBoxLayout()
         self.__header_layout.addWidget(self.__collapse_button)
         self.__header_layout.addWidget(self.__label)
+        self.__header_layout.setSpacing(10)
         self.__header_layout.setStretch(1, True)
         self.__layout = QVBoxLayout()
         self.__layout.setSpacing(0)
