@@ -125,8 +125,8 @@ pyside6-lupdate -recursive -extensions py ./ -ts translations/en_us.ts
 Agora abra o arquivo .ts gerado e traduza cada widget, após isso, compile o arquivo .ts para .qm com o comando:
 
 ```bash
-pyside6-lrelease translations/pt_br.ts
-pyside6-lrelease translations/en_us.ts
+pyside6-lrelease translations/pt_br.ts -qm translations/build/pt_br.qm
+pyside6-lrelease translations/en_us.ts -qm translations/build/en_us.qm
 ```
 
 ## Compilando:

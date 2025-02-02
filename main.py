@@ -17,7 +17,7 @@ if __name__ == "__main__":
     lang = config.get("language")
     locale.setlocale(locale.LC_ALL, lang)
     translator = QTranslator()
-    translator.load(f"translations/{lang}.qm")
+    translator.load(f"translations/build/{lang}.qm")
     app.installTranslator(translator)
     window = Main()
     window.show()

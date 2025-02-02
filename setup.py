@@ -6,7 +6,10 @@ setup(
     description="Um software para o desenvolvimento de bot no Discord.",
     options={
         "build_exe": {
-            "include_files": [("source/", "source"), ("translations/", "translations")],
+            "include_files": [
+                ("source/", "source"),
+                ("translations/build", "translations/build"),
+            ],
         }
     },
     executables=[Executable("main.py", icon="logo.ico")],
