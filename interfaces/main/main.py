@@ -93,10 +93,14 @@ class Main(QMainWindow):
         language_menu = QMenu(translate("MainWindow", "Language"), self)
         config_menu.addMenu(language_menu)
 
-        english_action = QAction(translate("MainWindow", "English"), self)
+        english_action = QAction("English", self)
         english_action.triggered.connect(lambda: self.set_language("en_us"))
-        portuguese_action = QAction(translate("MainWindow", "Portuguese"), self)
+        portuguese_action = QAction("Portuguese", self)
         portuguese_action.triggered.connect(lambda: self.set_language("pt_br"))
+        language_actions = {"en_us": english_action, "pt_br": portuguese_action}
+        selected_language_action = language_actions[config.get("language")]
+        selected_language_action.setCheckable(True)
+        selected_language_action.setChecked(True)
         language_menu.addAction(english_action)
         language_menu.addAction(portuguese_action)
 
