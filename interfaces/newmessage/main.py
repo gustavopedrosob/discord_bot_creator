@@ -12,6 +12,7 @@ from PySide6.QtGui import (
     QRegularExpressionValidator,
     QKeyEvent,
     QValidator,
+    QCursor,
 )
 from PySide6.QtWidgets import (
     QVBoxLayout,
@@ -99,7 +100,7 @@ class MessageWindow:
         self.window.resize(1000, 800)
         self.window.setWindowTitle(translate("MessageWindow", "Message"))
 
-        self.emoji_picker_popup = QEmojiPickerPopup()
+        self.emoji_picker_popup = None
 
         left_layout = QVBoxLayout()
         mid_layout = QVBoxLayout()
@@ -284,6 +285,9 @@ class MessageWindow:
         def append_emoji(text):
             return line_edit.setPlainText(line_edit.toPlainText() + text)
 
+        self.window.setCursor(Qt.CursorShape.WaitCursor)
+        if self.emoji_picker_popup is None:
+            self.emoji_picker_popup = QEmojiPickerPopup()
         emoji_picker = self.emoji_picker_popup.emoji_picker()
         emoji_picker.emoji_click.connect(append_emoji)
         emoji_picker.reset()
@@ -292,6 +296,7 @@ class MessageWindow:
         self.emoji_picker_popup.hideEvent = emoji_picker.emoji_click.disconnect(
             append_emoji
         )
+        self.window.setCursor(Qt.CursorShape.ArrowCursor)
 
     def _add_condition(self, condition: str):
         translated_condition = self._translated_conditions[condition]
