@@ -22,6 +22,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QMainWindow,
 )
+from discord import LoginFailure
 
 from bot import IntegratedBot
 from core.config import instance as config
@@ -40,6 +41,7 @@ translate = QCoreApplication.translate
 
 class QBotThread(QThread):
     bot_ready = Signal()
+    login_failure = Signal()
 
     def __init__(self):
         super().__init__()
@@ -47,7 +49,10 @@ class QBotThread(QThread):
 
     def run(self):
         self.__bot = IntegratedBot(self)
-        self.__bot.run(config.get("token"))
+        try:
+            self.__bot.run(config.get("token"))
+        except LoginFailure:
+            self.login_failure.emit()
 
     def close(self):
         self.__bot.loop.create_task(self.__bot.close())
@@ -65,6 +70,7 @@ class Main(QMainWindow):
         self.bot_thread = QBotThread()
         self.bot_thread.finished.connect(self.on_bot_thread_finished)
         self.bot_thread.bot_ready.connect(self.on_bot_ready)
+        self.bot_thread.login_failure.connect(self.on_login_failure)
 
         log_handler.set_app(self)
 
@@ -284,6 +290,16 @@ class Main(QMainWindow):
             config.save()
             self.set_window_title()
 
+    def on_login_failure(self):
+        QMessageBox.warning(
+            self,
+            translate("MainWindow", "Login failure"),
+            translate("MainWindow", "Improper token has been passed."),
+            QMessageBox.StandardButton.Ok,
+            QMessageBox.StandardButton.NoButton,
+        )
+        self.turn_on_bot_button.setDisabled(False)
+
     def set_window_title(self, file: typing.Optional[Path] = None):
         title = "Bot Discord Easy Creator"
         if file and file.exists():
@@ -385,6 +401,8 @@ class Main(QMainWindow):
         config.save()
 
     def start_turn_on_bot_thread(self):
+        if config.get("token") == "":
+            return self.on_login_failure()
         self.bot_thread.start()
         self.turn_on_bot_button.setDisabled(True)
 
