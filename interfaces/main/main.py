@@ -85,10 +85,8 @@ class Main(QMainWindow):
         help_menu = QMenu(translate("MainWindow", "Help"), self)
 
         # Add menus to the menu bar
-        self.menu_bar.addMenu(file_menu)
-        self.menu_bar.addMenu(config_menu)
-        self.menu_bar.addMenu(edit_menu)
-        self.menu_bar.addMenu(help_menu)
+        for menu in [file_menu, config_menu, edit_menu, help_menu]:
+            self.menu_bar.addMenu(menu)
 
         language_menu = QMenu(translate("MainWindow", "Language"), self)
         config_menu.addMenu(language_menu)
