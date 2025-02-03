@@ -10,7 +10,6 @@ from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QHBoxLayout,
-    QPushButton,
     QTextEdit,
     QListWidget,
     QLabel,
@@ -28,6 +27,7 @@ from bot import IntegratedBot
 from core.config import instance as config
 from core.messages import messages, Messages
 from interfaces.classes.color_button import QColorButton
+from interfaces.classes.custom_button import QCustomButton
 from interfaces.classes.password import QPassword
 from interfaces.credits.credits import CreditsWindow
 from interfaces.main.log_handler import log_handler
@@ -248,16 +248,16 @@ class Main(QMainWindow):
             self.message_context_menu_event
         )
 
-        new_message_button = QPushButton(translate("MainWindow", "New"))
+        new_message_button = QCustomButton(translate("MainWindow", "New"))
         new_message_button.clicked.connect(self.new_message)
 
-        edit_messages_button = QPushButton(translate("MainWindow", "Edit"))
+        edit_messages_button = QCustomButton(translate("MainWindow", "Edit"))
         edit_messages_button.clicked.connect(self.edit_selected_message)
 
-        remove_message_button = QPushButton(translate("MainWindow", "Remove"))
+        remove_message_button = QCustomButton(translate("MainWindow", "Remove"))
         remove_message_button.clicked.connect(self.confirm_remove_selected_message)
 
-        remove_all_message_button = QPushButton(translate("MainWindow", "Remove all"))
+        remove_all_message_button = QCustomButton(translate("MainWindow", "Remove all"))
         remove_all_message_button.clicked.connect(self.confirm_remove_messages)
 
         # Adding Widgets to Left Frame

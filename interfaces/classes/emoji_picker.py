@@ -19,7 +19,7 @@ from emojis.db import Emoji
 
 from interfaces.classes.collapse_group import QCollapseGroup
 from interfaces.classes.color_responsive_button import QColorResponsiveButton
-
+from interfaces.classes.custom_button import QCustomButton
 
 translate = QCoreApplication.translate
 
@@ -66,7 +66,7 @@ class EmojiUtils:
             return f"source/emojis/{file_name}.png"
 
 
-class QEmojiButton(QPushButton, EmojiUtils):
+class QEmojiButton(QCustomButton, EmojiUtils):
     def __init__(self, emoji: Emoji):
         super().__init__()
         self.__emoji = emoji

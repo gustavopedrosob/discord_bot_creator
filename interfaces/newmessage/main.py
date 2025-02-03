@@ -12,7 +12,6 @@ from PySide6.QtGui import (
     QRegularExpressionValidator,
     QKeyEvent,
     QValidator,
-    QCursor,
 )
 from PySide6.QtWidgets import (
     QVBoxLayout,
@@ -20,11 +19,9 @@ from PySide6.QtWidgets import (
     QDialog,
     QLabel,
     QComboBox,
-    QPushButton,
     QListWidget,
     QSpinBox,
     QLineEdit,
-    QCheckBox,
     QMessageBox,
     QTextEdit,
     QListWidgetItem,
@@ -35,6 +32,8 @@ from core.messages import messages
 from interfaces.classes.collapse_group import QCollapseGroup
 from interfaces.classes.color_button import QColorButton
 from interfaces.classes.color_responsive_button import QColorResponsiveButton
+from interfaces.classes.custom_button import QCustomButton
+from interfaces.classes.custom_checkbox import QCustomCheckBox
 from interfaces.classes.emoji_picker import QEmojiPickerPopup
 from interfaces.classes.emoji_validator import QEmojiValidator
 from interfaces.classes.resposive_text_edit import QResponsiveTextEdit
@@ -204,9 +203,9 @@ class MessageWindow:
             QLabel(translate("MessageWindow", "Action"))
         )
         self.group_pin_or_del.add_checkbox(
-            "pin", QCheckBox(translate("MessageWindow", "Pin"))
+            "pin", QCustomCheckBox(translate("MessageWindow", "Pin"))
         )
-        del_checkbox = QCheckBox(translate("MessageWindow", "Delete"))
+        del_checkbox = QCustomCheckBox(translate("MessageWindow", "Delete"))
         del_checkbox.checkStateChanged.connect(self.__del_checked)
         self.group_pin_or_del.add_checkbox("delete", del_checkbox)
         right_layout.addWidget(self.group_pin_or_del)
@@ -215,10 +214,10 @@ class MessageWindow:
             QLabel(translate("MessageWindow", "Penalty"))
         )
         self.group_kick_or_ban.add_checkbox(
-            "kick", QCheckBox(translate("MessageWindow", "Kick"))
+            "kick", QCustomCheckBox(translate("MessageWindow", "Kick"))
         )
         self.group_kick_or_ban.add_checkbox(
-            "ban", QCheckBox(translate("MessageWindow", "Ban"))
+            "ban", QCustomCheckBox(translate("MessageWindow", "Ban"))
         )
         right_layout.addWidget(self.group_kick_or_ban)
 
@@ -226,28 +225,28 @@ class MessageWindow:
             QLabel(translate("MessageWindow", "Where reply"))
         )
         self.group_where_reply.add_checkbox(
-            "group", QCheckBox(translate("MessageWindow", "Group"))
+            "group", QCustomCheckBox(translate("MessageWindow", "Group"))
         )
         self.group_where_reply.add_checkbox(
-            "private", QCheckBox(translate("MessageWindow", "Private"))
+            "private", QCustomCheckBox(translate("MessageWindow", "Private"))
         )
         right_layout.addWidget(self.group_where_reply)
 
         self.group_where_react = QCheckBoxGroup(
             QLabel(translate("MessageWindow", "Where react"))
         )
-        author_checkbox = QCheckBox(translate("MessageWindow", "Author"))
+        author_checkbox = QCustomCheckBox(translate("MessageWindow", "Author"))
         author_checkbox.checkStateChanged.connect(self.__author_checked)
         self.group_where_react.add_checkbox("author", author_checkbox)
         self.group_where_react.add_checkbox(
-            "bot", QCheckBox(translate("MessageWindow", "Bot"))
+            "bot", QCustomCheckBox(translate("MessageWindow", "Bot"))
         )
         right_layout.addWidget(self.group_where_react)
 
         delay_label = QLabel(translate("MessageWindow", "Delay"))
         self.delay = QSpinBox()
 
-        confirm = QPushButton(translate("MessageWindow", "Confirm"))
+        confirm = QCustomButton(translate("MessageWindow", "Confirm"))
 
         confirm_and_save = QColorButton(
             translate("MessageWindow", "Confirm and save"), "#3DCC61"
