@@ -15,33 +15,29 @@ from PySide6.QtCore import QTranslator, QCoreApplication
 logger = logging.getLogger(__name__)
 logger.addHandler(log_handler)
 
+translate = QCoreApplication.translate
+
 
 class Bot(Client):
-    def __init__(self, translator: QTranslator = None):
+    def __init__(self):
         super().__init__(intents=Intents.all())
-        self.__translator: typing.Optional[QTranslator] = translator
-
-    def translate(self, source: str):
-        if self.__translator is None:
-            return QCoreApplication.translate("Bot", source)
-        return self.__translator.translate("Bot", source)
 
     async def on_ready(self):
-        logger.info(self.translate("Bot start"))
+        logger.info(translate("Bot", "Bot start"))
 
     async def on_message(self, message: discord.Message):
         if message.author != self.user:
-            logger.info(self.translate("New message") % message.clean_content)
+            logger.info(translate("Bot", "New message") % message.clean_content)
 
             for message_name, message_data in messages.content().items():
                 message_condition = MessageConditions(
-                    message, expected_message=message_data["expected message"]
+                    message, message_data["expected message"], self.user
                 )
                 conditions_to_confirm = message_condition.filter(
                     message_data["conditions"]
                 )
                 logger.debug(
-                    self.translate("Validating conditions")
+                    translate("Bot", "Validating conditions")
                     % (message_name, conditions_to_confirm)
                 )
 
@@ -67,18 +63,20 @@ class Bot(Client):
                     if message_data["kick or ban"] == "kick":
                         await self.kick_member(message.author)
 
-    async def apply_delay(self, delay: int):
-        logger.info(self.translate("Delay") % delay)
+    @staticmethod
+    async def apply_delay(delay: int):
+        logger.info(translate("Bot", "Delay") % delay)
         await asyncio.sleep(delay)
 
-    async def send_reaction(self, reactions: list[list[str]], message: discord.Message):
+    @staticmethod
+    async def send_reaction(reactions: list[list[str]], message: discord.Message):
         for reaction in reactions:
             code_reaction = reaction
             reaction = random.choice(reaction)
             try:
                 await message.add_reaction(reaction)
                 logger.info(
-                    self.translate("New reaction")
+                    translate("Bot", "New reaction")
                     % (code_reaction, message.clean_content, message.author)
                 )
             except discord.HTTPException:
@@ -97,7 +95,7 @@ class Bot(Client):
             reply = Variable(message).apply_variable(reply)
             if where == "group" and message.channel.guild is not None:
                 logger.info(
-                    self.translate("Group reply")
+                    translate("Bot", "Group reply")
                     % (reply, message.clean_content, message.author)
                 )
                 reply_message = await message.channel.send(reply)
@@ -105,7 +103,7 @@ class Bot(Client):
                     await self.send_reaction(reactions, reply_message)
             elif where == "private":
                 logger.info(
-                    self.translate("Private reply")
+                    translate("Bot", "Private reply")
                     % (reply, message.clean_content, message.author)
                 )
                 dm_channel = await message.author.create_dm()
@@ -113,29 +111,33 @@ class Bot(Client):
                 if where_reaction == "bot":
                     await self.send_reaction(reactions, reply_message)
 
-    async def remove_message(self, message: discord.Message):
+    @staticmethod
+    async def remove_message(message: discord.Message):
         await message.delete()
         logger.info(
-            self.translate("Remove message") % (message.clean_content, message.author)
+            translate("Bot", "Remove message") % (message.clean_content, message.author)
         )
 
-    async def pin_message(self, message: discord.Message):
+    @staticmethod
+    async def pin_message(message: discord.Message):
         await message.pin()
         logger.info(
-            self.translate("Pin message") % (message.clean_content, message.author)
+            translate("Bot", "Pin message") % (message.clean_content, message.author)
         )
 
-    async def kick_member(self, member: discord.Member):
+    @staticmethod
+    async def kick_member(member: discord.Member):
         await member.kick()
-        logger.info(self.translate("Kick member") % member.name)
+        logger.info(translate("Bot", "Kick member") % member.name)
 
-    async def ban_member(self, member: discord.Member):
+    @staticmethod
+    async def ban_member(member: discord.Member):
         await member.ban()
-        logger.info(self.translate("Ban member") % member.name)
+        logger.info(translate("Bot", "Ban member") % member.name)
 
     async def close(self):
         await super().close()
-        logger.info(self.translate("Bot close"))
+        logger.info(translate("Bot", "Bot close"))
 
 
 class IntegratedBot(Bot):
@@ -154,8 +156,9 @@ if __name__ == "__main__":
         format="%(asctime)s - %(message)s",
         datefmt="%x %X",
     )
-    translator_ = QTranslator()
-    translator_.load(f"translations/build/{config.get("language")}.qm")
+    translator = QTranslator()
+    translator.load(f"translations/build/{config.get("language")}.qm")
+    translate = translator.translate
     messages.load(config.get("file"))
-    bot = Bot(translator_)
+    bot = Bot()
     bot.run(config.get("token"))
