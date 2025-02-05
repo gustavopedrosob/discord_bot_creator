@@ -149,6 +149,11 @@ class IntegratedBot(Bot):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(message)s",
+        datefmt="%x %X",
+    )
     translator_ = QTranslator()
     translator_.load(f"translations/build/{config.get("language")}.qm")
     messages.load(config.get("file"))
