@@ -127,12 +127,12 @@ class Bot(Client):
     @staticmethod
     async def kick_member(member: discord.Member):
         await member.kick()
-        translate("Bot", "Kick member") % member.name
+        logger.info(translate("Bot", "Kick member") % member.name)
 
     @staticmethod
     async def ban_member(member: discord.Member):
         await member.ban()
-        translate("Bot", "Ban member") % member.name
+        logger.info(translate("Bot", "Ban member") % member.name)
 
     async def close(self):
         await super().close()
