@@ -41,6 +41,7 @@ translate = QCoreApplication.translate
 
 class QBotThread(QThread):
     bot_ready = Signal()
+    log = Signal(str)
     login_failure = Signal()
 
     def __init__(self):
@@ -71,8 +72,9 @@ class Main(QMainWindow):
         self.bot_thread.finished.connect(self.on_bot_thread_finished)
         self.bot_thread.bot_ready.connect(self.on_bot_ready)
         self.bot_thread.login_failure.connect(self.on_login_failure)
+        self.bot_thread.log.connect(self.log)
 
-        log_handler.set_app(self)
+        log_handler.set_signal(self.bot_thread.log)
 
         # Create the menu bar
         self.menu_bar = QMenuBar(self)
