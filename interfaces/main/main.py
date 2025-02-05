@@ -1,3 +1,4 @@
+import html
 import logging
 import os
 import typing
@@ -41,7 +42,7 @@ translate = QCoreApplication.translate
 
 class QBotThread(QThread):
     bot_ready = Signal()
-    log = Signal(str)
+    log = Signal(str, int)
     login_failure = Signal()
 
     def __init__(self):
@@ -555,9 +556,18 @@ class Main(QMainWindow):
                 QMessageBox.StandardButton.NoButton,
             )
 
-    def log(self, message):
-        self.logs_text_edit.insertPlainText(message)
-        self.logs_text_edit.update()
+    def log(self, message: str, level: typing.Optional[int] = None):
+        if level is None:
+            level = logging.INFO
+        styles = {
+            logging.INFO: "",
+            logging.DEBUG: "color: #E5D352;",
+            logging.ERROR: "color: #D8315B;",
+            logging.WARNING: "color: #FF7F11;",
+        }
+        self.logs_text_edit.insertHtml(
+            f'<span style="{styles[level]}">{html.escape(message)}</span><br>'
+        )
 
     def turn_off_bot(self):
         self.bot_thread.close()

@@ -40,7 +40,7 @@ class Bot(Client):
                 conditions_to_confirm = message_condition.filter(
                     message_data["conditions"]
                 )
-                logger.info(
+                logger.debug(
                     self.translate("Validating conditions")
                     % (message_name, conditions_to_confirm)
                 )

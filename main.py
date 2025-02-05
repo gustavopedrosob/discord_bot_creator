@@ -9,7 +9,7 @@ import locale
 
 if __name__ == "__main__":
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG,
         format="%(asctime)s - %(message)s",
         datefmt="%x %X",
     )
