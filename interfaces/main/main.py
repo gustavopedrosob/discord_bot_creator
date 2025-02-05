@@ -6,7 +6,7 @@ import webbrowser
 from pathlib import Path
 
 from PySide6.QtCore import QPoint, QCoreApplication, QThread, Signal
-from PySide6.QtGui import QIcon, QAction, Qt
+from PySide6.QtGui import QIcon, QAction, Qt, QCloseEvent
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -586,7 +586,10 @@ class Main(QMainWindow):
         context_menu.addAction(self.remove_all_message_action)
         context_menu.exec(self.messages_list_widget.mapToGlobal(position))
 
-    def closeEvent(self, event):
+    def closeEvent(self, event: QCloseEvent):
         if self.bot_thread.isRunning():
             self.turn_off_bot()
-        super().closeEvent(event)
+            self.setCursor(Qt.CursorShape.WaitCursor)
+            self.bot_thread.quit()
+            self.bot_thread.wait()
+        event.accept()
