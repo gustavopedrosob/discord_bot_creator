@@ -4,62 +4,62 @@
 <context>
     <name>Bot</name>
     <message>
-        <location filename="../bot.py" line="25"/>
+        <location filename="../bot.py" line="26"/>
         <source>Bot start</source>
         <translation>Bot started!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="29"/>
+        <location filename="../bot.py" line="30"/>
         <source>New message</source>
         <translation>Identified message &quot;%s&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="40"/>
+        <location filename="../bot.py" line="41"/>
         <source>Validating conditions</source>
         <translation>Validating message conditions %s: %s</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="67"/>
+        <location filename="../bot.py" line="68"/>
         <source>Delay</source>
         <translation>Waiting %s seconds delay to next executation!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="79"/>
+        <location filename="../bot.py" line="80"/>
         <source>New reaction</source>
         <translation>Adding reaction &quot;%s&quot; to the message &quot;%s&quot; by the author %s.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="98"/>
+        <location filename="../bot.py" line="99"/>
         <source>Group reply</source>
         <translation>Replying on group &quot;%s&quot; to the message &quot;%s&quot; by the author %s.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="106"/>
+        <location filename="../bot.py" line="107"/>
         <source>Private reply</source>
         <translation>Replying on private &quot;%s&quot; to the message &quot;%s&quot; by the author %s.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="117"/>
+        <location filename="../bot.py" line="118"/>
         <source>Remove message</source>
         <translation>Removing message &quot;%s&quot; by the author %s.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="124"/>
+        <location filename="../bot.py" line="125"/>
         <source>Pin message</source>
         <translation>Pinning message &quot;%s&quot; by the author %s.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="130"/>
+        <location filename="../bot.py" line="131"/>
         <source>Kick member</source>
         <translation>Kicking member &quot;%s&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="135"/>
+        <location filename="../bot.py" line="136"/>
         <source>Ban member</source>
         <translation>Banning member &quot;%s&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="139"/>
+        <location filename="../bot.py" line="140"/>
         <source>Bot close</source>
         <translation>Bot finished!</translation>
     </message>
@@ -78,21 +78,31 @@
     </message>
     <message>
         <location filename="../interfaces/newmessage/main.py" line="125"/>
+        <source>mention bot</source>
+        <translation>Mention bot</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/newmessage/main.py" line="126"/>
+        <source>not mention bot</source>
+        <translation>Not mention bot</translation>
+    </message>
+    <message>
+        <location filename="../interfaces/newmessage/main.py" line="127"/>
         <source>mention someone</source>
         <translation>Mention someone</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="126"/>
+        <location filename="../interfaces/newmessage/main.py" line="128"/>
         <source>not mention someone</source>
         <translation>Not mention someone</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="127"/>
+        <location filename="../interfaces/newmessage/main.py" line="129"/>
         <source>mention everyone</source>
         <translation>Mention everyone</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="128"/>
+        <location filename="../interfaces/newmessage/main.py" line="130"/>
         <source>not mention everyone</source>
         <translation>Not mention everyone</translation>
     </message>
@@ -105,42 +115,42 @@
         <translation type="vanished">Not author is expected</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="129"/>
+        <location filename="../interfaces/newmessage/main.py" line="131"/>
         <source>author is bot</source>
         <translation>Author is bot</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="130"/>
+        <location filename="../interfaces/newmessage/main.py" line="132"/>
         <source>not author is bot</source>
         <translation>Not author is bot</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="131"/>
+        <location filename="../interfaces/newmessage/main.py" line="133"/>
         <source>number in message</source>
         <translation>Number in message</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="132"/>
+        <location filename="../interfaces/newmessage/main.py" line="134"/>
         <source>not number in message</source>
         <translation>Not number in message</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="133"/>
+        <location filename="../interfaces/newmessage/main.py" line="135"/>
         <source>symbols in message</source>
         <translation>Symbols in message</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="134"/>
+        <location filename="../interfaces/newmessage/main.py" line="136"/>
         <source>not symbols in message</source>
         <translation>Not symbols in message</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="135"/>
+        <location filename="../interfaces/newmessage/main.py" line="137"/>
         <source>emojis in message</source>
         <translation>Emojis in message</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="136"/>
+        <location filename="../interfaces/newmessage/main.py" line="138"/>
         <source>not emojis in message</source>
         <translation>Not emojis in message</translation>
     </message>
@@ -148,69 +158,67 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../interfaces/main/main.py" line="82"/>
+        <location filename="../interfaces/main/main.py" line="85"/>
         <source>File</source>
         <translation>File</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="83"/>
+        <location filename="../interfaces/main/main.py" line="86"/>
         <source>Config</source>
         <translation>Config</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="84"/>
-        <location filename="../interfaces/main/main.py" line="252"/>
+        <location filename="../interfaces/main/main.py" line="87"/>
+        <location filename="../interfaces/main/main.py" line="257"/>
         <source>Edit</source>
         <translation>Edit</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="85"/>
+        <location filename="../interfaces/main/main.py" line="88"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="93"/>
+        <location filename="../interfaces/main/main.py" line="94"/>
         <source>Language</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="96"/>
         <source>English</source>
-        <translation>English</translation>
+        <translation type="vanished">English</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="98"/>
         <source>Portuguese</source>
-        <translation>Portuguese</translation>
+        <translation type="vanished">Portuguese</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="103"/>
+        <location filename="../interfaces/main/main.py" line="108"/>
         <source>New file</source>
         <translation>New</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="105"/>
+        <location filename="../interfaces/main/main.py" line="110"/>
         <source>Load</source>
         <translation>Load</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="107"/>
+        <location filename="../interfaces/main/main.py" line="112"/>
         <source>Save</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="109"/>
+        <location filename="../interfaces/main/main.py" line="114"/>
         <source>Save as</source>
         <translation>Save as</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="111"/>
+        <location filename="../interfaces/main/main.py" line="116"/>
         <source>Exit</source>
         <translation>Exit</translation>
     </message>
     <message>
         <location filename="../interfaces/credits/credits.py" line="9"/>
-        <location filename="../interfaces/main/main.py" line="123"/>
+        <location filename="../interfaces/main/main.py" line="128"/>
         <source>Credits</source>
         <translation>Credits</translation>
     </message>
@@ -220,84 +228,84 @@
         <translation>Developed by: Gustavo Pedroso Bernardes</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="125"/>
+        <location filename="../interfaces/main/main.py" line="130"/>
         <source>Project</source>
         <translation>Project</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="131"/>
+        <location filename="../interfaces/main/main.py" line="136"/>
         <source>Report bug</source>
         <translation>Report bug</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="138"/>
+        <location filename="../interfaces/main/main.py" line="143"/>
         <source>Discord applications</source>
         <translation>Discord applications</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="143"/>
+        <location filename="../interfaces/main/main.py" line="148"/>
         <source>New message</source>
         <translation>New message</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="147"/>
+        <location filename="../interfaces/main/main.py" line="152"/>
         <source>Edit message</source>
         <translation>Edit message</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="152"/>
-        <location filename="../interfaces/main/main.py" line="490"/>
+        <location filename="../interfaces/main/main.py" line="157"/>
+        <location filename="../interfaces/main/main.py" line="497"/>
         <source>Remove message</source>
         <translation>Remove message</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="159"/>
-        <location filename="../interfaces/main/main.py" line="508"/>
+        <location filename="../interfaces/main/main.py" line="164"/>
+        <location filename="../interfaces/main/main.py" line="515"/>
         <source>Remove all messages</source>
         <translation>Remove all messages</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="194"/>
+        <location filename="../interfaces/main/main.py" line="199"/>
         <source>No logs at moment</source>
         <translation>No logs at moment</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="214"/>
+        <location filename="../interfaces/main/main.py" line="219"/>
         <source>Turn on bot</source>
         <translation>Turn on bot</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="219"/>
+        <location filename="../interfaces/main/main.py" line="224"/>
         <source>Turn off bot</source>
         <translation>Turn off bot</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="239"/>
+        <location filename="../interfaces/main/main.py" line="244"/>
         <source>Messages</source>
         <translation>Messages</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="249"/>
+        <location filename="../interfaces/main/main.py" line="254"/>
         <source>New</source>
         <translation>New</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="255"/>
+        <location filename="../interfaces/main/main.py" line="260"/>
         <source>Remove</source>
         <translation>Remove</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="258"/>
+        <location filename="../interfaces/main/main.py" line="263"/>
         <source>Remove all</source>
         <translation>Remove all</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="296"/>
+        <location filename="../interfaces/main/main.py" line="301"/>
         <source>Login failure</source>
         <translation>Login failure</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="297"/>
+        <location filename="../interfaces/main/main.py" line="302"/>
         <source>Improper token has been passed.</source>
         <translation>Improper token has been passed.</translation>
     </message>
@@ -306,70 +314,70 @@
         <translation type="vanished">Invalid token.</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="319"/>
+        <location filename="../interfaces/main/main.py" line="324"/>
         <source>Open File</source>
         <translation>Open File</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="330"/>
+        <location filename="../interfaces/main/main.py" line="335"/>
         <source>Saving</source>
         <translation>Saving</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="336"/>
+        <location filename="../interfaces/main/main.py" line="341"/>
         <source>The file has been saved successfully.</source>
         <translation>The file has been saved successfully.</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="355"/>
-        <location filename="../interfaces/main/main.py" line="392"/>
+        <location filename="../interfaces/main/main.py" line="360"/>
+        <location filename="../interfaces/main/main.py" line="397"/>
         <source>Warning</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="361"/>
+        <location filename="../interfaces/main/main.py" line="366"/>
         <source>The file don&apos;t exists anymore.</source>
         <translation>The file don&apos;t exists anymore.</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="367"/>
+        <location filename="../interfaces/main/main.py" line="372"/>
         <source>Save File</source>
         <translation>Save File</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="398"/>
+        <location filename="../interfaces/main/main.py" line="403"/>
         <source>You need to restart the application to apply the changes.</source>
         <translation>You need to restart the application to apply the changes.</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="493"/>
+        <location filename="../interfaces/main/main.py" line="500"/>
         <source>Are you sure you want to remove this message?</source>
         <translation>Are you sure you want to remove this message?</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="498"/>
-        <location filename="../interfaces/main/main.py" line="516"/>
+        <location filename="../interfaces/main/main.py" line="505"/>
+        <location filename="../interfaces/main/main.py" line="523"/>
         <source>Yes</source>
         <translation>Yes</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="500"/>
-        <location filename="../interfaces/main/main.py" line="518"/>
+        <location filename="../interfaces/main/main.py" line="507"/>
+        <location filename="../interfaces/main/main.py" line="525"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="511"/>
+        <location filename="../interfaces/main/main.py" line="518"/>
         <source>Are you sure you want to remove all messages?</source>
         <translation>Are you sure you want to remove all messages?</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="546"/>
+        <location filename="../interfaces/main/main.py" line="553"/>
         <source>Invalid file</source>
         <translation>Invalid file</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="547"/>
+        <location filename="../interfaces/main/main.py" line="554"/>
         <source>This file can&apos;t be loaded.</source>
         <translation>This file can&apos;t be loaded.</translation>
     </message>
@@ -392,97 +400,97 @@
         <translation>The name can include letters (with accents), numbers, and spaces. Example: &apos;Test 123&apos;.</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="146"/>
+        <location filename="../interfaces/newmessage/main.py" line="148"/>
         <source>Conditions</source>
         <translation>Conditions</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="162"/>
+        <location filename="../interfaces/newmessage/main.py" line="164"/>
         <source>Reactions</source>
         <translation>Reactions</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="176"/>
+        <location filename="../interfaces/newmessage/main.py" line="178"/>
         <source>Messages</source>
         <translation>Messages</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="187"/>
+        <location filename="../interfaces/newmessage/main.py" line="189"/>
         <source>Replies</source>
         <translation>Replies</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="203"/>
+        <location filename="../interfaces/newmessage/main.py" line="205"/>
         <source>Action</source>
         <translation>Action</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="206"/>
+        <location filename="../interfaces/newmessage/main.py" line="208"/>
         <source>Pin</source>
         <translation>Pin</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="208"/>
+        <location filename="../interfaces/newmessage/main.py" line="210"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="214"/>
+        <location filename="../interfaces/newmessage/main.py" line="216"/>
         <source>Penalty</source>
         <translation>Penalty</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="217"/>
+        <location filename="../interfaces/newmessage/main.py" line="219"/>
         <source>Kick</source>
         <translation>Kick</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="220"/>
+        <location filename="../interfaces/newmessage/main.py" line="222"/>
         <source>Ban</source>
         <translation>Ban</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="225"/>
+        <location filename="../interfaces/newmessage/main.py" line="227"/>
         <source>Where reply</source>
         <translation>Where reply</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="228"/>
+        <location filename="../interfaces/newmessage/main.py" line="230"/>
         <source>Group</source>
         <translation>Group</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="231"/>
+        <location filename="../interfaces/newmessage/main.py" line="233"/>
         <source>Private</source>
         <translation>Private</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="236"/>
+        <location filename="../interfaces/newmessage/main.py" line="238"/>
         <source>Where react</source>
         <translation>Where react</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="238"/>
+        <location filename="../interfaces/newmessage/main.py" line="240"/>
         <source>Author</source>
         <translation>Author</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="242"/>
+        <location filename="../interfaces/newmessage/main.py" line="244"/>
         <source>Bot</source>
         <translation>Bot</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="246"/>
+        <location filename="../interfaces/newmessage/main.py" line="248"/>
         <source>Delay</source>
         <translation>Delay</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="249"/>
+        <location filename="../interfaces/newmessage/main.py" line="251"/>
         <source>Confirm</source>
         <translation>Confirm</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="252"/>
+        <location filename="../interfaces/newmessage/main.py" line="254"/>
         <source>Confirm and save</source>
         <translation>Confirm and save</translation>
     </message>
@@ -491,22 +499,22 @@
         <translation type="vanished">Save and quit</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="329"/>
+        <location filename="../interfaces/newmessage/main.py" line="335"/>
         <source>Name already exists</source>
         <translation>Name already exists</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="336"/>
+        <location filename="../interfaces/newmessage/main.py" line="342"/>
         <source>You can&apos;t set a message with a name that already exists.</source>
         <translation>You can&apos;t set a message with a name that already exists.</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="342"/>
+        <location filename="../interfaces/newmessage/main.py" line="348"/>
         <source>Opposite conditions</source>
         <translation>Opposite conditions</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="349"/>
+        <location filename="../interfaces/newmessage/main.py" line="355"/>
         <source>You can&apos;t have opposite conditions, please remove them.</source>
         <translation>You can&apos;t have opposite conditions, please remove them.</translation>
     </message>

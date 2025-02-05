@@ -122,6 +122,8 @@ class MessageWindow:
         self._translated_conditions = {
             "expected message": translate("Conditions", "expected message"),
             "not expected message": translate("Conditions", "not expected message"),
+            "mention bot": translate("Conditions", "mention bot"),
+            "not mention bot": translate("Conditions", "not mention bot"),
             "mention someone": translate("Conditions", "mention someone"),
             "not mention someone": translate("Conditions", "not mention someone"),
             "mention everyone": translate("Conditions", "mention everyone"),

@@ -9,10 +9,13 @@ class MessageConditions:
         self,
         message: discord.Message,
         expected_message: list[str],
+        bot: discord.ClientUser,
     ):
 
         expected_message = message.clean_content in expected_message
         not_expected_message = not expected_message
+        mention_bot = any(user == bot for user in message.mentions)
+        not_mention_bot = not mention_bot
         mention_someone = len(message.mentions) >= 1
         not_mention_someone = not mention_someone
         mention_everyone = message.mention_everyone
@@ -29,6 +32,8 @@ class MessageConditions:
         self.string_conditions = {
             "expected message": expected_message,
             "not expected message": not_expected_message,
+            "mention bot": mention_bot,
+            "not mention bot": not_mention_bot,
             "mention someone": mention_someone,
             "not mention someone": not_mention_someone,
             "mention everyone": mention_everyone,
