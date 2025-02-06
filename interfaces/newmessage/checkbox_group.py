@@ -24,15 +24,11 @@ class QCheckBoxGroup(QWidget):
 
     def __checkbox_checked(self, name: str, checkbox: QCheckBox, check_state: int):
         if check_state == Qt.CheckState.Checked:
-            self.__current = checkbox
-            self.__current_name = name
-            for r in self.__checkboxes.values():
-                if r != checkbox:
-                    r.setChecked(False)
-            self.__current.setChecked(True)
+            self.__current, self.__current_name = checkbox, name
+            for checkbox_2 in self.__checkboxes.values():
+                checkbox_2.setChecked(checkbox_2 == checkbox)
         elif name == self.__current_name:
-            self.__current = None
-            self.__current_name = None
+            self.__current, self.__current_name = None, None
 
     def get_current_name(self) -> str:
         return self.__current_name
