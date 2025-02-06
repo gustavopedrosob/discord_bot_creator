@@ -1,16 +1,16 @@
 import asyncio
 import logging
 import random
-import typing
 
 import discord
+from PySide6.QtCore import QTranslator, QCoreApplication
 from discord import Intents, Client
+
 from core.config import instance as config
 from core.messages import messages
 from interfaces.main.log_handler import log_handler
 from interpreter.conditions import MessageConditions
 from interpreter.variable import Variable
-from PySide6.QtCore import QTranslator, QCoreApplication
 
 logger = logging.getLogger(__name__)
 logger.addHandler(log_handler)

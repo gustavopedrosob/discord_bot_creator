@@ -2,7 +2,7 @@ import typing
 from pathlib import Path
 
 from PySide6.QtCore import QCoreApplication, QSize, Signal, QTimer
-from PySide6.QtGui import QIcon, QFont, Qt, QPixmap, QImage
+from PySide6.QtGui import QIcon, QFont, Qt, QPixmap
 from PySide6.QtWidgets import (
     QVBoxLayout,
     QScrollArea,
@@ -11,7 +11,6 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QGridLayout,
-    QPushButton,
     QDialog,
 )
 from emojis import emojis
