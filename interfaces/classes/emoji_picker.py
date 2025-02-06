@@ -246,9 +246,7 @@ class QEmojiPicker(QWidget, EmojiUtils):
 
     def __collapse_all_but(self, category: str):
         for category_2 in self.__categories.keys():
-            if category_2 != category:
-                self.collapse_group(category_2).set_collapse(True)
-        self.collapse_group(category).set_collapse(False)
+            self.collapse_group(category_2).set_collapse(category_2 != category)
 
     def __scroll_to_category(self, category: str):
         collapse_group = self.collapse_group(category)
