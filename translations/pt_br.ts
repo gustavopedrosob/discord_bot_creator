@@ -5,62 +5,62 @@
     <name>Bot</name>
     <message>
         <location filename="../bot.py" line="26"/>
-        <source>Bot start</source>
+        <source>Bot started!</source>
         <translation>Bot iniciado!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="30"/>
-        <source>New message</source>
-        <translation>Identificada mensagem &quot;%s&quot;.</translation>
+        <location filename="../bot.py" line="31"/>
+        <source>Identified message &quot;{}&quot;.</source>
+        <translation>Identificada mensagem &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="41"/>
-        <source>Validating conditions</source>
-        <translation>Verificando condições da mensagem %s: %s</translation>
+        <location filename="../bot.py" line="44"/>
+        <source>Validating message conditions {}: {}</source>
+        <translation>Verificando condições da mensagem {}: {}</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="68"/>
-        <source>Delay</source>
-        <translation>Aguardando delay de %s segundos para a proxima execução!</translation>
+        <location filename="../bot.py" line="74"/>
+        <source>Waiting {} seconds delay to next execution!</source>
+        <translation>Aguardando delay de {} segundos para a proxima execução!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="80"/>
-        <source>New reaction</source>
-        <translation>Adicionando a reação &quot;%s&quot; a mensagem &quot;%s&quot; do autor %s.</translation>
+        <location filename="../bot.py" line="91"/>
+        <source>Adding reaction &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
+        <translation>Adicionando a reação &quot;{}&quot; a mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="99"/>
-        <source>Group reply</source>
-        <translation>Enviando no grupo a resposta &quot;%s&quot; à mensagem &quot;%s&quot; do autor %s.</translation>
+        <location filename="../bot.py" line="112"/>
+        <source>Replying on group &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
+        <translation>Enviando no grupo a resposta &quot;{}&quot; à mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="107"/>
-        <source>Private reply</source>
-        <translation>Enviando no private a resposta &quot;%s&quot; à mensagem &quot;%s&quot; do autor %s.</translation>
+        <location filename="../bot.py" line="122"/>
+        <source>Replying on private &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
+        <translation>Enviando no privado a resposta &quot;{}&quot; à mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="118"/>
-        <source>Remove message</source>
-        <translation>Removendo mensagem &quot;%s&quot; do autor %s.</translation>
+        <location filename="../bot.py" line="133"/>
+        <source>Removing message &quot;{}&quot; by the author {}.</source>
+        <translation>Removendo mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="125"/>
-        <source>Pin message</source>
-        <translation>Fixando mensagem &quot;%s&quot; do autor %s.</translation>
+        <location filename="../bot.py" line="142"/>
+        <source>Pinning message &quot;{}&quot; by the author {}.</source>
+        <translation>Fixando mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="131"/>
-        <source>Kick member</source>
-        <translation>Expulsando membro &quot;%s&quot;.</translation>
+        <location filename="../bot.py" line="150"/>
+        <source>Kicking member &quot;{}&quot;.</source>
+        <translation>Expulsando membro &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="136"/>
-        <source>Ban member</source>
-        <translation>Banindo membro &quot;%s&quot;.</translation>
+        <location filename="../bot.py" line="155"/>
+        <source>Banning member &quot;{}&quot;.</source>
+        <translation>Banindo membro &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="140"/>
-        <source>Bot close</source>
+        <location filename="../bot.py" line="159"/>
+        <source>Bot finished!</source>
         <translation>Bot desligado!</translation>
     </message>
 </context>
@@ -105,14 +105,6 @@
         <location filename="../interfaces/newmessage/main.py" line="130"/>
         <source>not mention everyone</source>
         <translation>Não mencionou todos</translation>
-    </message>
-    <message>
-        <source>author is expected</source>
-        <translation type="vanished">Autor é esperado</translation>
-    </message>
-    <message>
-        <source>not author is expected</source>
-        <translation type="vanished">Autor não é esperado</translation>
     </message>
     <message>
         <location filename="../interfaces/newmessage/main.py" line="131"/>
@@ -182,14 +174,6 @@
         <location filename="../interfaces/main/main.py" line="94"/>
         <source>Language</source>
         <translation>Linguagem</translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="vanished">Inglês</translation>
-    </message>
-    <message>
-        <source>Portuguese</source>
-        <translation type="vanished">Português</translation>
     </message>
     <message>
         <location filename="../interfaces/main/main.py" line="108"/>
@@ -308,10 +292,6 @@
         <location filename="../interfaces/main/main.py" line="302"/>
         <source>Improper token has been passed.</source>
         <translation>Um Token inválido foi passado.</translation>
-    </message>
-    <message>
-        <source>Invalid token.</source>
-        <translation type="vanished">Token inválido.</translation>
     </message>
     <message>
         <location filename="../interfaces/main/main.py" line="324"/>
@@ -495,26 +475,22 @@
         <translation>Confirmar e salvar</translation>
     </message>
     <message>
-        <source>Save and quit</source>
-        <translation type="vanished">Salvar e sair</translation>
-    </message>
-    <message>
-        <location filename="../interfaces/newmessage/main.py" line="335"/>
+        <location filename="../interfaces/newmessage/main.py" line="336"/>
         <source>Name already exists</source>
         <translation>Nome já existe</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="342"/>
+        <location filename="../interfaces/newmessage/main.py" line="343"/>
         <source>You can&apos;t set a message with a name that already exists.</source>
         <translation>Você não pode definir uma mensagem com um nome que já existe.</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="348"/>
+        <location filename="../interfaces/newmessage/main.py" line="349"/>
         <source>Opposite conditions</source>
         <translation>Condições opostas</translation>
     </message>
     <message>
-        <location filename="../interfaces/newmessage/main.py" line="355"/>
+        <location filename="../interfaces/newmessage/main.py" line="356"/>
         <source>You can&apos;t have opposite conditions, please remove them.</source>
         <translation>Você não pode ter condições opostas, por favor remova elas.</translation>
     </message>
@@ -525,10 +501,6 @@
         <location filename="../interfaces/classes/emoji_picker.py" line="157"/>
         <source>Enter your favorite emoji</source>
         <translation>Digite seu emoji favorito</translation>
-    </message>
-    <message>
-        <source>Favorite</source>
-        <translation type="vanished">Favorito</translation>
     </message>
     <message>
         <location filename="../interfaces/classes/emoji_picker.py" line="184"/>
@@ -569,261 +541,6 @@
         <location filename="../interfaces/classes/emoji_picker.py" line="227"/>
         <source>Flags</source>
         <translation>Bandeiras</translation>
-    </message>
-</context>
-<context>
-    <name>QMainWindow</name>
-    <message>
-        <source>Credits</source>
-        <translation type="vanished">Creditos</translation>
-    </message>
-    <message>
-        <source>Credits text</source>
-        <translation type="vanished">Desenvolvido por: Gustavo Pedroso Bernardes</translation>
-    </message>
-    <message>
-        <source>File</source>
-        <translation type="vanished">Arquivo</translation>
-    </message>
-    <message>
-        <source>Config</source>
-        <translation type="vanished">Configuração</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="vanished">Editar</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Ajuda</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation type="vanished">Linguagem</translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="vanished">Inglês</translation>
-    </message>
-    <message>
-        <source>Portuguese</source>
-        <translation type="vanished">Português</translation>
-    </message>
-    <message>
-        <source>Load</source>
-        <translation type="vanished">Carregar</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Salvar</translation>
-    </message>
-    <message>
-        <source>Save as</source>
-        <translation type="vanished">Salvar como</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="vanished">Sair</translation>
-    </message>
-    <message>
-        <source>Project</source>
-        <translation type="vanished">Projeto</translation>
-    </message>
-    <message>
-        <source>Report bug</source>
-        <translation type="vanished">Reportar bug</translation>
-    </message>
-    <message>
-        <source>Discord applications</source>
-        <translation type="vanished">Aplicações do Discord</translation>
-    </message>
-    <message>
-        <source>New message</source>
-        <translation type="vanished">Nova mensagem</translation>
-    </message>
-    <message>
-        <source>Edit message</source>
-        <translation type="vanished">Editar mensagem</translation>
-    </message>
-    <message>
-        <source>Remove message</source>
-        <translation type="vanished">Remover mensagem</translation>
-    </message>
-    <message>
-        <source>Remove all messages</source>
-        <translation type="vanished">Remover todas mensagens</translation>
-    </message>
-    <message>
-        <source>No logs at moment</source>
-        <translation type="vanished">Sem logs no momento</translation>
-    </message>
-    <message>
-        <source>Turn on bot</source>
-        <translation type="vanished">Ligar bot</translation>
-    </message>
-    <message>
-        <source>Messages</source>
-        <translation type="vanished">Mensagens</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="vanished">Nova</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="vanished">Remover</translation>
-    </message>
-    <message>
-        <source>Remove all</source>
-        <translation type="vanished">Remover todas</translation>
-    </message>
-    <message>
-        <source>Open File</source>
-        <translation type="vanished">Abrir Arquivo</translation>
-    </message>
-    <message>
-        <source>Saving</source>
-        <translation type="vanished">Salvando</translation>
-    </message>
-    <message>
-        <source>The file has been saved successfully.</source>
-        <translation type="vanished">O arquivo foi salvo com sucesso.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Aviso</translation>
-    </message>
-    <message>
-        <source>The file don&apos;t exists anymore.</source>
-        <translation type="vanished">O arquivo não existe mais.</translation>
-    </message>
-    <message>
-        <source>Save File</source>
-        <translation type="vanished">Salvar Arquivo</translation>
-    </message>
-    <message>
-        <source>You need to restart the application to apply the changes.</source>
-        <translation type="vanished">Você precisa reiniciar a aplicação para aplicar as mudanças.</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to remove this message?</source>
-        <translation type="vanished">Você tem certeza que deseja remover esta mensagem?</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Sim</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Não</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to remove all messages?</source>
-        <translation type="vanished">Você tem certeza que deseja remover todas as mensagens?</translation>
-    </message>
-    <message>
-        <source>Invalid file</source>
-        <translation type="vanished">Arquivo inválido</translation>
-    </message>
-    <message>
-        <source>This file can&apos;t be loaded.</source>
-        <translation type="vanished">Esse arquivo não pode ser carregado.</translation>
-    </message>
-    <message>
-        <source>Turn off bot</source>
-        <translation type="vanished">Desligar bot</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation type="vanished">Mensagem</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Nome</translation>
-    </message>
-    <message>
-        <source>Conditions</source>
-        <translation type="vanished">Condições</translation>
-    </message>
-    <message>
-        <source>Reactions</source>
-        <translation type="vanished">Reações</translation>
-    </message>
-    <message>
-        <source>Replies</source>
-        <translation type="vanished">Respostas</translation>
-    </message>
-    <message>
-        <source>Action</source>
-        <translation type="vanished">Ação</translation>
-    </message>
-    <message>
-        <source>Pin</source>
-        <translation type="vanished">Fixar</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="vanished">Deletar</translation>
-    </message>
-    <message>
-        <source>Penalty</source>
-        <translation type="vanished">Penalidade</translation>
-    </message>
-    <message>
-        <source>Kick</source>
-        <translation type="vanished">Expulsar</translation>
-    </message>
-    <message>
-        <source>Ban</source>
-        <translation type="vanished">Banir</translation>
-    </message>
-    <message>
-        <source>Where reply</source>
-        <translation type="vanished">Onde responder</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">Grupo</translation>
-    </message>
-    <message>
-        <source>Private</source>
-        <translation type="vanished">Privado</translation>
-    </message>
-    <message>
-        <source>Where react</source>
-        <translation type="vanished">Onde reagir</translation>
-    </message>
-    <message>
-        <source>Author</source>
-        <translation type="vanished">Autor</translation>
-    </message>
-    <message>
-        <source>Bot</source>
-        <translation type="vanished">Bot</translation>
-    </message>
-    <message>
-        <source>Delay</source>
-        <translation type="vanished">Delay</translation>
-    </message>
-    <message>
-        <source>Save and quit</source>
-        <translation type="vanished">Salvar e sair</translation>
-    </message>
-    <message>
-        <source>Name already exists</source>
-        <translation type="vanished">Nome já existe</translation>
-    </message>
-    <message>
-        <source>You can&apos;t set a message with a name that already exists.</source>
-        <translation type="vanished">Você não pode definir uma mensagem com um nome que já existe.</translation>
-    </message>
-    <message>
-        <source>Opposite conditions</source>
-        <translation type="vanished">Condições opostas</translation>
-    </message>
-    <message>
-        <source>You can&apos;t have opposite conditions, please remove them.</source>
-        <translation type="vanished">Você não pode ter condições opostas, por favor remova elas.</translation>
     </message>
 </context>
 </TS>

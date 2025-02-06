@@ -23,11 +23,15 @@ class Bot(Client):
         super().__init__(intents=Intents.all())
 
     async def on_ready(self):
-        logger.info(translate("Bot", "Bot start"))
+        logger.info(translate("Bot", "Bot started!"))
 
     async def on_message(self, message: discord.Message):
         if message.author != self.user:
-            logger.info(translate("Bot", "New message") % message.clean_content)
+            logger.info(
+                translate("Bot", 'Identified message "{}".').format(
+                    message.clean_content
+                )
+            )
 
             for message_name, message_data in messages.content().items():
                 message_condition = MessageConditions(
@@ -37,8 +41,9 @@ class Bot(Client):
                     message_data["conditions"]
                 )
                 logger.debug(
-                    translate("Bot", "Validating conditions")
-                    % (message_name, conditions_to_confirm)
+                    translate("Bot", "Validating message conditions {}: {}").format(
+                        message_name, conditions_to_confirm
+                    )
                 )
 
                 if all(conditions_to_confirm.values()):
@@ -65,7 +70,11 @@ class Bot(Client):
 
     @staticmethod
     async def apply_delay(delay: int):
-        logger.info(translate("Bot", "Delay") % delay)
+        logger.info(
+            translate("Bot", "Waiting {} seconds delay to next execution!").format(
+                delay
+            )
+        )
         await asyncio.sleep(delay)
 
     @staticmethod
@@ -76,8 +85,10 @@ class Bot(Client):
             try:
                 await message.add_reaction(reaction)
                 logger.info(
-                    translate("Bot", "New reaction")
-                    % (code_reaction, message.clean_content, message.author)
+                    translate(
+                        "Bot",
+                        'Adding reaction "{}" to the message "{}" by the author {}.',
+                    ).format(code_reaction, message.clean_content, message.author)
                 )
             except discord.HTTPException:
                 print(reaction)
@@ -95,16 +106,20 @@ class Bot(Client):
             reply = Variable(message).apply_variable(reply)
             if where == "group" and message.channel.guild is not None:
                 logger.info(
-                    translate("Bot", "Group reply")
-                    % (reply, message.clean_content, message.author)
+                    translate(
+                        "Bot",
+                        'Replying on group "{}" to the message "{}" by the author {}.',
+                    ).format(reply, message.clean_content, message.author)
                 )
                 reply_message = await message.channel.send(reply)
                 if where_reaction == "bot":
                     await self.send_reaction(reactions, reply_message)
             elif where == "private":
                 logger.info(
-                    translate("Bot", "Private reply")
-                    % (reply, message.clean_content, message.author)
+                    translate(
+                        "Bot",
+                        'Replying on private "{}" to the message "{}" by the author {}.',
+                    ).format(reply, message.clean_content, message.author)
                 )
                 dm_channel = await message.author.create_dm()
                 reply_message = await dm_channel.send(reply)
@@ -115,29 +130,33 @@ class Bot(Client):
     async def remove_message(message: discord.Message):
         await message.delete()
         logger.info(
-            translate("Bot", "Remove message") % (message.clean_content, message.author)
+            translate("Bot", 'Removing message "{}" by the author {}.').format(
+                message.clean_content, message.author
+            )
         )
 
     @staticmethod
     async def pin_message(message: discord.Message):
         await message.pin()
         logger.info(
-            translate("Bot", "Pin message") % (message.clean_content, message.author)
+            translate("Bot", 'Pinning message "{}" by the author {}.').format(
+                message.clean_content, message.author
+            )
         )
 
     @staticmethod
     async def kick_member(member: discord.Member):
         await member.kick()
-        logger.info(translate("Bot", "Kick member") % member.name)
+        logger.info(translate("Bot", 'Kicking member "{}".').format(member.name))
 
     @staticmethod
     async def ban_member(member: discord.Member):
         await member.ban()
-        logger.info(translate("Bot", "Ban member") % member.name)
+        logger.info(translate("Bot", 'Banning member "{}".').format(member.name))
 
     async def close(self):
         await super().close()
-        logger.info(translate("Bot", "Bot close"))
+        logger.info(translate("Bot", "Bot finished!"))
 
 
 class IntegratedBot(Bot):
