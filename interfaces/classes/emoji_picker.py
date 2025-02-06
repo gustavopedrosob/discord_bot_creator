@@ -234,8 +234,7 @@ class QEmojiPicker(QWidget, EmojiUtils):
         shortcut_button.setIconSize(QSize(22, 22))
         shortcut_button.setFlat(True)
         shortcut_button.setIcon(icon)
-        shortcut_button.clicked.connect(lambda: self.__collapse_all_but(category))
-        shortcut_button.clicked.connect(lambda: self.__scroll_to_category(category))
+        shortcut_button.clicked.connect(lambda: self.__on_shortcut_click(category))
         self.__menu_horizontal_layout.addWidget(shortcut_button)
         collapse_group = QCollapseGroup(title, QEmojiGrid())
         self.__categories[category] = {
@@ -249,8 +248,13 @@ class QEmojiPicker(QWidget, EmojiUtils):
             self.collapse_group(category_2).set_collapse(category_2 != category)
 
     def __scroll_to_category(self, category: str):
-        collapse_group = self.collapse_group(category)
-        self.__scroll_area.verticalScrollBar().setValue(collapse_group.y())
+        self.__scroll_area.verticalScrollBar().setValue(
+            self.collapse_group(category).y()
+        )
+
+    def __on_shortcut_click(self, category: str):
+        self.__collapse_all_but(category)
+        QTimer.singleShot(5, lambda: self.__scroll_to_category(category))
 
     def collapse_group(self, category: str) -> QCollapseGroup:
         return self.__categories[category]["group"]
