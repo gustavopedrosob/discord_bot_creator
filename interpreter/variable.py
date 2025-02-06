@@ -7,11 +7,7 @@ class Variable:
     def __init__(self, message: discord.Message):
         self.keys = {
             "author name": message.author.name,
-            "guild name": (
-                message.guild.name
-                if isinstance(message.channel, discord.GroupChannel)
-                else "N/A"
-            ),
+            "guild name": message.guild.name if message.guild else "N/A",
             "day": get_time("%d"),
             "month": get_time("%m"),
             "year": get_time("%Y"),
