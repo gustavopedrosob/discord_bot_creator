@@ -1,7 +1,7 @@
 import typing
 from pathlib import Path
 
-from PySide6.QtCore import QCoreApplication, QSize, Signal
+from PySide6.QtCore import QCoreApplication, QSize, Signal, QTimer
 from PySide6.QtGui import QIcon, QFont, Qt, QPixmap, QImage
 from PySide6.QtWidgets import (
     QVBoxLayout,
@@ -252,7 +252,7 @@ class QEmojiPicker(QWidget, EmojiUtils):
 
     def __scroll_to_category(self, category: str):
         collapse_group = self.collapse_group(category)
-        self.__scroll_area.ensureWidgetVisible(collapse_group.header())
+        self.__scroll_area.verticalScrollBar().setValue(collapse_group.y())
 
     def collapse_group(self, category: str) -> QCollapseGroup:
         return self.__categories[category]["group"]
