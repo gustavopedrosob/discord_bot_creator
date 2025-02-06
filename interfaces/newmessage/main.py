@@ -309,7 +309,8 @@ class MessageWindow:
     def __on_add_condition(self):
         index = self.conditions_combobox.currentIndex()
         condition = self.conditions_combobox.itemData(index, Qt.ItemDataRole.UserRole)
-        self._add_condition(condition)
+        if condition not in self.listbox_conditions.get_items_userdata():
+            self._add_condition(condition)
 
     def is_name_valid(self):
         return self.get_name() not in messages.message_names()
