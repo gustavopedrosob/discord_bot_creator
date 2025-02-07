@@ -105,6 +105,38 @@ class Main(QMainWindow):
         language_menu.addAction(english_action)
         language_menu.addAction(portuguese_action)
 
+        self.log_level_menu = QMenu(translate("MainWindow", "Log level"), self)
+        config_menu.addMenu(self.log_level_menu)
+
+        self.debug_level_action = QAction(translate("MainWindow", "Debug"), self)
+        self.debug_level_action.triggered.connect(
+            lambda: self.config_log_level(logging.DEBUG)
+        )
+        self.info_level_action = QAction(translate("MainWindow", "Info"), self)
+        self.info_level_action.triggered.connect(
+            lambda: self.config_log_level(logging.INFO)
+        )
+        self.warning_level_action = QAction(translate("MainWindow", "Warning"), self)
+        self.warning_level_action.triggered.connect(
+            lambda: self.config_log_level(logging.WARNING)
+        )
+        self.error_level_action = QAction(translate("MainWindow", "Error"), self)
+        self.error_level_action.triggered.connect(
+            lambda: self.config_log_level(logging.ERROR)
+        )
+
+        selected_log_level_action = self.__get_log_level_action(config.get("log_level"))
+        selected_log_level_action.setCheckable(True)
+        selected_log_level_action.setChecked(True)
+
+        for action in [
+            self.debug_level_action,
+            self.info_level_action,
+            self.warning_level_action,
+            self.error_level_action,
+        ]:
+            self.log_level_menu.addAction(action)
+
         new_action = QAction(translate("MainWindow", "New file"), self)
         new_action.triggered.connect(self.on_new_action)
         load_action = QAction(translate("MainWindow", "Load"), self)
@@ -294,6 +326,26 @@ class Main(QMainWindow):
             config.set("file", "")
             config.save()
             self.set_window_title()
+
+    def __get_log_level_action(self, log_level: int):
+        log_level_actions = {
+            logging.DEBUG: self.debug_level_action,
+            logging.INFO: self.info_level_action,
+            logging.WARNING: self.warning_level_action,
+            logging.ERROR: self.error_level_action,
+        }
+        return log_level_actions[log_level]
+
+    def config_log_level(self, level: int):
+        log_level_action = self.__get_log_level_action(config.get("log_level"))
+        log_level_action.setChecked(False)
+        logger.setLevel(level)
+        logging.getLogger("bot").setLevel(level)
+        config.set("log_level", level)
+        config.save()
+        log_level_action = self.__get_log_level_action(level)
+        log_level_action.setCheckable(True)
+        log_level_action.setChecked(True)
 
     def on_login_failure(self):
         QMessageBox.warning(

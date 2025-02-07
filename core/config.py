@@ -1,3 +1,4 @@
+import logging
 import os
 import yaml
 
@@ -13,6 +14,7 @@ class Config:
                 "token": "",
                 "language": "en_us",
                 "file": "source/message and reply.json",
+                "log_level": logging.INFO,
             }
             self.save()
 
