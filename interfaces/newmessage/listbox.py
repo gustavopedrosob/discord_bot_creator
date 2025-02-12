@@ -1,7 +1,7 @@
 import typing
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QAction, QIcon
+from PySide6.QtCore import Qt, QCoreApplication
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QVBoxLayout,
     QListWidget,
@@ -15,6 +15,9 @@ from PySide6.QtWidgets import (
 )
 from extra_qwidgets.utils import get_awesome_icon
 from extra_qwidgets.widgets.color_responsive_button import QColorResponsiveButton
+
+
+translate = QCoreApplication.translate
 
 
 class QListBox(QScrollArea):
@@ -74,7 +77,7 @@ class QListBox(QScrollArea):
     def contextMenuEvent(self, event):
         if self.__is_selecting():
             context_menu = QMenu(self)
-            delete_action = QAction("Remover", self)
+            delete_action = QAction(translate("QListBox", "Remove"), self)
             delete_action.triggered.connect(self.__delete_selected_items)
             context_menu.addAction(delete_action)
             context_menu.exec(event.globalPos())
