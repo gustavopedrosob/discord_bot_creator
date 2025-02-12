@@ -13,8 +13,8 @@ from PySide6.QtWidgets import (
     QTextEdit,
     QScrollArea,
 )
-
-from interfaces.classes.color_responsive_button import QColorResponsiveButton
+from extra_qwidgets.utils import get_awesome_icon
+from extra_qwidgets.widgets.color_responsive_button import QColorResponsiveButton
 
 
 class QListBox(QScrollArea):
@@ -23,7 +23,7 @@ class QListBox(QScrollArea):
         self.__list = QListWidget()
         self.__list.setMinimumHeight(85)
         self.__add_button = QColorResponsiveButton()
-        self.__add_button.setIcon(QIcon("source/icons/plus-solid"))
+        self.__add_button.setIcon(get_awesome_icon("plus"))
         self.__add_button.setFlat(True)
         self.__line_edit = line_edit
         self.__horizontal_layout = QHBoxLayout()

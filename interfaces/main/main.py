@@ -23,13 +23,14 @@ from PySide6.QtWidgets import (
     QMainWindow,
 )
 from discord import LoginFailure
+from extra_qwidgets.utils import get_awesome_icon, colorize_icon
+from extra_qwidgets.widgets.color_button import QColorButton
+from extra_qwidgets.widgets.password import QPassword
 
 from bot import IntegratedBot
 from core.config import instance as config
 from core.messages import messages, Messages
-from interfaces.classes.color_button import QColorButton
 from interfaces.classes.custom_button import QCustomButton
-from interfaces.classes.password import QPassword
 from interfaces.credits.credits import CreditsWindow
 from interfaces.main.log_handler import log_handler
 from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow
@@ -250,12 +251,16 @@ class Main(QMainWindow):
         self.turn_on_bot_button = QColorButton(
             translate("MainWindow", "Turn on bot"), "#3e92cc"
         )
-        self.turn_on_bot_button.setIcon(QIcon("source/icons/play-solid.svg"))
+        self.turn_on_bot_button.setIcon(
+            colorize_icon(get_awesome_icon("play"), "#FFFFFF")
+        )
         self.turn_on_bot_button.clicked.connect(self.start_turn_on_bot_thread)
         self.turn_off_bot_button = QColorButton(
             translate("MainWindow", "Turn off bot"), "#d8315b"
         )
-        self.turn_off_bot_button.setIcon(QIcon("source/icons/stop-solid.svg"))
+        self.turn_off_bot_button.setIcon(
+            colorize_icon(get_awesome_icon("stop"), "#FFFFFF")
+        )
         self.turn_off_bot_button.clicked.connect(self.turn_off_bot)
         self.update_bot_button()
 

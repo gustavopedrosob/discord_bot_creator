@@ -27,17 +27,19 @@ from PySide6.QtWidgets import (
     QListWidgetItem,
 )
 from emojis import emojis
+from emojis.db import Emoji
+from extra_qwidgets.utils import get_awesome_icon, colorize_icon
+from extra_qwidgets.widgets import QColorResponsiveButton
+from extra_qwidgets.widgets.checkbox_group import QCheckBoxGroup
+from extra_qwidgets.widgets.collapse_group import QCollapseGroup
+from extra_qwidgets.widgets.color_button import QColorButton
+from extra_qwidgets.widgets.emoji_picker.emoji_validator import QEmojiValidator
+from extra_qwidgets.widgets.resposive_text_edit import QResponsiveTextEdit
 
 from core.messages import messages
-from interfaces.classes.collapse_group import QCollapseGroup
-from interfaces.classes.color_button import QColorButton
-from interfaces.classes.color_responsive_button import QColorResponsiveButton
 from interfaces.classes.custom_button import QCustomButton
 from interfaces.classes.custom_checkbox import QCustomCheckBox
 from interfaces.classes.emoji_picker import QEmojiPickerPopup
-from interfaces.classes.emoji_validator import QEmojiValidator
-from interfaces.classes.resposive_text_edit import QResponsiveTextEdit
-from interfaces.newmessage.checkbox_group import QCheckBoxGroup
 from interfaces.newmessage.listbox import QListBox
 
 
@@ -255,7 +257,9 @@ class MessageWindow:
         )
         confirm_and_save.setAutoDefault(False)
         confirm_and_save.setDefault(False)
-        confirm_and_save.setIcon(QIcon("source/icons/floppy-disk-solid.svg"))
+        confirm_and_save.setIcon(
+            colorize_icon(get_awesome_icon("floppy-disk"), "#FFFFFF")
+        )
 
         for widget in (
             delay_label,
@@ -283,20 +287,18 @@ class MessageWindow:
         confirm_and_save.clicked.connect(self.on_confirm_and_save)
 
     def __raise_emoji_popup(self, point: QPoint, line_edit: QTextEdit):
-        def append_emoji(text):
-            return line_edit.setPlainText(line_edit.toPlainText() + text)
+        def append_emoji(emoji: Emoji):
+            return line_edit.insertPlainText(emoji.emoji)
 
         self.window.setCursor(Qt.CursorShape.WaitCursor)
         if self.emoji_picker_popup is None:
             self.emoji_picker_popup = QEmojiPickerPopup()
         emoji_picker = self.emoji_picker_popup.emoji_picker()
-        emoji_picker.emoji_click.connect(append_emoji)
+        emoji_picker.picked.connect(append_emoji)
         emoji_picker.reset()
         self.emoji_picker_popup.move(point.x() - 500, point.y() - 500)
         self.emoji_picker_popup.exec()
-        self.emoji_picker_popup.hideEvent = emoji_picker.emoji_click.disconnect(
-            append_emoji
-        )
+        self.emoji_picker_popup.hideEvent = emoji_picker.picked.disconnect(append_emoji)
         self.window.setCursor(Qt.CursorShape.ArrowCursor)
 
     def _add_condition(self, condition: str):
@@ -319,7 +321,7 @@ class MessageWindow:
         self, layout: QHBoxLayout, line_edit: typing.Union[QLineEdit, QTextEdit]
     ):
         emote_button = QColorResponsiveButton()
-        emote_button.setIcon(QIcon("source/icons/face-smile-solid.svg"))
+        emote_button.setIcon(get_awesome_icon("face-smile"))
         emote_button.setFlat(True)
         layout.addWidget(emote_button, alignment=Qt.AlignmentFlag.AlignTop)
         emote_button.clicked.connect(
