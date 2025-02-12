@@ -519,40 +519,69 @@
 <context>
     <name>QEmojiPicker</name>
     <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="37"/>
         <source>Enter your favorite emoji</source>
-        <translation type="vanished">Digite seu emoji favorito</translation>
+        <translation>Digite seu emoji favorito</translation>
     </message>
     <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="82"/>
+        <source>Recent</source>
+        <translation>Recente</translation>
+    </message>
+    <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="88"/>
+        <source>Favorite</source>
+        <translation>Favoritos</translation>
+    </message>
+    <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="93"/>
         <source>Smileys &amp; Emotion</source>
-        <translation type="vanished">Carinhas &amp; Emoções</translation>
+        <translation>Carinhas &amp; Emoções</translation>
     </message>
     <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="98"/>
         <source>Animals &amp; Nature</source>
-        <translation type="vanished">Animais &amp; Natureza</translation>
+        <translation>Animais &amp; Natureza</translation>
     </message>
     <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="103"/>
         <source>Food &amp; Drink</source>
-        <translation type="vanished">Comida &amp; Bebida</translation>
+        <translation>Comida &amp; Bebida</translation>
     </message>
     <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="108"/>
         <source>Activities</source>
-        <translation type="vanished">Atividades</translation>
+        <translation>Atividades</translation>
     </message>
     <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="113"/>
         <source>Travel &amp; Places</source>
-        <translation type="vanished">Viagem &amp; Lugares</translation>
+        <translation>Viagem &amp; Lugares</translation>
     </message>
     <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="118"/>
         <source>Objects</source>
-        <translation type="vanished">Objetos</translation>
+        <translation>Objetos</translation>
     </message>
     <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="123"/>
         <source>Symbols</source>
-        <translation type="vanished">Símbolos</translation>
+        <translation>Símbolos</translation>
     </message>
     <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="128"/>
         <source>Flags</source>
-        <translation type="vanished">Bandeiras</translation>
+        <translation>Bandeiras</translation>
+    </message>
+    <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="299"/>
+        <source>Remove from favorite</source>
+        <translation>Remover dos favoritos</translation>
+    </message>
+    <message>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="303"/>
+        <source>Add to favorite</source>
+        <translation>Adicionar aos favoritos</translation>
     </message>
 </context>
 <context>
