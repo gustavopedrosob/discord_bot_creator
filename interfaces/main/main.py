@@ -4,6 +4,7 @@ import os
 import typing
 import webbrowser
 from pathlib import Path
+from typing import Any
 
 from PySide6.QtCore import QPoint, QCoreApplication, QThread, Signal
 from PySide6.QtGui import QIcon, QAction, Qt, QCloseEvent
@@ -46,6 +47,7 @@ class QBotThread(QThread):
     bot_ready = Signal()
     log = Signal(str, int)
     login_failure = Signal()
+    left_group = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -57,6 +59,14 @@ class QBotThread(QThread):
             self.__bot.run(config.get("token"))
         except LoginFailure:
             self.login_failure.emit()
+
+    def groups(self) -> list[tuple[int, str]]:
+        return list(map(lambda group: (group.id, group.name), self.__bot.guilds))
+
+    def leave_group(self, group_id: int):
+        group = self.__bot.get_guild(group_id)
+        self.__bot.loop.create_task(self.__bot.leave_guild(group))
+        self.left_group.emit(str(group_id))
 
     def close(self):
         self.__bot.loop.create_task(self.__bot.close())
@@ -200,6 +210,9 @@ class Main(QMainWindow):
         self.remove_all_message_action.triggered.connect(self.confirm_remove_messages)
         self.remove_all_message_action.setShortcut("Ctrl+Delete")
 
+        self.quit_group_action = QAction(translate("MainWindow", "Quit group"), self)
+        self.quit_group_action.triggered.connect(self.quit_selected_group)
+
         for action in [
             self.new_message_action,
             self.edit_message_action,
@@ -276,16 +289,42 @@ class Main(QMainWindow):
         ]:
             right_frame.addWidget(widget)
 
-        # Left Frame for Messages
+        # Left Tab for Groups
+
+        groups_widget = QWidget()
+        groups_widget.setContentsMargins(5, 5, 5, 5)
+        groups_layout = QVBoxLayout()
+        groups_widget.setLayout(groups_layout)
+
+        self.groups_list_widget = QListWidget()
+        self.groups_list_widget.setContextMenuPolicy(
+            Qt.ContextMenuPolicy.CustomContextMenu
+        )
+        self.groups_list_widget.customContextMenuRequested.connect(
+            self.group_context_menu_event
+        )
+
+        update_groups_button = QCustomButton(translate("MainWindow", "Update"))
+        update_groups_button.clicked.connect(self.update_groups)
+
+        quit_group_button = QCustomButton(translate("MainWindow", "Quit"))
+        quit_group_button.clicked.connect(self.quit_selected_group)
+
+        groups_layout.addWidget(self.groups_list_widget)
+        groups_layout.addWidget(update_groups_button)
+        groups_layout.addWidget(quit_group_button)
+
+        # Left Tab for Messages
 
         messages_widget = QWidget()
         messages_widget.setContentsMargins(5, 5, 5, 5)
-        messages_frame = QVBoxLayout()
-        messages_widget.setLayout(messages_frame)
+        messages_layout = QVBoxLayout()
+        messages_widget.setLayout(messages_layout)
 
         left_widget = QTabWidget()
 
         left_widget.addTab(messages_widget, translate("MainWindow", "Messages"))
+        left_widget.addTab(groups_widget, translate("MainWindow", "Groups"))
 
         self.messages_list_widget = QListWidget()
         self.messages_list_widget.setContextMenuPolicy(
@@ -315,7 +354,7 @@ class Main(QMainWindow):
             remove_message_button,
             remove_all_message_button,
         ]:
-            messages_frame.addWidget(widget)
+            messages_layout.addWidget(widget)
 
         left_widget.setContentsMargins(0, 0, 10, 0)
         right_frame.setContentsMargins(10, 0, 0, 0)
@@ -357,6 +396,22 @@ class Main(QMainWindow):
         log_level_action = self.__get_log_level_action(level)
         log_level_action.setCheckable(True)
         log_level_action.setChecked(True)
+
+    def quit_selected_group(self):
+        if self.__is_selecting_group():
+            selected_group = self.__get_selected_group()
+            item = self.groups_list_widget.item(selected_group)
+            group_id = item.data(Qt.ItemDataRole.UserRole)
+            self.groups_list_widget.takeItem(selected_group)
+            self.bot_thread.leave_group(group_id)
+
+    def update_groups(self):
+        if self.bot_thread.isRunning():
+            self.groups_list_widget.clear()
+            for group_id, group_name in self.bot_thread.groups():
+                group = QListWidgetItem(group_name)
+                group.setData(Qt.ItemDataRole.UserRole, group_id)
+                self.groups_list_widget.addItem(group)
 
     def on_login_failure(self):
         QMessageBox.warning(
@@ -477,6 +532,7 @@ class Main(QMainWindow):
     def on_bot_ready(self):
         self.turn_on_bot_button.setDisabled(False)
         self.update_bot_button()
+        self.update_groups()
 
     def entry_command(self):
         """Handles commands for the bot's log entry."""
@@ -525,6 +581,9 @@ class Main(QMainWindow):
     def __get_selected_message(self) -> int:
         return self.messages_list_widget.selectedIndexes()[0].row()
 
+    def __get_selected_group(self) -> int:
+        return self.groups_list_widget.selectedIndexes()[0].row()
+
     def __get_list_item_message(self, message: str) -> QListWidgetItem:
         return self.messages_list_widget.item(
             next(
@@ -543,8 +602,14 @@ class Main(QMainWindow):
     def __get_selected_message_text(self) -> str:
         return self.messages_list_widget.selectedItems()[0].text()
 
+    def __get_selected_group_text(self) -> str:
+        return self.groups_list_widget.selectedItems()[0].text()
+
     def __is_selecting_message(self) -> bool:
         return bool(self.messages_list_widget.selectedIndexes())
+
+    def __is_selecting_group(self) -> bool:
+        return bool(self.groups_list_widget.selectedIndexes())
 
     def remove_selected_message(self):
         """Removes the selected message from the messages list and deletes it from "message and reply.json"."""
@@ -648,6 +713,12 @@ class Main(QMainWindow):
             context_menu.addAction(self.remove_selected_message_action)
         context_menu.addAction(self.remove_all_message_action)
         context_menu.exec(self.messages_list_widget.mapToGlobal(position))
+
+    def group_context_menu_event(self, position: QPoint):
+        context_menu = QMenu(self)
+        if self.__is_selecting_group():
+            context_menu.addAction(self.quit_group_action)
+        context_menu.exec(self.groups_list_widget.mapToGlobal(position))
 
     def closeEvent(self, event: QCloseEvent):
         if self.bot_thread.isRunning():

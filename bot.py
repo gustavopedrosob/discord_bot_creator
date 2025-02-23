@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import random
+import typing
 
 import discord
 from PySide6.QtCore import QTranslator, QCoreApplication
@@ -157,6 +158,14 @@ class Bot(Client):
     async def close(self):
         await super().close()
         logger.info(translate("Bot", "Bot finished!"))
+
+    @staticmethod
+    async def leave_guild(guild: discord.Guild):
+        await guild.leave()
+        logger.info(translate("Bot", 'Leaving guild "{}"').format(guild.name))
+
+    def get_guild(self, guild_id: int) -> typing.Optional[discord.Guild]:
+        return next(filter(lambda g: g.id == guild_id, self.guilds))
 
 
 class IntegratedBot(Bot):
