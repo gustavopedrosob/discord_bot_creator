@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (
     QListWidgetItem,
     QFileDialog,
     QMainWindow,
+    QTabWidget,
 )
 from discord import LoginFailure
 from extra_qwidgets.utils import get_awesome_icon, colorize_icon
@@ -276,9 +277,14 @@ class Main(QMainWindow):
             right_frame.addWidget(widget)
 
         # Left Frame for Messages
-        left_frame = QVBoxLayout()
 
-        message_label = QLabel(translate("MainWindow", "Messages"))
+        messages_widget = QWidget()
+        messages_frame = QVBoxLayout()
+        messages_widget.setLayout(messages_frame)
+
+        left_widget = QTabWidget()
+
+        left_widget.addTab(messages_widget, "Messages")
 
         self.messages_list_widget = QListWidget()
         self.messages_list_widget.setContextMenuPolicy(
@@ -302,19 +308,18 @@ class Main(QMainWindow):
 
         # Adding Widgets to Left Frame
         for widget in [
-            message_label,
             self.messages_list_widget,
             new_message_button,
             edit_messages_button,
             remove_message_button,
             remove_all_message_button,
         ]:
-            left_frame.addWidget(widget)
+            messages_frame.addWidget(widget)
 
-        left_frame.setContentsMargins(0, 0, 10, 0)
+        messages_frame.setContentsMargins(0, 0, 10, 0)
         right_frame.setContentsMargins(10, 0, 0, 0)
 
-        main_layout.addLayout(left_frame)
+        main_layout.addWidget(left_widget)
         main_layout.addLayout(right_frame)
 
         main_layout.setStretch(1, 1)
