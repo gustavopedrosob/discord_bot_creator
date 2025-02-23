@@ -285,7 +285,7 @@ class Main(QMainWindow):
 
         left_widget = QTabWidget()
 
-        left_widget.addTab(messages_widget, "Messages")
+        left_widget.addTab(messages_widget, translate("MainWindow", "Messages"))
 
         self.messages_list_widget = QListWidget()
         self.messages_list_widget.setContextMenuPolicy(
