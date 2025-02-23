@@ -177,6 +177,15 @@ class IntegratedBot(Bot):
         await super().on_ready()
         self.thread_executor.bot_ready.emit()
 
+    async def on_guild_join(self, guild: discord.Guild):
+        self.thread_executor.guild_join.emit(str(guild.id))
+
+    async def on_guild_remove(self, guild: discord.Guild):
+        self.thread_executor.guild_remove.emit(str(guild.id))
+
+    async def on_guild_update(self, _: discord.Guild, after: discord.Guild):
+        self.thread_executor.guild_update.emit(str(after.id))
+
 
 if __name__ == "__main__":
     logging.basicConfig(

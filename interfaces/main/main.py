@@ -47,7 +47,9 @@ class QBotThread(QThread):
     bot_ready = Signal()
     log = Signal(str, int)
     login_failure = Signal()
-    left_group = Signal(str)
+    guild_join = Signal(str)
+    guild_remove = Signal(str)
+    guild_update = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -66,7 +68,6 @@ class QBotThread(QThread):
     def leave_group(self, group_id: int):
         group = self.__bot.get_guild(group_id)
         self.__bot.loop.create_task(self.__bot.leave_guild(group))
-        self.left_group.emit(str(group_id))
 
     def close(self):
         self.__bot.loop.create_task(self.__bot.close())
@@ -86,6 +87,9 @@ class Main(QMainWindow):
         self.bot_thread.bot_ready.connect(self.on_bot_ready)
         self.bot_thread.login_failure.connect(self.on_login_failure)
         self.bot_thread.log.connect(self.log)
+        self.bot_thread.guild_join.connect(self.update_groups)
+        self.bot_thread.guild_remove.connect(self.update_groups)
+        self.bot_thread.guild_update.connect(self.update_groups)
 
         log_handler.set_signal(self.bot_thread.log)
 
@@ -304,14 +308,10 @@ class Main(QMainWindow):
             self.group_context_menu_event
         )
 
-        update_groups_button = QCustomButton(translate("MainWindow", "Update"))
-        update_groups_button.clicked.connect(self.update_groups)
-
         quit_group_button = QCustomButton(translate("MainWindow", "Quit"))
         quit_group_button.clicked.connect(self.quit_selected_group)
 
         groups_layout.addWidget(self.groups_list_widget)
-        groups_layout.addWidget(update_groups_button)
         groups_layout.addWidget(quit_group_button)
 
         # Left Tab for Messages
@@ -406,12 +406,11 @@ class Main(QMainWindow):
             self.bot_thread.leave_group(group_id)
 
     def update_groups(self):
-        if self.bot_thread.isRunning():
-            self.groups_list_widget.clear()
-            for group_id, group_name in self.bot_thread.groups():
-                group = QListWidgetItem(group_name)
-                group.setData(Qt.ItemDataRole.UserRole, group_id)
-                self.groups_list_widget.addItem(group)
+        self.groups_list_widget.clear()
+        for group_id, group_name in self.bot_thread.groups():
+            group = QListWidgetItem(group_name)
+            group.setData(Qt.ItemDataRole.UserRole, group_id)
+            self.groups_list_widget.addItem(group)
 
     def on_login_failure(self):
         QMessageBox.warning(
