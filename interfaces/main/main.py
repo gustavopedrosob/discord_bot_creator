@@ -279,6 +279,7 @@ class Main(QMainWindow):
         # Left Frame for Messages
 
         messages_widget = QWidget()
+        messages_widget.setContentsMargins(5, 5, 5, 5)
         messages_frame = QVBoxLayout()
         messages_widget.setLayout(messages_frame)
 
@@ -316,7 +317,7 @@ class Main(QMainWindow):
         ]:
             messages_frame.addWidget(widget)
 
-        messages_frame.setContentsMargins(0, 0, 10, 0)
+        left_widget.setContentsMargins(0, 0, 10, 0)
         right_frame.setContentsMargins(10, 0, 0, 0)
 
         main_layout.addWidget(left_widget)
