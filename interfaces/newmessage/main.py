@@ -36,7 +36,7 @@ from extra_qwidgets.widgets.color_button import QColorButton
 from extra_qwidgets.widgets.emoji_picker.emoji_validator import QEmojiValidator
 from extra_qwidgets.widgets.resposive_text_edit import QResponsiveTextEdit
 
-from core.messages import messages
+from core.interactions import interactions
 from interfaces.classes.custom_button import QCustomButton
 from interfaces.classes.custom_checkbox import QCustomCheckBox
 from interfaces.classes.emoji_picker import QEmojiPickerPopup
@@ -315,7 +315,7 @@ class MessageWindow:
             self._add_condition(condition)
 
     def is_name_valid(self):
-        return self.get_name() not in messages.message_names()
+        return self.get_name() not in interactions.message_names()
 
     def __add_emoji_button(
         self, layout: QHBoxLayout, line_edit: typing.Union[QLineEdit, QTextEdit]

@@ -24,13 +24,12 @@ from PySide6.QtWidgets import (
     QTabWidget,
 )
 from discord import TextChannel, VoiceChannel
-from discord.abc import Messageable
 from extra_qwidgets.utils import get_awesome_icon, colorize_icon
 from extra_qwidgets.widgets.color_button import QColorButton
 from extra_qwidgets.widgets.password import QPassword
 
 from core.config import instance as config
-from core.messages import messages, Messages
+from core.interactions import interactions, Interactions
 from interfaces.classes.custom_button import QCustomButton
 from interfaces.credits.credits import CreditsWindow
 from interfaces.group.group import GroupWindow
@@ -350,7 +349,7 @@ class Main(QMainWindow):
         if file.name == "":
             self.set_window_title()
         elif file.exists() and file.is_file():
-            self.load_messages(file)
+            self.load_interactions(file)
             self.set_window_title(file)
         else:
             self.file_dont_exists_message_box()
@@ -425,7 +424,7 @@ class Main(QMainWindow):
     def on_new_action(self):
         config.set("file", "")
         config.save()
-        messages.clear()
+        interactions.clear()
         self.set_window_title()
         self.messages_list_widget.clear()
 
@@ -438,7 +437,7 @@ class Main(QMainWindow):
         )
         if file_path:
             file = Path(file_path)
-            self.load_messages(file)
+            self.load_interactions(file)
             self.set_window_title(file)
 
     def saved_successfully_message_box(self):
@@ -463,7 +462,7 @@ class Main(QMainWindow):
             self.on_save_as_action()
 
     def save(self):
-        messages.save(Path(config.get("file")))
+        interactions.save(Path(config.get("file")))
         self.saved_successfully_message_box()
 
     def file_dont_exists_message_box(self):
@@ -488,7 +487,7 @@ class Main(QMainWindow):
             config.set("file", file_path)
             config.save()
             path = Path(file_path)
-            messages.save(path)
+            interactions.save(path)
             self.set_window_title(path)
             self.saved_successfully_message_box()
 
@@ -545,7 +544,7 @@ class Main(QMainWindow):
         if self.__is_selecting_message():
             selected_message = self.__get_selected_message_text()
             self.message_window = EditMessageWindow(
-                self, selected_message, messages.get(selected_message)
+                self, selected_message, interactions.get("messages")[selected_message]
             )
             self.message_window.window.accepted.connect(
                 lambda: self.accepted_edit_selected_message(
@@ -561,14 +560,16 @@ class Main(QMainWindow):
     ):
         if not new_message_name:
             new_message_name = old_message_name
-        messages.delete(old_message_name)
-        messages.set(new_message_name, message_data)
+        messages: dict = interactions.get("messages")
+        messages.pop(old_message_name)
+        messages[new_message_name] = message_data
         self.__get_list_item_message(old_message_name).setText(new_message_name)
 
     def accepted_new_message(self, message_name: str, message_data: dict):
         if not message_name:
-            message_name = messages.new_id()
-        messages.set(message_name, message_data)
+            message_name = interactions.new_id()
+        messages: dict = interactions.get("messages")
+        messages[message_name] = message_data
         self.messages_list_widget.addItem(message_name)
 
     def __get_selected_message(self) -> int:
@@ -614,7 +615,7 @@ class Main(QMainWindow):
         selected_row = self.__get_selected_message()
         selected_message = self.__get_selected_message_text()
         self.messages_list_widget.takeItem(selected_row)
-        messages.delete(selected_message)
+        interactions.delete(selected_message)
 
     def confirm_remove_selected_message(self):
         """Asks the user if they want to remove the selected message."""
@@ -656,20 +657,20 @@ class Main(QMainWindow):
     def remove_messages(self):
         """Removes all messages from the list."""
         self.messages_list_widget.clear()
-        messages.clear()
+        interactions.clear()
 
-    def load_messages(self, path: Path):
+    def load_interactions(self, path: Path):
         """
         Loads all messages from file in path and inserts them into the messages list.
         If it's an invalid file raises a warning window.
         Saves the file path on config file if it's valid.
         """
-        temp_messages = Messages()
-        temp_messages.load(path)
-        if temp_messages.is_valid():
-            messages.replace(temp_messages)
+        temp_interactions = Interactions()
+        temp_interactions.load(path)
+        if temp_interactions.is_valid():
+            interactions.set("messages", temp_interactions.get("messages"))
             self.messages_list_widget.clear()
-            for message_name in messages.message_names():
+            for message_name in interactions.message_names():
                 self.messages_list_widget.addItem(message_name)
             config.set("file", str(path))
             config.save()

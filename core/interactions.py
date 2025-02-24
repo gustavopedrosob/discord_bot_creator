@@ -3,7 +3,7 @@ import typing
 from pathlib import Path
 
 
-class Messages:
+class Interactions:
     def __init__(self):
         self.__content = {}
 
@@ -15,20 +15,20 @@ class Messages:
         with open(path, "w") as file:
             file.write(json.dumps(self.__content))
 
-    def set(self, message: str, data: dict):
-        self.__content[message] = data
+    def set(self, key: str, data: dict):
+        self.__content[key] = data
 
-    def get(self, message: str):
-        return self.__content[message]
+    def get(self, key: str):
+        return self.__content[key]
 
-    def delete(self, message: str):
-        self.__content.pop(message)
+    def delete(self, key: str):
+        self.__content.pop(key)
 
     def clear(self):
         self.__content = {}
 
     def message_names(self) -> typing.List[str]:
-        return list(self.__content.keys())
+        return list(self.get("messages").keys())
 
     def content(self) -> dict:
         return self.__content
@@ -43,7 +43,7 @@ class Messages:
         return all(
             map(lambda message: isinstance(message, str), self.message_names())
         ) and all(
-            map(lambda message: self.is_message(message), self.content().values())
+            map(lambda message: self.is_message(message), self.get("messages").values())
         )
 
     @staticmethod
@@ -61,8 +61,5 @@ class Messages:
         ]
         return all(map(lambda field: field in message, fields))
 
-    def replace(self, messages_):
-        self.__content = messages_.content()
 
-
-messages = Messages()
+interactions = Interactions()

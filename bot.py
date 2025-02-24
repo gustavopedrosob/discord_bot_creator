@@ -8,7 +8,7 @@ from PySide6.QtCore import QTranslator, QCoreApplication
 from discord import Intents, Client
 
 from core.config import instance as config
-from core.messages import messages
+from core.interactions import interactions
 from interfaces.main.log_handler import log_handler
 from interpreter.conditions import MessageConditions
 from interpreter.variable import Variable
@@ -34,7 +34,7 @@ class Bot(Client):
                 )
             )
 
-            for message_name, message_data in messages.content().items():
+            for message_name, message_data in interactions.content().items():
                 message_condition = MessageConditions(
                     message, message_data["expected message"], self.user
                 )
@@ -196,6 +196,6 @@ if __name__ == "__main__":
     translator = QTranslator()
     translator.load(f"translations/build/{config.get("language")}.qm")
     translate = translator.translate
-    messages.load(config.get("file"))
+    interactions.load(config.get("file"))
     bot = Bot()
     bot.run(config.get("token"))
