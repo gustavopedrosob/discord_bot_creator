@@ -37,14 +37,6 @@ class QBotThread(QThread):
     def groups(self) -> dict[int, discord.Guild]:
         return {guild.id: guild for guild in self.__bot.guilds}
 
-    def channels(
-        self, guild_id: int
-    ) -> Sequence[
-        VoiceChannel | StageChannel | ForumChannel | TextChannel | CategoryChannel
-    ]:
-        group = self.groups()[guild_id]
-        return group.channels
-
     def leave_group(self, group_id: int):
         group = self.__bot.get_guild(group_id)
         self.__bot.loop.create_task(self.__bot.leave_guild(group))
