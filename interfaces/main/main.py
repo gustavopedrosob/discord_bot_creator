@@ -23,7 +23,7 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QTabWidget,
 )
-from discord import TextChannel
+from discord import TextChannel, VoiceChannel
 from discord.abc import Messageable
 from extra_qwidgets.utils import get_awesome_icon, colorize_icon
 from extra_qwidgets.widgets.color_button import QColorButton
@@ -361,13 +361,14 @@ class Main(QMainWindow):
     def config_selected_group(self):
         if self.__is_selecting_group():
             selected_group_id = self.__get_selected_group_user_data()
-            self.group_window = GroupWindow(self.__get_selected_group_text())
-            channels = [
-                channel.name
-                for channel in self.bot_thread.channels(selected_group_id)
-                if isinstance(channel, Messageable)
-            ]
-            self.group_window.update_channels(channels)
+            channels = self.bot_thread.channels(selected_group_id)
+            text_channels = list(filter(lambda c: isinstance(c, TextChannel), channels))
+            voice_channels = list(
+                filter(lambda c: isinstance(c, VoiceChannel), channels)
+            )
+            self.group_window = GroupWindow(
+                self.__get_selected_group_text(), text_channels, voice_channels
+            )
             self.group_window.exec()
 
     def __get_log_level_action(self, log_level: int):
