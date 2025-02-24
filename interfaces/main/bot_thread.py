@@ -1,0 +1,53 @@
+from typing import Sequence
+
+import discord
+from PySide6.QtCore import Signal, QThread
+from discord import (
+    LoginFailure,
+    VoiceChannel,
+    StageChannel,
+    ForumChannel,
+    TextChannel,
+    CategoryChannel,
+)
+
+from bot import IntegratedBot
+from core.config import instance as config
+
+
+class QBotThread(QThread):
+    bot_ready = Signal()
+    log = Signal(str, int)
+    login_failure = Signal()
+    guild_join = Signal(str)
+    guild_remove = Signal(str)
+    guild_update = Signal(str)
+
+    def __init__(self):
+        super().__init__()
+        self.__bot = None
+
+    def run(self):
+        self.__bot = IntegratedBot(self)
+        try:
+            self.__bot.run(config.get("token"))
+        except LoginFailure:
+            self.login_failure.emit()
+
+    def groups(self) -> dict[int, discord.Guild]:
+        return {guild.id: guild for guild in self.__bot.guilds}
+
+    def channels(
+        self, guild_id: int
+    ) -> Sequence[
+        VoiceChannel | StageChannel | ForumChannel | TextChannel | CategoryChannel
+    ]:
+        group = self.groups()[guild_id]
+        return group.channels
+
+    def leave_group(self, group_id: int):
+        group = self.__bot.get_guild(group_id)
+        self.__bot.loop.create_task(self.__bot.leave_guild(group))
+
+    def close(self):
+        self.__bot.loop.create_task(self.__bot.close())

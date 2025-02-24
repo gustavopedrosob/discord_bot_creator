@@ -4,9 +4,8 @@ import os
 import typing
 import webbrowser
 from pathlib import Path
-from typing import Any
 
-from PySide6.QtCore import QPoint, QCoreApplication, QThread, Signal
+from PySide6.QtCore import QPoint, QCoreApplication
 from PySide6.QtGui import QIcon, QAction, Qt, QCloseEvent
 from PySide6.QtWidgets import (
     QWidget,
@@ -24,16 +23,18 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QTabWidget,
 )
-from discord import LoginFailure
+from discord import TextChannel
+from discord.abc import Messageable
 from extra_qwidgets.utils import get_awesome_icon, colorize_icon
 from extra_qwidgets.widgets.color_button import QColorButton
 from extra_qwidgets.widgets.password import QPassword
 
-from bot import IntegratedBot
 from core.config import instance as config
 from core.messages import messages, Messages
 from interfaces.classes.custom_button import QCustomButton
 from interfaces.credits.credits import CreditsWindow
+from interfaces.group.group import GroupWindow
+from interfaces.main.bot_thread import QBotThread
 from interfaces.main.log_handler import log_handler
 from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow
 
@@ -43,36 +44,6 @@ logger.addHandler(log_handler)
 translate = QCoreApplication.translate
 
 
-class QBotThread(QThread):
-    bot_ready = Signal()
-    log = Signal(str, int)
-    login_failure = Signal()
-    guild_join = Signal(str)
-    guild_remove = Signal(str)
-    guild_update = Signal(str)
-
-    def __init__(self):
-        super().__init__()
-        self.__bot = None
-
-    def run(self):
-        self.__bot = IntegratedBot(self)
-        try:
-            self.__bot.run(config.get("token"))
-        except LoginFailure:
-            self.login_failure.emit()
-
-    def groups(self) -> list[tuple[int, str]]:
-        return list(map(lambda group: (group.id, group.name), self.__bot.guilds))
-
-    def leave_group(self, group_id: int):
-        group = self.__bot.get_guild(group_id)
-        self.__bot.loop.create_task(self.__bot.leave_guild(group))
-
-    def close(self):
-        self.__bot.loop.create_task(self.__bot.close())
-
-
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -80,6 +51,7 @@ class Main(QMainWindow):
         self.resize(1000, 800)
         self.setWindowIcon(QIcon("source/icons/window-icon.svg"))
 
+        self.group_window = None
         self.message_window = None
         self.credits_window = CreditsWindow()
         self.bot_thread = QBotThread()
@@ -214,6 +186,11 @@ class Main(QMainWindow):
         self.remove_all_message_action.triggered.connect(self.confirm_remove_messages)
         self.remove_all_message_action.setShortcut("Ctrl+Delete")
 
+        self.config_group_action = QAction(
+            translate("MainWindow", "Config group"), self
+        )
+        self.config_group_action.triggered.connect(self.config_selected_group)
+
         self.quit_group_action = QAction(translate("MainWindow", "Quit group"), self)
         self.quit_group_action.triggered.connect(self.quit_selected_group)
 
@@ -308,10 +285,14 @@ class Main(QMainWindow):
             self.group_context_menu_event
         )
 
+        config_group_button = QCustomButton(translate("MainWindow", "Config"))
+        config_group_button.clicked.connect(self.config_selected_group)
+
         quit_group_button = QCustomButton(translate("MainWindow", "Quit"))
         quit_group_button.clicked.connect(self.quit_selected_group)
 
         groups_layout.addWidget(self.groups_list_widget)
+        groups_layout.addWidget(config_group_button)
         groups_layout.addWidget(quit_group_button)
 
         # Left Tab for Messages
@@ -377,6 +358,18 @@ class Main(QMainWindow):
             config.save()
             self.set_window_title()
 
+    def config_selected_group(self):
+        if self.__is_selecting_group():
+            selected_group_id = self.__get_selected_group_user_data()
+            self.group_window = GroupWindow(self.__get_selected_group_text())
+            channels = [
+                channel.name
+                for channel in self.bot_thread.channels(selected_group_id)
+                if isinstance(channel, Messageable)
+            ]
+            self.group_window.update_channels(channels)
+            self.group_window.exec()
+
     def __get_log_level_action(self, log_level: int):
         log_level_actions = {
             logging.DEBUG: self.debug_level_action,
@@ -407,8 +400,8 @@ class Main(QMainWindow):
 
     def update_groups(self):
         self.groups_list_widget.clear()
-        for group_id, group_name in self.bot_thread.groups():
-            group = QListWidgetItem(group_name)
+        for group_id, group in self.bot_thread.groups().items():
+            group = QListWidgetItem(group.name)
             group.setData(Qt.ItemDataRole.UserRole, group_id)
             self.groups_list_widget.addItem(group)
 
@@ -583,6 +576,11 @@ class Main(QMainWindow):
     def __get_selected_group(self) -> int:
         return self.groups_list_widget.selectedIndexes()[0].row()
 
+    def __get_selected_group_user_data(self) -> int:
+        return self.groups_list_widget.selectedIndexes()[0].data(
+            Qt.ItemDataRole.UserRole
+        )
+
     def __get_list_item_message(self, message: str) -> QListWidgetItem:
         return self.messages_list_widget.item(
             next(
@@ -716,6 +714,7 @@ class Main(QMainWindow):
     def group_context_menu_event(self, position: QPoint):
         context_menu = QMenu(self)
         if self.__is_selecting_group():
+            context_menu.addAction(self.config_group_action)
             context_menu.addAction(self.quit_group_action)
         context_menu.exec(self.groups_list_widget.mapToGlobal(position))
 
