@@ -39,7 +39,12 @@ class Bot(Client):
         welcome_message = group_to_interact["welcome_message"]
         if welcome_message and welcome_message_channel:
             channel = channels.get(welcome_message_channel)
-            await channel.send(welcome_message)
+            await channel.send(welcome_message.format(member=member.name))
+            logger.info(
+                translate(
+                    "Bot", 'Sending welcome message "{}" on channel "{}" at "{}" group.'
+                ).format(welcome_message, channel.name, guild.name)
+            )
 
     async def on_message(self, message: discord.Message):
         if message.author != self.user:
@@ -49,7 +54,7 @@ class Bot(Client):
                 )
             )
 
-            for message_name, message_data in interactions.content().items():
+            for message_name, message_data in interactions.get("messages").items():
                 message_condition = MessageConditions(
                     message, message_data["expected message"], self.user
                 )

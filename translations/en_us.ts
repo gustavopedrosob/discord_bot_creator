@@ -4,67 +4,72 @@
 <context>
     <name>Bot</name>
     <message>
-        <location filename="../bot.py" line="27"/>
+        <location filename="../bot.py" line="28"/>
         <source>Bot started!</source>
         <translation>Bot started!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="32"/>
+        <location filename="../bot.py" line="47"/>
+        <source>Sending welcome message &quot;{}&quot; on channel &quot;{}&quot; at &quot;{}&quot; group.</source>
+        <translation>Sending welcome message &quot;{}&quot; on channel &quot;{}&quot; at &quot;{}&quot; group.</translation>
+    </message>
+    <message>
+        <location filename="../bot.py" line="53"/>
         <source>Identified message &quot;{}&quot;.</source>
         <translation>Identified message &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="45"/>
+        <location filename="../bot.py" line="66"/>
         <source>Validating message conditions {}: {}</source>
         <translation>Validating message conditions {}: {}</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="75"/>
+        <location filename="../bot.py" line="96"/>
         <source>Waiting {} seconds delay to next execution!</source>
         <translation>Waiting {} seconds delay to next executation!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="92"/>
+        <location filename="../bot.py" line="113"/>
         <source>Adding reaction &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Adding reaction &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="113"/>
+        <location filename="../bot.py" line="134"/>
         <source>Replying on group &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Replying on group &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="123"/>
+        <location filename="../bot.py" line="144"/>
         <source>Replying on private &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Replying on private &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="134"/>
+        <location filename="../bot.py" line="155"/>
         <source>Removing message &quot;{}&quot; by the author {}.</source>
         <translation>Removing message &quot;{}&quot; by the author {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="143"/>
+        <location filename="../bot.py" line="164"/>
         <source>Pinning message &quot;{}&quot; by the author {}.</source>
         <translation>Pinning message &quot;{}&quot; by the author {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="151"/>
+        <location filename="../bot.py" line="172"/>
         <source>Kicking member &quot;{}&quot;.</source>
         <translation>Kicking member &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="156"/>
+        <location filename="../bot.py" line="177"/>
         <source>Banning member &quot;{}&quot;.</source>
         <translation>Banning member &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="160"/>
+        <location filename="../bot.py" line="181"/>
         <source>Bot finished!</source>
         <translation>Bot finished!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="165"/>
+        <location filename="../bot.py" line="186"/>
         <source>Leaving guild &quot;{}&quot;</source>
         <translation>Leaving guild &quot;{}&quot;</translation>
     </message>
@@ -161,7 +166,7 @@
     </message>
     <message>
         <location filename="../interfaces/group/group.py" line="55"/>
-        <location filename="../interfaces/group/group.py" line="108"/>
+        <location filename="../interfaces/group/group.py" line="110"/>
         <source>Undefined</source>
         <translation>Undefined</translation>
     </message>
@@ -181,12 +186,12 @@
         <translation>Welcome message:</translation>
     </message>
     <message>
-        <location filename="../interfaces/group/group.py" line="113"/>
+        <location filename="../interfaces/group/group.py" line="115"/>
         <source>Welcome message channel: {}</source>
         <translation>Welcome message channel: {}</translation>
     </message>
     <message>
-        <location filename="../interfaces/group/group.py" line="124"/>
+        <location filename="../interfaces/group/group.py" line="126"/>
         <source>Channels</source>
         <translation>Channels</translation>
     </message>
@@ -313,13 +318,13 @@
     </message>
     <message>
         <location filename="../interfaces/main/main.py" line="176"/>
-        <location filename="../interfaces/main/main.py" line="646"/>
+        <location filename="../interfaces/main/main.py" line="647"/>
         <source>Remove message</source>
         <translation>Remove message</translation>
     </message>
     <message>
         <location filename="../interfaces/main/main.py" line="183"/>
-        <location filename="../interfaces/main/main.py" line="664"/>
+        <location filename="../interfaces/main/main.py" line="665"/>
         <source>Remove all messages</source>
         <translation>Remove all messages</translation>
     </message>
@@ -379,81 +384,81 @@
         <translation>Remove all</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="432"/>
+        <location filename="../interfaces/main/main.py" line="433"/>
         <source>Login failure</source>
         <translation>Login failure</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="433"/>
+        <location filename="../interfaces/main/main.py" line="434"/>
         <source>Improper token has been passed.</source>
         <translation>Improper token has been passed.</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="455"/>
+        <location filename="../interfaces/main/main.py" line="456"/>
         <source>Open File</source>
         <translation>Open File</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="466"/>
+        <location filename="../interfaces/main/main.py" line="467"/>
         <source>Saving</source>
         <translation>Saving</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="472"/>
+        <location filename="../interfaces/main/main.py" line="473"/>
         <source>The file has been saved successfully.</source>
         <translation>The file has been saved successfully.</translation>
     </message>
     <message>
         <location filename="../interfaces/main/main.py" line="106"/>
-        <location filename="../interfaces/main/main.py" line="491"/>
-        <location filename="../interfaces/main/main.py" line="528"/>
+        <location filename="../interfaces/main/main.py" line="492"/>
+        <location filename="../interfaces/main/main.py" line="529"/>
         <source>Warning</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="497"/>
+        <location filename="../interfaces/main/main.py" line="498"/>
         <source>The file don&apos;t exists anymore.</source>
         <translation>The file don&apos;t exists anymore.</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="503"/>
+        <location filename="../interfaces/main/main.py" line="504"/>
         <source>Save File</source>
         <translation>Save File</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="534"/>
+        <location filename="../interfaces/main/main.py" line="535"/>
         <source>You need to restart the application to apply the changes.</source>
         <translation>You need to restart the application to apply the changes.</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="649"/>
+        <location filename="../interfaces/main/main.py" line="650"/>
         <source>Are you sure you want to remove this message?</source>
         <translation>Are you sure you want to remove this message?</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="654"/>
-        <location filename="../interfaces/main/main.py" line="672"/>
+        <location filename="../interfaces/main/main.py" line="655"/>
+        <location filename="../interfaces/main/main.py" line="673"/>
         <source>Yes</source>
         <translation>Yes</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="656"/>
-        <location filename="../interfaces/main/main.py" line="674"/>
+        <location filename="../interfaces/main/main.py" line="657"/>
+        <location filename="../interfaces/main/main.py" line="675"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="667"/>
+        <location filename="../interfaces/main/main.py" line="668"/>
         <source>Are you sure you want to remove all messages?</source>
         <translation>Are you sure you want to remove all messages?</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="703"/>
+        <location filename="../interfaces/main/main.py" line="704"/>
         <source>Invalid file</source>
         <translation>Invalid file</translation>
     </message>
     <message>
-        <location filename="../interfaces/main/main.py" line="704"/>
+        <location filename="../interfaces/main/main.py" line="705"/>
         <source>This file can&apos;t be loaded.</source>
         <translation>This file can&apos;t be loaded.</translation>
     </message>
