@@ -360,13 +360,11 @@ class Main(QMainWindow):
     def config_selected_group(self):
         if self.__is_selecting_group():
             selected_group_id = self.__get_selected_group_user_data()
-            channels = self.bot_thread.channels(selected_group_id)
-            text_channels = list(filter(lambda c: isinstance(c, TextChannel), channels))
-            voice_channels = list(
-                filter(lambda c: isinstance(c, VoiceChannel), channels)
-            )
+            group = self.bot_thread.groups()[selected_group_id]
             self.group_window = GroupWindow(
-                self.__get_selected_group_text(), text_channels, voice_channels
+                self.__get_selected_group_text(),
+                group.text_channels,
+                group.voice_channels,
             )
             self.group_window.accepted.connect(
                 lambda: self.save_selected_group(selected_group_id)
