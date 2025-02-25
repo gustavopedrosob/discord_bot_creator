@@ -23,7 +23,7 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QTabWidget,
 )
-from discord import TextChannel, VoiceChannel
+from discord.abc import Messageable
 from extra_qwidgets.utils import get_awesome_icon, colorize_icon
 from extra_qwidgets.widgets.color_button import QColorButton
 from extra_qwidgets.widgets.password import QPassword
@@ -360,11 +360,26 @@ class Main(QMainWindow):
     def config_selected_group(self):
         if self.__is_selecting_group():
             selected_group_id = self.__get_selected_group_user_data()
+            groups = interactions.get("groups")
             group = self.bot_thread.groups()[selected_group_id]
+            group_interaction = groups.get(str(selected_group_id))
+            welcome_message_channel, welcome_message = None, None
+            if group_interaction:
+                channels = {
+                    c.id: c for c in group.channels if isinstance(c, Messageable)
+                }
+                if group_interaction["welcome_message_channel"]:
+                    welcome_message_channel = channels[
+                        group_interaction["welcome_message_channel"]
+                    ]
+                welcome_message = group_interaction["welcome_message"]
+
             self.group_window = GroupWindow(
                 self.__get_selected_group_text(),
                 group.text_channels,
                 group.voice_channels,
+                welcome_message_channel,
+                welcome_message,
             )
             self.group_window.accepted.connect(
                 lambda: self.save_selected_group(selected_group_id)
@@ -374,7 +389,7 @@ class Main(QMainWindow):
     def save_selected_group(self, group_id: int):
         data = self.group_window.get_data()
         groups = interactions.get("groups")
-        groups[group_id] = data
+        groups[str(group_id)] = data
         self.on_save_action()
 
     def __get_log_level_action(self, log_level: int):
@@ -622,7 +637,8 @@ class Main(QMainWindow):
         selected_row = self.__get_selected_message()
         selected_message = self.__get_selected_message_text()
         self.messages_list_widget.takeItem(selected_row)
-        interactions.delete(selected_message)
+        messages = interactions.get("messages")
+        messages.pop(selected_message)
 
     def confirm_remove_selected_message(self):
         """Asks the user if they want to remove the selected message."""
@@ -664,7 +680,7 @@ class Main(QMainWindow):
     def remove_messages(self):
         """Removes all messages from the list."""
         self.messages_list_widget.clear()
-        interactions.clear()
+        interactions.set("messages", {})
 
     def load_interactions(self, path: Path):
         """
@@ -676,6 +692,7 @@ class Main(QMainWindow):
         temp_interactions.load(path)
         if temp_interactions.is_valid():
             interactions.set("messages", temp_interactions.get("messages"))
+            interactions.set("groups", temp_interactions.get("groups"))
             self.messages_list_widget.clear()
             for message_name in interactions.message_names():
                 self.messages_list_widget.addItem(message_name)

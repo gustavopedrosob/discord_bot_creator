@@ -66,6 +66,9 @@ class GroupWindow(QDialog):
         self.set_welcome_message_channel_button = QCustomButton(
             translate("GroupWindow", "Set welcome message channel")
         )
+        self.unset_welcome_message_channel_button = QCustomButton(
+            translate("GroupWindow", "Unset welcome message channel")
+        )
         self.welcome_message_channel_label = QLabel()
         self.welcome_message_textedit_label = QLabel(
             translate("GroupWindow", "Welcome message:")
@@ -89,16 +92,23 @@ class GroupWindow(QDialog):
 
     def setup_binds(self):
         self.set_welcome_message_channel_button.clicked.connect(
-            self.select_welcome_message
+            self.select_welcome_message_channel
+        )
+        self.unset_welcome_message_channel_button.clicked.connect(
+            self.unselect_welcome_message_channel
         )
 
-    def select_welcome_message(self):
+    def select_welcome_message_channel(self):
         selection = self.channels_treeview.selectedIndexes()
         if selection:
             selected = self.channels_model.itemFromIndex(selection[0])
             if selected not in (self.text_item, self.voice_item):
                 self.update_welcome_message_channel(selected.text())
                 self.welcome_message_channel = selected.data(Qt.ItemDataRole.UserRole)
+
+    def unselect_welcome_message_channel(self):
+        self.update_welcome_message_channel(translate("GroupWindow", "Undefined"))
+        self.welcome_message_channel = None
 
     def update_welcome_message_channel(self, welcome_message_channel: str):
         self.welcome_message_channel_label.setText(
@@ -118,6 +128,7 @@ class GroupWindow(QDialog):
         self.channels_model.appendRow(self.text_item)
         self.voice_item.appendRows([VoiceChannelItem(vc) for vc in voice_channels])
         self.channels_model.appendRow(self.voice_item)
+        self.channels_treeview.expandAll()
 
     def get_data(self) -> dict:
         return dict(
@@ -129,9 +140,13 @@ class GroupWindow(QDialog):
         main_layout = QHBoxLayout()
         left_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
-        left_layout.addWidget(self.channels_treeview)
-        left_layout.addWidget(self.welcome_message_channel_label)
-        left_layout.addWidget(self.set_welcome_message_channel_button)
+        for widget in (
+            self.channels_treeview,
+            self.welcome_message_channel_label,
+            self.set_welcome_message_channel_button,
+            self.unset_welcome_message_channel_button,
+        ):
+            left_layout.addWidget(widget)
         right_layout.addWidget(self.welcome_message_textedit_label)
         right_layout.addWidget(self.welcome_message_textedit)
         right_layout.addStretch()
