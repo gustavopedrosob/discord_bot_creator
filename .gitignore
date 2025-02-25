@@ -5,3 +5,4 @@ log.txt
 source/config.json
 config.yaml
 build
+test.py

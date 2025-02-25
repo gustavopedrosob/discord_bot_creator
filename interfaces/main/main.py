@@ -368,7 +368,16 @@ class Main(QMainWindow):
             self.group_window = GroupWindow(
                 self.__get_selected_group_text(), text_channels, voice_channels
             )
+            self.group_window.accepted.connect(
+                lambda: self.save_selected_group(selected_group_id)
+            )
             self.group_window.exec()
+
+    def save_selected_group(self, group_id: int):
+        data = self.group_window.get_data()
+        groups = interactions.get("groups")
+        groups[group_id] = data
+        self.on_save_action()
 
     def __get_log_level_action(self, log_level: int):
         log_level_actions = {

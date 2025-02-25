@@ -5,7 +5,7 @@ from pathlib import Path
 
 class Interactions:
     def __init__(self):
-        self.__content = {}
+        self.__content = {"messages": {}, "groups": {}}
 
     def load(self, path: Path):
         with open(path, "r") as json_file:
