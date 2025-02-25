@@ -6,6 +6,7 @@ import typing
 import discord
 from PySide6.QtCore import QTranslator, QCoreApplication
 from discord import Intents, Client
+from discord.abc import Messageable
 
 from core.config import instance as config
 from core.interactions import interactions
@@ -25,6 +26,20 @@ class Bot(Client):
 
     async def on_ready(self):
         logger.info(translate("Bot", "Bot started!"))
+
+    @staticmethod
+    async def on_member_join(member: discord.Member):
+        guild = member.guild
+        channels = {c.id: c for c in guild.channels if isinstance(c, Messageable)}
+        groups = interactions.get("groups")
+        group_to_interact = groups.get(str(guild.id))
+        if not group_to_interact:
+            return
+        welcome_message_channel = group_to_interact["welcome_message_channel"]
+        welcome_message = group_to_interact["welcome_message"]
+        if welcome_message and welcome_message_channel:
+            channel = channels.get(welcome_message_channel)
+            await channel.send(welcome_message)
 
     async def on_message(self, message: discord.Message):
         if message.author != self.user:
