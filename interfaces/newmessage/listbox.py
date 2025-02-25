@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
     QScrollArea,
 )
 from extra_qwidgets.utils import get_awesome_icon
-from extra_qwidgets.widgets.color_responsive_button import QColorResponsiveButton
+from extra_qwidgets.widgets.theme_responsive_button import QThemeResponsiveButton
 
 
 translate = QCoreApplication.translate
@@ -25,7 +25,7 @@ class QListBox(QScrollArea):
         super().__init__()
         self.__list = QListWidget()
         self.__list.setMinimumHeight(85)
-        self.__add_button = QColorResponsiveButton()
+        self.__add_button = QThemeResponsiveButton()
         self.__add_button.setIcon(get_awesome_icon("plus"))
         self.__add_button.setFlat(True)
         self.__line_edit = line_edit
@@ -71,7 +71,7 @@ class QListBox(QScrollArea):
     def entry_layout(self) -> QHBoxLayout:
         return self.__horizontal_layout
 
-    def add_button(self) -> QColorResponsiveButton:
+    def add_button(self) -> QThemeResponsiveButton:
         return self.__add_button
 
     def contextMenuEvent(self, event):

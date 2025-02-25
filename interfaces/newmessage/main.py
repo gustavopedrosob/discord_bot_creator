@@ -29,7 +29,7 @@ from PySide6.QtWidgets import (
 from emojis import emojis
 from emojis.db import Emoji
 from extra_qwidgets.utils import get_awesome_icon, colorize_icon
-from extra_qwidgets.widgets import QColorResponsiveButton
+from extra_qwidgets.widgets import QThemeResponsiveButton
 from extra_qwidgets.widgets.checkbox_group import QCheckBoxGroup
 from extra_qwidgets.widgets.collapse_group import QCollapseGroup
 from extra_qwidgets.widgets.color_button import QColorButton
@@ -320,7 +320,7 @@ class MessageWindow:
     def __add_emoji_button(
         self, layout: QHBoxLayout, line_edit: typing.Union[QLineEdit, QTextEdit]
     ):
-        emote_button = QColorResponsiveButton()
+        emote_button = QThemeResponsiveButton()
         emote_button.setIcon(get_awesome_icon("face-smile"))
         emote_button.setFlat(True)
         layout.addWidget(emote_button, alignment=Qt.AlignmentFlag.AlignTop)
