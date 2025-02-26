@@ -6,7 +6,7 @@ import webbrowser
 from pathlib import Path
 
 from PySide6.QtCore import QPoint, QCoreApplication
-from PySide6.QtGui import QIcon, QAction, Qt, QCloseEvent
+from PySide6.QtGui import QIcon, QAction, Qt, QCloseEvent, QTextCursor
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -716,7 +716,11 @@ class Main(QMainWindow):
             logging.ERROR: "color: #D8315B;",
             logging.WARNING: "color: #FF7F11;",
         }
-        self.logs_text_edit.insertHtml(
+        text_cursor = self.logs_text_edit.textCursor()
+        text_cursor.movePosition(
+            QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor
+        )
+        text_cursor.insertHtml(
             f'<span style="{styles[level]}">{html.escape(message)}</span><br>'
         )
 
