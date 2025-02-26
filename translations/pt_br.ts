@@ -9,67 +9,82 @@
         <translation>Bot iniciado!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="47"/>
+        <location filename="../bot.py" line="46"/>
         <source>Sending welcome message &quot;{}&quot; on channel &quot;{}&quot; at &quot;{}&quot; group.</source>
         <translation>Enviando mensagem de boas-vindas &quot;{}&quot; no canal &quot;{}&quot; do grupo &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="53"/>
+        <location filename="../bot.py" line="52"/>
         <source>Identified message &quot;{}&quot;.</source>
         <translation>Identificada mensagem &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="66"/>
+        <location filename="../bot.py" line="65"/>
         <source>Validating message conditions {}: {}</source>
         <translation>Verificando condições da mensagem {}: {}</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="96"/>
+        <location filename="../bot.py" line="95"/>
         <source>Waiting {} seconds delay to next execution!</source>
         <translation>Aguardando delay de {} segundos para a proxima execução!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="113"/>
+        <location filename="../bot.py" line="112"/>
         <source>Adding reaction &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Adicionando a reação &quot;{}&quot; a mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="134"/>
+        <location filename="../bot.py" line="133"/>
         <source>Replying on group &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Enviando no grupo a resposta &quot;{}&quot; à mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="144"/>
+        <location filename="../bot.py" line="143"/>
         <source>Replying on private &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Enviando no privado a resposta &quot;{}&quot; à mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="155"/>
+        <location filename="../bot.py" line="159"/>
+        <source>Don&apos;t have permission to remove message &quot;{}&quot; by the author {}.</source>
+        <translation>Não tem permissão para remover a mensagem &quot;{}&quot; do autor {}.</translation>
+    </message>
+    <message>
+        <location filename="../bot.py" line="163"/>
         <source>Removing message &quot;{}&quot; by the author {}.</source>
         <translation>Removendo mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="164"/>
+        <location filename="../bot.py" line="172"/>
         <source>Pinning message &quot;{}&quot; by the author {}.</source>
         <translation>Fixando mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="172"/>
+        <location filename="../bot.py" line="183"/>
+        <source>Don&apos;t have permission to kick &quot;{}&quot;.</source>
+        <translation>Não tem permissão para expulsar &quot;{}&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../bot.py" line="188"/>
         <source>Kicking member &quot;{}&quot;.</source>
         <translation>Expulsando membro &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="177"/>
+        <location filename="../bot.py" line="196"/>
+        <source>Don&apos;t have permission to ban &quot;{}&quot;.</source>
+        <translation>Não tem permissão para banir &quot;{}&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../bot.py" line="201"/>
         <source>Banning member &quot;{}&quot;.</source>
         <translation>Banindo membro &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="181"/>
+        <location filename="../bot.py" line="205"/>
         <source>Bot finished!</source>
         <translation>Bot desligado!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="186"/>
+        <location filename="../bot.py" line="210"/>
         <source>Leaving guild &quot;{}&quot;</source>
         <translation>Saindo do grupo &quot;{}&quot;</translation>
     </message>

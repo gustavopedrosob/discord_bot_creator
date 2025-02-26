@@ -149,12 +149,21 @@ class Bot(Client):
 
     @staticmethod
     async def remove_message(message: discord.Message):
-        await message.delete()
-        logger.info(
-            translate("Bot", 'Removing message "{}" by the author {}.').format(
-                message.clean_content, message.author
+        try:
+            await message.delete()
+        except discord.Forbidden:
+            logger.error(
+                translate(
+                    "Bot",
+                    'Don\'t have permission to remove message "{}" by the author {}.',
+                ).format(message.clean_content, message.author)
             )
-        )
+        else:
+            logger.info(
+                translate("Bot", 'Removing message "{}" by the author {}.').format(
+                    message.clean_content, message.author
+                )
+            )
 
     @staticmethod
     async def pin_message(message: discord.Message):
@@ -167,13 +176,29 @@ class Bot(Client):
 
     @staticmethod
     async def kick_member(member: discord.Member):
-        await member.kick()
-        logger.info(translate("Bot", 'Kicking member "{}".').format(member.name))
+        try:
+            await member.kick()
+        except discord.Forbidden:
+            logger.error(
+                translate("Bot", 'Don\'t have permission to kick "{}".').format(
+                    member.name
+                )
+            )
+        else:
+            logger.info(translate("Bot", 'Kicking member "{}".').format(member.name))
 
     @staticmethod
     async def ban_member(member: discord.Member):
-        await member.ban()
-        logger.info(translate("Bot", 'Banning member "{}".').format(member.name))
+        try:
+            await member.ban()
+        except discord.Forbidden:
+            logger.error(
+                translate("Bot", 'Don\'t have permission to ban "{}".').format(
+                    member.name
+                )
+            )
+        else:
+            logger.info(translate("Bot", 'Banning member "{}".').format(member.name))
 
     async def close(self):
         await super().close()
