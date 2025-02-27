@@ -58,23 +58,12 @@ class Main(QMainWindow):
         self.bot_thread = QBotThread()
         log_handler.set_signal(self.bot_thread.log)
 
-        # Create the menu bar
         self.menu_bar = QMenuBar(self)
-        self.setMenuBar(self.menu_bar)
-
-        # Create menus
-        file_menu = QMenu(translate("MainWindow", "File"), self)
-        config_menu = QMenu(translate("MainWindow", "Config"), self)
-        edit_menu = QMenu(translate("MainWindow", "Edit"), self)
-        help_menu = QMenu(translate("MainWindow", "Help"), self)
-
-        # Add menus to the menu bar
-        for menu in [file_menu, config_menu, edit_menu, help_menu]:
-            self.menu_bar.addMenu(menu)
-
-        language_menu = QMenu(translate("MainWindow", "Language"), self)
-        config_menu.addMenu(language_menu)
-
+        self.file_menu = QMenu(translate("MainWindow", "File"), self)
+        self.config_menu = QMenu(translate("MainWindow", "Config"), self)
+        self.edit_menu = QMenu(translate("MainWindow", "Edit"), self)
+        self.help_menu = QMenu(translate("MainWindow", "Help"), self)
+        self.language_menu = QMenu(translate("MainWindow", "Language"), self)
         self.english_action = QAction("English", self)
         self.portuguese_action = QAction("Portuguese", self)
         language_actions = {
@@ -84,12 +73,8 @@ class Main(QMainWindow):
         selected_language_action = language_actions[config.get("language")]
         selected_language_action.setCheckable(True)
         selected_language_action.setChecked(True)
-        language_menu.addAction(self.english_action)
-        language_menu.addAction(self.portuguese_action)
 
         self.log_level_menu = QMenu(translate("MainWindow", "Log level"), self)
-        config_menu.addMenu(self.log_level_menu)
-
         self.debug_level_action = QAction(translate("MainWindow", "Debug"), self)
         self.info_level_action = QAction(translate("MainWindow", "Info"), self)
         self.warning_level_action = QAction(translate("MainWindow", "Warning"), self)
@@ -111,14 +96,6 @@ class Main(QMainWindow):
             translate("MainWindow", "Discord applications"), self
         )
 
-        # Central Widget and Layouts
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
-        main_layout = QHBoxLayout()
-        central_widget.setLayout(main_layout)
-
-        # Right Frame for Bot Controls
-        right_frame = QVBoxLayout()
         self.logs_text_edit = QTextEdit()
         self.logs_text_edit.setPlaceholderText(
             translate("MainWindow", "No logs at moment")
@@ -126,26 +103,22 @@ class Main(QMainWindow):
         self.logs_text_edit.setReadOnly(True)
         self.logs_text_edit.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
-        # Command Entry Frame
         self.cmd_combobox = QComboBox()
         self.cmd_combobox.addItems(["clear"])
         self.cmd_combobox.setEditable(True)
         self.cmd_combobox.lineEdit().clear()
         self.cmd_combobox.lineEdit().setPlaceholderText("Cmd")
 
-        # Token Entry Frame
         self.token_widget = QPassword()
         self.token_widget.line_edit.setText(config.get("token"))
         self.token_widget.line_edit.setMaxLength(100)
 
-        # Execute Bot Button
         self.turn_on_bot_button = QColorButton(
             translate("MainWindow", "Turn on bot"), "#3e92cc"
         )
         self.turn_on_bot_button.setIcon(
             colorize_icon(get_awesome_icon("play"), "#FFFFFF")
         )
-
         self.turn_off_bot_button = QColorButton(
             translate("MainWindow", "Turn off bot"), "#d8315b"
         )
@@ -154,44 +127,9 @@ class Main(QMainWindow):
         )
         self.update_bot_button()
 
-        # Adding Widgets to Right Frame
-        for widget in [
-            self.logs_text_edit,
-            self.cmd_combobox,
-            QLabel("Token:"),
-            self.token_widget,
-            self.turn_on_bot_button,
-            self.turn_off_bot_button,
-        ]:
-            right_frame.addWidget(widget)
-
-        # Left Tab for Groups
-
-        groups_widget = QWidget()
-        groups_widget.setContentsMargins(5, 5, 5, 5)
-        groups_layout = QVBoxLayout()
-        groups_widget.setLayout(groups_layout)
-
         self.groups_list_widget = QGroupsList()
         self.config_group_button = QCustomButton(translate("MainWindow", "Config"))
         self.quit_group_button = QCustomButton(translate("MainWindow", "Quit"))
-
-        groups_layout.addWidget(self.groups_list_widget)
-        groups_layout.addWidget(self.config_group_button)
-        groups_layout.addWidget(self.quit_group_button)
-
-        # Left Tab for Messages
-
-        messages_widget = QWidget()
-        messages_widget.setContentsMargins(5, 5, 5, 5)
-        messages_layout = QVBoxLayout()
-        messages_widget.setLayout(messages_layout)
-
-        left_widget = QTabWidget()
-
-        left_widget.addTab(messages_widget, translate("MainWindow", "Messages"))
-        left_widget.addTab(groups_widget, translate("MainWindow", "Groups"))
-
         self.messages_list_widget = QMessagesList()
         self.new_message_button = QCustomButton(translate("MainWindow", "New"))
         self.edit_messages_button = QCustomButton(translate("MainWindow", "Edit"))
@@ -199,24 +137,6 @@ class Main(QMainWindow):
         self.remove_all_message_button = QCustomButton(
             translate("MainWindow", "Remove all")
         )
-
-        # Adding Widgets to Left Frame
-        for widget in [
-            self.messages_list_widget,
-            self.new_message_button,
-            self.edit_messages_button,
-            self.remove_message_button,
-            self.remove_all_message_button,
-        ]:
-            messages_layout.addWidget(widget)
-
-        left_widget.setContentsMargins(0, 0, 10, 0)
-        right_frame.setContentsMargins(10, 0, 0, 0)
-
-        main_layout.addWidget(left_widget)
-        main_layout.addLayout(right_frame)
-
-        main_layout.setStretch(1, 1)
 
         file = Path(config.get("file"))
 
@@ -231,6 +151,16 @@ class Main(QMainWindow):
             config.save()
             self.set_window_title()
 
+        self.setup_binds()
+        self.setup_layout()
+        self.setup_menus()
+
+    def setup_menus(self):
+        self.setMenuBar(self.menu_bar)
+        for menu in (self.file_menu, self.config_menu, self.edit_menu, self.help_menu):
+            self.menu_bar.addMenu(menu)
+        self.config_menu.addMenu(self.log_level_menu)
+        self.config_menu.addMenu(self.language_menu)
         self.log_level_menu.addActions(
             (
                 self.debug_level_action,
@@ -239,7 +169,7 @@ class Main(QMainWindow):
                 self.error_level_action,
             )
         )
-        file_menu.addActions(
+        self.file_menu.addActions(
             (
                 self.new_action,
                 self.load_action,
@@ -256,7 +186,7 @@ class Main(QMainWindow):
                 self.messages_list_widget.remove_all_action,
             )
         )
-        help_menu.addActions(
+        self.help_menu.addActions(
             (
                 self.discord_applications,
                 self.credits_action,
@@ -264,9 +194,56 @@ class Main(QMainWindow):
                 self.report_action,
             )
         )
-        edit_menu.addAction(self.messages_list_widget.new_action)
-        edit_menu.addAction(self.messages_list_widget.remove_all_action)
-        self.setup_binds()
+        self.edit_menu.addActions(
+            (
+                self.messages_list_widget.new_action,
+                self.messages_list_widget.remove_all_action,
+            )
+        )
+        self.language_menu.addActions((self.english_action, self.portuguese_action))
+
+    def setup_layout(self):
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        main_layout = QHBoxLayout()
+        central_widget.setLayout(main_layout)
+        right_frame = QVBoxLayout()
+        for widget in [
+            self.logs_text_edit,
+            self.cmd_combobox,
+            QLabel("Token:"),
+            self.token_widget,
+            self.turn_on_bot_button,
+            self.turn_off_bot_button,
+        ]:
+            right_frame.addWidget(widget)
+        groups_widget = QWidget()
+        groups_widget.setContentsMargins(5, 5, 5, 5)
+        groups_layout = QVBoxLayout()
+        groups_widget.setLayout(groups_layout)
+        groups_layout.addWidget(self.groups_list_widget)
+        groups_layout.addWidget(self.config_group_button)
+        groups_layout.addWidget(self.quit_group_button)
+        messages_widget = QWidget()
+        messages_widget.setContentsMargins(5, 5, 5, 5)
+        messages_layout = QVBoxLayout()
+        messages_widget.setLayout(messages_layout)
+        left_widget = QTabWidget()
+        left_widget.addTab(messages_widget, translate("MainWindow", "Messages"))
+        left_widget.addTab(groups_widget, translate("MainWindow", "Groups"))
+        for widget in [
+            self.messages_list_widget,
+            self.new_message_button,
+            self.edit_messages_button,
+            self.remove_message_button,
+            self.remove_all_message_button,
+        ]:
+            messages_layout.addWidget(widget)
+        left_widget.setContentsMargins(0, 0, 10, 0)
+        right_frame.setContentsMargins(10, 0, 0, 0)
+        main_layout.addWidget(left_widget)
+        main_layout.addLayout(right_frame)
+        main_layout.setStretch(1, 1)
 
     def setup_binds(self):
         self.new_message_button.clicked.connect(self.new_message)
