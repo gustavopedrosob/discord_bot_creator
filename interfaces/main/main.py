@@ -436,7 +436,6 @@ class Main(QMainWindow):
             title,
             text,
             QMessageBox.StandardButton.Ok,
-            QMessageBox.StandardButton.NoButton,
         )
 
     def information_message_box(self, title: str, text: str):
@@ -445,7 +444,6 @@ class Main(QMainWindow):
             title,
             text,
             QMessageBox.StandardButton.Ok,
-            QMessageBox.StandardButton.NoButton,
         )
 
     def set_window_title(self, file: typing.Optional[Path] = None):
