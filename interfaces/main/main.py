@@ -117,14 +117,6 @@ class Main(QMainWindow):
         selected_log_level_action.setCheckable(True)
         selected_log_level_action.setChecked(True)
 
-        for action in [
-            self.debug_level_action,
-            self.info_level_action,
-            self.warning_level_action,
-            self.error_level_action,
-        ]:
-            self.log_level_menu.addAction(action)
-
         new_action = QAction(translate("MainWindow", "New file"), self)
         new_action.triggered.connect(self.on_new_action)
         load_action = QAction(translate("MainWindow", "Load"), self)
@@ -135,15 +127,6 @@ class Main(QMainWindow):
         save_as_action.triggered.connect(self.on_save_as_action)
         exit_action = QAction(translate("MainWindow", "Exit"), self)
         exit_action.triggered.connect(self.close)
-
-        for action in [
-            new_action,
-            load_action,
-            save_action,
-            save_as_action,
-            exit_action,
-        ]:
-            file_menu.addAction(action)
 
         credits_action = QAction(translate("MainWindow", "Credits"), self)
         credits_action.triggered.connect(self.credits_window.window.show)
@@ -194,22 +177,34 @@ class Main(QMainWindow):
         self.quit_group_action = QAction(translate("MainWindow", "Quit group"), self)
         self.quit_group_action.triggered.connect(self.quit_selected_group)
 
-        for action in [
-            self.new_message_action,
-            self.edit_message_action,
-            self.remove_selected_message_action,
-            self.remove_all_message_action,
-        ]:
-            self.addAction(action)
-
-        for action in [
-            discord_applications,
-            credits_action,
-            project_action,
-            report_action,
-        ]:
-            help_menu.addAction(action)
-
+        self.log_level_menu.addActions(
+            (
+                self.debug_level_action,
+                self.info_level_action,
+                self.warning_level_action,
+                self.error_level_action,
+            )
+        )
+        file_menu.addActions(
+            (
+                new_action,
+                load_action,
+                save_action,
+                save_as_action,
+                exit_action,
+            )
+        )
+        self.addActions(
+            (
+                self.new_message_action,
+                self.edit_message_action,
+                self.remove_selected_message_action,
+                self.remove_all_message_action,
+            )
+        )
+        help_menu.addActions(
+            (discord_applications, credits_action, project_action, report_action)
+        )
         edit_menu.addAction(self.new_message_action)
         edit_menu.addAction(self.remove_all_message_action)
 
@@ -729,16 +724,16 @@ class Main(QMainWindow):
         context_menu = QMenu(self)
         context_menu.addAction(self.new_message_action)
         if self.__is_selecting_message():
-            context_menu.addAction(self.edit_message_action)
-            context_menu.addAction(self.remove_selected_message_action)
+            context_menu.addActions(
+                (self.edit_message_action, self.remove_selected_message_action)
+            )
         context_menu.addAction(self.remove_all_message_action)
         context_menu.exec(self.messages_list_widget.mapToGlobal(position))
 
     def group_context_menu_event(self, position: QPoint):
         context_menu = QMenu(self)
         if self.__is_selecting_group():
-            context_menu.addAction(self.config_group_action)
-            context_menu.addAction(self.quit_group_action)
+            context_menu.addActions((self.config_group_action, self.quit_group_action))
         context_menu.exec(self.groups_list_widget.mapToGlobal(position))
 
     def closeEvent(self, event: QCloseEvent):
