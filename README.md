@@ -38,7 +38,7 @@ Esse processo pode ser realizado a partir da interface.
 Para iniciar a interface do bot, digite no cmd:
 
 ```bash
-python main.py
+python messages.py
 ```
 
 ### 3º Passo: Inserindo o token

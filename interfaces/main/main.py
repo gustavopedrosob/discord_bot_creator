@@ -5,14 +5,13 @@ import typing
 import webbrowser
 from pathlib import Path
 
-from PySide6.QtCore import QPoint, QCoreApplication
+from PySide6.QtCore import QCoreApplication
 from PySide6.QtGui import QIcon, QAction, Qt, QCloseEvent, QTextCursor
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QHBoxLayout,
     QTextEdit,
-    QListWidget,
     QLabel,
     QMenuBar,
     QMenu,
@@ -38,7 +37,7 @@ from interfaces.main.bot_thread import QBotThread
 from interfaces.main.groups_list import QGroupsList
 from interfaces.main.log_handler import log_handler
 from interfaces.main.messages_list import QMessagesList
-from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow
+from interfaces.messages.messages import EditMessageWindow, NewMessageWindow
 
 
 logger = logging.getLogger(__name__)
@@ -57,14 +56,6 @@ class Main(QMainWindow):
         self.message_window = None
         self.credits_window = CreditsWindow()
         self.bot_thread = QBotThread()
-        self.bot_thread.finished.connect(self.on_bot_thread_finished)
-        self.bot_thread.bot_ready.connect(self.on_bot_ready)
-        self.bot_thread.login_failure.connect(self.on_login_failure)
-        self.bot_thread.log.connect(self.log)
-        self.bot_thread.guild_join.connect(self.update_groups)
-        self.bot_thread.guild_remove.connect(self.update_groups)
-        self.bot_thread.guild_update.connect(self.update_groups)
-
         log_handler.set_signal(self.bot_thread.log)
 
         # Create the menu bar
@@ -84,71 +75,40 @@ class Main(QMainWindow):
         language_menu = QMenu(translate("MainWindow", "Language"), self)
         config_menu.addMenu(language_menu)
 
-        english_action = QAction("English", self)
-        english_action.triggered.connect(lambda: self.set_language("en_us"))
-        portuguese_action = QAction("Portuguese", self)
-        portuguese_action.triggered.connect(lambda: self.set_language("pt_br"))
-        language_actions = {"en_us": english_action, "pt_br": portuguese_action}
+        self.english_action = QAction("English", self)
+        self.portuguese_action = QAction("Portuguese", self)
+        language_actions = {
+            "en_us": self.english_action,
+            "pt_br": self.portuguese_action,
+        }
         selected_language_action = language_actions[config.get("language")]
         selected_language_action.setCheckable(True)
         selected_language_action.setChecked(True)
-        language_menu.addAction(english_action)
-        language_menu.addAction(portuguese_action)
+        language_menu.addAction(self.english_action)
+        language_menu.addAction(self.portuguese_action)
 
         self.log_level_menu = QMenu(translate("MainWindow", "Log level"), self)
         config_menu.addMenu(self.log_level_menu)
 
         self.debug_level_action = QAction(translate("MainWindow", "Debug"), self)
-        self.debug_level_action.triggered.connect(
-            lambda: self.config_log_level(logging.DEBUG)
-        )
         self.info_level_action = QAction(translate("MainWindow", "Info"), self)
-        self.info_level_action.triggered.connect(
-            lambda: self.config_log_level(logging.INFO)
-        )
         self.warning_level_action = QAction(translate("MainWindow", "Warning"), self)
-        self.warning_level_action.triggered.connect(
-            lambda: self.config_log_level(logging.WARNING)
-        )
         self.error_level_action = QAction(translate("MainWindow", "Error"), self)
-        self.error_level_action.triggered.connect(
-            lambda: self.config_log_level(logging.ERROR)
-        )
 
         selected_log_level_action = self.__get_log_level_action(config.get("log_level"))
         selected_log_level_action.setCheckable(True)
         selected_log_level_action.setChecked(True)
 
-        new_action = QAction(translate("MainWindow", "New file"), self)
-        new_action.triggered.connect(self.on_new_action)
-        load_action = QAction(translate("MainWindow", "Load"), self)
-        load_action.triggered.connect(self.on_load_action)
-        save_action = QAction(translate("MainWindow", "Save"), self)
-        save_action.triggered.connect(self.on_save_action)
-        save_as_action = QAction(translate("MainWindow", "Save as"), self)
-        save_as_action.triggered.connect(self.on_save_as_action)
-        exit_action = QAction(translate("MainWindow", "Exit"), self)
-        exit_action.triggered.connect(self.close)
-
-        credits_action = QAction(translate("MainWindow", "Credits"), self)
-        credits_action.triggered.connect(self.credits_window.window.show)
-        project_action = QAction(translate("MainWindow", "Project"), self)
-        project_action.triggered.connect(
-            lambda: webbrowser.open(
-                "https://github.com/gustavopedrosob/bot_discord_easy_creator"
-            )
-        )
-        report_action = QAction(translate("MainWindow", "Report bug"), self)
-        report_action.triggered.connect(
-            lambda: webbrowser.open(
-                "https://github.com/gustavopedrosob/bot_discord_easy_creator/issues/new"
-            )
-        )
-        discord_applications = QAction(
+        self.new_action = QAction(translate("MainWindow", "New file"), self)
+        self.load_action = QAction(translate("MainWindow", "Load"), self)
+        self.save_action = QAction(translate("MainWindow", "Save"), self)
+        self.save_as_action = QAction(translate("MainWindow", "Save as"), self)
+        self.exit_action = QAction(translate("MainWindow", "Exit"), self)
+        self.credits_action = QAction(translate("MainWindow", "Credits"), self)
+        self.project_action = QAction(translate("MainWindow", "Project"), self)
+        self.report_action = QAction(translate("MainWindow", "Report bug"), self)
+        self.discord_applications = QAction(
             translate("MainWindow", "Discord applications"), self
-        )
-        discord_applications.triggered.connect(
-            lambda: webbrowser.open("https://discord.com/developers/applications/")
         )
 
         # Central Widget and Layouts
@@ -172,12 +132,10 @@ class Main(QMainWindow):
         self.cmd_combobox.setEditable(True)
         self.cmd_combobox.lineEdit().clear()
         self.cmd_combobox.lineEdit().setPlaceholderText("Cmd")
-        self.cmd_combobox.lineEdit().returnPressed.connect(self.entry_command)
 
         # Token Entry Frame
         self.token_widget = QPassword()
         self.token_widget.line_edit.setText(config.get("token"))
-        self.token_widget.line_edit.textEdited.connect(self.update_token)
         self.token_widget.line_edit.setMaxLength(100)
 
         # Execute Bot Button
@@ -187,14 +145,13 @@ class Main(QMainWindow):
         self.turn_on_bot_button.setIcon(
             colorize_icon(get_awesome_icon("play"), "#FFFFFF")
         )
-        self.turn_on_bot_button.clicked.connect(self.start_turn_on_bot_thread)
+
         self.turn_off_bot_button = QColorButton(
             translate("MainWindow", "Turn off bot"), "#d8315b"
         )
         self.turn_off_bot_button.setIcon(
             colorize_icon(get_awesome_icon("stop"), "#FFFFFF")
         )
-        self.turn_off_bot_button.clicked.connect(self.turn_off_bot)
         self.update_bot_button()
 
         # Adding Widgets to Right Frame
@@ -216,21 +173,12 @@ class Main(QMainWindow):
         groups_widget.setLayout(groups_layout)
 
         self.groups_list_widget = QGroupsList()
-
-        self.groups_list_widget.config_action.triggered.connect(
-            self.config_selected_group
-        )
-        self.groups_list_widget.quit_action.triggered.connect(self.quit_selected_group)
-
-        config_group_button = QCustomButton(translate("MainWindow", "Config"))
-        config_group_button.clicked.connect(self.config_selected_group)
-
-        quit_group_button = QCustomButton(translate("MainWindow", "Quit"))
-        quit_group_button.clicked.connect(self.quit_selected_group)
+        self.config_group_button = QCustomButton(translate("MainWindow", "Config"))
+        self.quit_group_button = QCustomButton(translate("MainWindow", "Quit"))
 
         groups_layout.addWidget(self.groups_list_widget)
-        groups_layout.addWidget(config_group_button)
-        groups_layout.addWidget(quit_group_button)
+        groups_layout.addWidget(self.config_group_button)
+        groups_layout.addWidget(self.quit_group_button)
 
         # Left Tab for Messages
 
@@ -245,37 +193,20 @@ class Main(QMainWindow):
         left_widget.addTab(groups_widget, translate("MainWindow", "Groups"))
 
         self.messages_list_widget = QMessagesList()
-
-        self.messages_list_widget.new_action.triggered.connect(self.new_message)
-        self.messages_list_widget.edit_action.triggered.connect(
-            self.edit_selected_message
+        self.new_message_button = QCustomButton(translate("MainWindow", "New"))
+        self.edit_messages_button = QCustomButton(translate("MainWindow", "Edit"))
+        self.remove_message_button = QCustomButton(translate("MainWindow", "Remove"))
+        self.remove_all_message_button = QCustomButton(
+            translate("MainWindow", "Remove all")
         )
-        self.messages_list_widget.remove_action.triggered.connect(
-            self.confirm_remove_selected_message
-        )
-        self.messages_list_widget.remove_all_action.triggered.connect(
-            self.confirm_remove_messages
-        )
-
-        new_message_button = QCustomButton(translate("MainWindow", "New"))
-        new_message_button.clicked.connect(self.new_message)
-
-        edit_messages_button = QCustomButton(translate("MainWindow", "Edit"))
-        edit_messages_button.clicked.connect(self.edit_selected_message)
-
-        remove_message_button = QCustomButton(translate("MainWindow", "Remove"))
-        remove_message_button.clicked.connect(self.confirm_remove_selected_message)
-
-        remove_all_message_button = QCustomButton(translate("MainWindow", "Remove all"))
-        remove_all_message_button.clicked.connect(self.confirm_remove_messages)
 
         # Adding Widgets to Left Frame
         for widget in [
             self.messages_list_widget,
-            new_message_button,
-            edit_messages_button,
-            remove_message_button,
-            remove_all_message_button,
+            self.new_message_button,
+            self.edit_messages_button,
+            self.remove_message_button,
+            self.remove_all_message_button,
         ]:
             messages_layout.addWidget(widget)
 
@@ -310,11 +241,11 @@ class Main(QMainWindow):
         )
         file_menu.addActions(
             (
-                new_action,
-                load_action,
-                save_action,
-                save_as_action,
-                exit_action,
+                self.new_action,
+                self.load_action,
+                self.save_action,
+                self.save_as_action,
+                self.exit_action,
             )
         )
         self.addActions(
@@ -326,10 +257,82 @@ class Main(QMainWindow):
             )
         )
         help_menu.addActions(
-            (discord_applications, credits_action, project_action, report_action)
+            (
+                self.discord_applications,
+                self.credits_action,
+                self.project_action,
+                self.report_action,
+            )
         )
         edit_menu.addAction(self.messages_list_widget.new_action)
         edit_menu.addAction(self.messages_list_widget.remove_all_action)
+        self.setup_binds()
+
+    def setup_binds(self):
+        self.new_message_button.clicked.connect(self.new_message)
+        self.edit_messages_button.clicked.connect(self.edit_selected_message)
+        self.remove_message_button.clicked.connect(self.confirm_remove_selected_message)
+        self.remove_all_message_button.clicked.connect(self.confirm_remove_messages)
+        self.turn_on_bot_button.clicked.connect(self.start_turn_on_bot_thread)
+        self.turn_off_bot_button.clicked.connect(self.turn_off_bot)
+        self.messages_list_widget.new_action.triggered.connect(self.new_message)
+        self.messages_list_widget.edit_action.triggered.connect(
+            self.edit_selected_message
+        )
+        self.messages_list_widget.remove_action.triggered.connect(
+            self.confirm_remove_selected_message
+        )
+        self.messages_list_widget.remove_all_action.triggered.connect(
+            self.confirm_remove_messages
+        )
+        self.discord_applications.triggered.connect(
+            lambda: webbrowser.open("https://discord.com/developers/applications/")
+        )
+        self.report_action.triggered.connect(
+            lambda: webbrowser.open(
+                "https://github.com/gustavopedrosob/bot_discord_easy_creator/issues/new"
+            )
+        )
+        self.project_action.triggered.connect(
+            lambda: webbrowser.open(
+                "https://github.com/gustavopedrosob/bot_discord_easy_creator"
+            )
+        )
+        self.credits_action.triggered.connect(self.credits_window.window.show)
+        self.exit_action.triggered.connect(self.close)
+        self.save_as_action.triggered.connect(self.on_save_as_action)
+        self.save_action.triggered.connect(self.on_save_action)
+        self.load_action.triggered.connect(self.on_load_action)
+        self.new_action.triggered.connect(self.on_new_action)
+        self.error_level_action.triggered.connect(
+            lambda: self.config_log_level(logging.ERROR)
+        )
+        self.warning_level_action.triggered.connect(
+            lambda: self.config_log_level(logging.WARNING)
+        )
+        self.info_level_action.triggered.connect(
+            lambda: self.config_log_level(logging.INFO)
+        )
+        self.debug_level_action.triggered.connect(
+            lambda: self.config_log_level(logging.DEBUG)
+        )
+        self.english_action.triggered.connect(lambda: self.set_language("en_us"))
+        self.portuguese_action.triggered.connect(lambda: self.set_language("pt_br"))
+        self.bot_thread.finished.connect(self.on_bot_thread_finished)
+        self.bot_thread.bot_ready.connect(self.on_bot_ready)
+        self.bot_thread.login_failure.connect(self.on_login_failure)
+        self.bot_thread.log.connect(self.log)
+        self.bot_thread.guild_join.connect(self.update_groups)
+        self.bot_thread.guild_remove.connect(self.update_groups)
+        self.bot_thread.guild_update.connect(self.update_groups)
+        self.groups_list_widget.config_action.triggered.connect(
+            self.config_selected_group
+        )
+        self.groups_list_widget.quit_action.triggered.connect(self.quit_selected_group)
+        self.config_group_button.clicked.connect(self.config_selected_group)
+        self.quit_group_button.clicked.connect(self.quit_selected_group)
+        self.token_widget.line_edit.textEdited.connect(self.update_token)
+        self.cmd_combobox.lineEdit().returnPressed.connect(self.entry_command)
 
     def config_selected_group(self):
         if self.__is_selecting_group():

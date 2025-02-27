@@ -40,7 +40,7 @@ from core.interactions import interactions
 from interfaces.classes.custom_button import QCustomButton
 from interfaces.classes.custom_checkbox import QCustomCheckBox
 from interfaces.classes.emoji_picker import QEmojiPickerPopup
-from interfaces.newmessage.listbox import QListBox
+from interfaces.messages.listbox import QListBox
 
 
 translate = QCoreApplication.translate
