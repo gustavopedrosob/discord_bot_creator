@@ -35,6 +35,7 @@ from interfaces.classes.custom_button import QCustomButton
 from interfaces.credits.credits import CreditsWindow
 from interfaces.group.group import GroupWindow
 from interfaces.main.bot_thread import QBotThread
+from interfaces.main.groups_list import QGroupsList
 from interfaces.main.log_handler import log_handler
 from interfaces.main.messages_list import QMessagesList
 from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow
@@ -150,14 +151,6 @@ class Main(QMainWindow):
             lambda: webbrowser.open("https://discord.com/developers/applications/")
         )
 
-        self.config_group_action = QAction(
-            translate("MainWindow", "Config group"), self
-        )
-        self.config_group_action.triggered.connect(self.config_selected_group)
-
-        self.quit_group_action = QAction(translate("MainWindow", "Quit group"), self)
-        self.quit_group_action.triggered.connect(self.quit_selected_group)
-
         # Central Widget and Layouts
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
@@ -222,13 +215,12 @@ class Main(QMainWindow):
         groups_layout = QVBoxLayout()
         groups_widget.setLayout(groups_layout)
 
-        self.groups_list_widget = QListWidget()
-        self.groups_list_widget.setContextMenuPolicy(
-            Qt.ContextMenuPolicy.CustomContextMenu
+        self.groups_list_widget = QGroupsList()
+
+        self.groups_list_widget.config_action.triggered.connect(
+            self.config_selected_group
         )
-        self.groups_list_widget.customContextMenuRequested.connect(
-            self.group_context_menu_event
-        )
+        self.groups_list_widget.quit_action.triggered.connect(self.quit_selected_group)
 
         config_group_button = QCustomButton(translate("MainWindow", "Config"))
         config_group_button.clicked.connect(self.config_selected_group)
@@ -703,12 +695,6 @@ class Main(QMainWindow):
     def on_bot_thread_finished(self):
         self.turn_off_bot_button.setDisabled(False)
         self.update_bot_button()
-
-    def group_context_menu_event(self, position: QPoint):
-        context_menu = QMenu(self)
-        if self.__is_selecting_group():
-            context_menu.addActions((self.config_group_action, self.quit_group_action))
-        context_menu.exec(self.groups_list_widget.mapToGlobal(position))
 
     def closeEvent(self, event: QCloseEvent):
         if self.bot_thread.isRunning():
