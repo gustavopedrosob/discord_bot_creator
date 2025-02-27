@@ -30,6 +30,7 @@ from extra_qwidgets.widgets.password import QPassword
 
 from core.config import instance as config
 from core.interactions import interactions, Interactions
+from interfaces.classes.confirm_message_box import QConfirmMessageBox
 from interfaces.classes.custom_button import QCustomButton
 from interfaces.credits.credits import CreditsWindow
 from interfaces.group.group import GroupWindow
@@ -428,14 +429,29 @@ class Main(QMainWindow):
             self.groups_list_widget.addItem(group)
 
     def on_login_failure(self):
-        QMessageBox.warning(
-            self,
+        self.warning_message_box(
             translate("MainWindow", "Login failure"),
             translate("MainWindow", "Improper token has been passed."),
+        )
+        self.turn_on_bot_button.setDisabled(False)
+
+    def warning_message_box(self, title: str, text: str):
+        QMessageBox.warning(
+            self,
+            title,
+            text,
             QMessageBox.StandardButton.Ok,
             QMessageBox.StandardButton.NoButton,
         )
-        self.turn_on_bot_button.setDisabled(False)
+
+    def information_message_box(self, title: str, text: str):
+        QMessageBox.information(
+            self,
+            title,
+            text,
+            QMessageBox.StandardButton.Ok,
+            QMessageBox.StandardButton.NoButton,
+        )
 
     def set_window_title(self, file: typing.Optional[Path] = None):
         title = "Bot Discord Easy Creator"
@@ -463,15 +479,13 @@ class Main(QMainWindow):
             self.set_window_title(file)
 
     def saved_successfully_message_box(self):
-        warning = QMessageBox(self)
-        warning.setWindowTitle(translate("MainWindow", "Saving"))
-        warning.setText(
+        self.information_message_box(
+            translate("MainWindow", "Saving"),
             translate(
                 "MainWindow",
                 "The file has been saved successfully.",
-            )
+            ),
         )
-        warning.exec()
 
     def on_save_action(self):
         file = Path(config.get("file"))
@@ -488,15 +502,10 @@ class Main(QMainWindow):
         self.saved_successfully_message_box()
 
     def file_dont_exists_message_box(self):
-        warning = QMessageBox(self)
-        warning.setWindowTitle(translate("MainWindow", "Warning"))
-        warning.setText(
-            translate(
-                "MainWindow",
-                "The file don't exists anymore.",
-            )
+        self.warning_message_box(
+            translate("MainWindow", "Warning"),
+            translate("MainWindow", "The file don't exists anymore."),
         )
-        warning.exec()
 
     def on_save_as_action(self):
         file_path, file_extension = QFileDialog.getSaveFileName(
@@ -525,15 +534,13 @@ class Main(QMainWindow):
         self.message_window.window.exec()
 
     def set_language(self, language: str):
-        warning = QMessageBox(self)
-        warning.setWindowTitle(translate("MainWindow", "Warning"))
-        warning.setText(
+        self.warning_message_box(
+            translate("MainWindow", "Warning"),
             translate(
                 "MainWindow",
                 "You need to restart the application to apply the changes.",
-            )
+            ),
         )
-        warning.exec()
         config.set("language", language)
         config.save()
 
@@ -643,38 +650,27 @@ class Main(QMainWindow):
     def confirm_remove_selected_message(self):
         """Asks the user if they want to remove the selected message."""
         if self.__is_selecting_message():
-            dialog = QMessageBox(self)
-            dialog.setWindowTitle(translate("MainWindow", "Remove message"))
-            dialog.setText(
-                translate("MainWindow", "Are you sure you want to remove this message?")
+            self.confirm_message_box(
+                translate("MainWindow", "Remove message"),
+                translate(
+                    "MainWindow", "Are you sure you want to remove this message?"
+                ),
+                self.remove_selected_message,
             )
-            dialog.setStandardButtons(
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-            )
-            yes_button = dialog.button(QMessageBox.StandardButton.Yes)
-            yes_button.setText(translate("MainWindow", "Yes"))
-            no_button = dialog.button(QMessageBox.StandardButton.No)
-            no_button.setText(translate("MainWindow", "No"))
-            dialog.setDefaultButton(QMessageBox.StandardButton.No)
-            dialog.accepted.connect(self.remove_selected_message)
-            dialog.exec()
 
     def confirm_remove_messages(self):
         """Asks the user if they want to remove all messages."""
-        dialog = QMessageBox(self)
-        dialog.setWindowTitle(translate("MainWindow", "Remove all messages"))
-        dialog.setText(
-            translate("MainWindow", "Are you sure you want to remove all messages?")
+        self.confirm_message_box(
+            translate("MainWindow", "Remove all messages"),
+            translate("MainWindow", "Are you sure you want to remove all messages?"),
+            self.remove_messages,
         )
-        dialog.setStandardButtons(
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-        )
-        yes_button = dialog.button(QMessageBox.StandardButton.Yes)
-        yes_button.setText(translate("MainWindow", "Yes"))
-        no_button = dialog.button(QMessageBox.StandardButton.No)
-        no_button.setText(translate("MainWindow", "No"))
-        dialog.setDefaultButton(QMessageBox.StandardButton.No)
-        dialog.accepted.connect(self.remove_messages)
+
+    def confirm_message_box(self, title: str, text: str, callback):
+        dialog = QConfirmMessageBox(self)
+        dialog.setWindowTitle(title)
+        dialog.setText(text)
+        dialog.accepted.connect(callback)
         dialog.exec()
 
     def remove_messages(self):
@@ -699,12 +695,9 @@ class Main(QMainWindow):
             config.set("file", str(path))
             config.save()
         else:
-            QMessageBox.warning(
-                self,
+            self.warning_message_box(
                 translate("MainWindow", "Invalid file"),
                 translate("MainWindow", "This file can't be loaded."),
-                QMessageBox.StandardButton.Ok,
-                QMessageBox.StandardButton.NoButton,
             )
 
     def log(self, message: str, level: typing.Optional[int] = None):
