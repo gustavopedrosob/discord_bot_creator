@@ -35,7 +35,9 @@ from interfaces.credits.credits import CreditsWindow
 from interfaces.group.group import GroupWindow
 from interfaces.main.bot_thread import QBotThread
 from interfaces.main.groups_list import QGroupsList
+from interfaces.main.language_menu import QLanguageMenu
 from interfaces.main.log_handler import log_handler
+from interfaces.main.log_level_menu import QLogLevelMenu
 from interfaces.main.messages_list import QMessagesList
 from interfaces.messages.messages import EditMessageWindow, NewMessageWindow
 
@@ -65,41 +67,11 @@ class Main(QMainWindow):
         self.config_menu = QMenu(translate("MainWindow", "Config"), self)
         self.edit_menu = QMenu(translate("MainWindow", "Edit"), self)
         self.help_menu = QMenu(translate("MainWindow", "Help"), self)
-        self.language_menu = QMenu(translate("MainWindow", "Language"), self)
-        self.language_action_group = QActionGroup(self)
-        self.language_action_group.setExclusive(True)
-        self.english_action = QAction(
-            "English", self, checked=language == "en_us", checkable=True
+        self.language_menu = QLanguageMenu(
+            translate("MainWindow", "Language"), self, language
         )
-        self.portuguese_action = QAction(
-            "Portuguese", self, checked=language == "pt_br", checkable=True
-        )
-        self.log_level_action_group = QActionGroup(self)
-        self.log_level_action_group.setExclusive(True)
-        self.log_level_menu = QMenu(translate("MainWindow", "Log level"), self)
-        self.debug_level_action = QAction(
-            translate("MainWindow", "Debug"),
-            self,
-            checked=log_level == logging.DEBUG,
-            checkable=True,
-        )
-        self.info_level_action = QAction(
-            translate("MainWindow", "Info"),
-            self,
-            checked=log_level == logging.INFO,
-            checkable=True,
-        )
-        self.warning_level_action = QAction(
-            translate("MainWindow", "Warning"),
-            self,
-            checked=log_level == logging.WARNING,
-            checkable=True,
-        )
-        self.error_level_action = QAction(
-            translate("MainWindow", "Error"),
-            self,
-            checked=log_level == logging.ERROR,
-            checkable=True,
+        self.log_level_menu = QLogLevelMenu(
+            translate("MainWindow", "Log level"), self, log_level
         )
         self.new_action = QAction(translate("MainWindow", "New file"), self)
         self.load_action = QAction(translate("MainWindow", "Load"), self)
@@ -176,21 +148,8 @@ class Main(QMainWindow):
         self.setMenuBar(self.menu_bar)
         for menu in (self.file_menu, self.config_menu, self.edit_menu, self.help_menu):
             self.menu_bar.addMenu(menu)
-        language_actions = (self.english_action, self.portuguese_action)
-        for a in language_actions:
-            self.language_action_group.addAction(a)
-        self.language_menu.addActions(language_actions)
         self.config_menu.addMenu(self.log_level_menu)
         self.config_menu.addMenu(self.language_menu)
-        log_level_actions = (
-            self.debug_level_action,
-            self.info_level_action,
-            self.warning_level_action,
-            self.error_level_action,
-        )
-        self.log_level_menu.addActions(log_level_actions)
-        for a in log_level_actions:
-            self.log_level_action_group.addAction(a)
         self.file_menu.addActions(
             (
                 self.new_action,
@@ -302,20 +261,24 @@ class Main(QMainWindow):
         self.save_action.triggered.connect(self.on_save_action)
         self.load_action.triggered.connect(self.on_load_action)
         self.new_action.triggered.connect(self.on_new_action)
-        self.error_level_action.triggered.connect(
+        self.log_level_menu.error_level_action.triggered.connect(
             lambda: self.config_log_level(logging.ERROR)
         )
-        self.warning_level_action.triggered.connect(
+        self.log_level_menu.warning_level_action.triggered.connect(
             lambda: self.config_log_level(logging.WARNING)
         )
-        self.info_level_action.triggered.connect(
+        self.log_level_menu.info_level_action.triggered.connect(
             lambda: self.config_log_level(logging.INFO)
         )
-        self.debug_level_action.triggered.connect(
+        self.log_level_menu.debug_level_action.triggered.connect(
             lambda: self.config_log_level(logging.DEBUG)
         )
-        self.english_action.triggered.connect(lambda: self.set_language("en_us"))
-        self.portuguese_action.triggered.connect(lambda: self.set_language("pt_br"))
+        self.language_menu.english_action.triggered.connect(
+            lambda: self.set_language("en_us")
+        )
+        self.language_menu.portuguese_action.triggered.connect(
+            lambda: self.set_language("pt_br")
+        )
         self.bot_thread.finished.connect(self.on_bot_thread_finished)
         self.bot_thread.bot_ready.connect(self.on_bot_ready)
         self.bot_thread.login_failure.connect(self.on_login_failure)
@@ -366,15 +329,6 @@ class Main(QMainWindow):
         groups = interactions.get("groups")
         groups[str(group_id)] = data
         self.on_save_action()
-
-    def __get_log_level_action(self, log_level: int):
-        log_level_actions = {
-            logging.DEBUG: self.debug_level_action,
-            logging.INFO: self.info_level_action,
-            logging.WARNING: self.warning_level_action,
-            logging.ERROR: self.error_level_action,
-        }
-        return log_level_actions[log_level]
 
     @staticmethod
     def config_log_level(level: int):
