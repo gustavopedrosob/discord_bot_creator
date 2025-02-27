@@ -6,7 +6,7 @@ import webbrowser
 from pathlib import Path
 
 from PySide6.QtCore import QCoreApplication
-from PySide6.QtGui import QIcon, QAction, Qt, QCloseEvent, QTextCursor
+from PySide6.QtGui import QIcon, QAction, Qt, QCloseEvent, QTextCursor, QActionGroup
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -52,6 +52,8 @@ class Main(QMainWindow):
         self.resize(1000, 800)
         self.setWindowIcon(QIcon("source/icons/window-icon.svg"))
 
+        language = config.get("language")
+        log_level = config.get("log_level")
         self.group_window = None
         self.message_window = None
         self.credits_window = CreditsWindow()
@@ -64,26 +66,41 @@ class Main(QMainWindow):
         self.edit_menu = QMenu(translate("MainWindow", "Edit"), self)
         self.help_menu = QMenu(translate("MainWindow", "Help"), self)
         self.language_menu = QMenu(translate("MainWindow", "Language"), self)
-        self.english_action = QAction("English", self)
-        self.portuguese_action = QAction("Portuguese", self)
-        language_actions = {
-            "en_us": self.english_action,
-            "pt_br": self.portuguese_action,
-        }
-        selected_language_action = language_actions[config.get("language")]
-        selected_language_action.setCheckable(True)
-        selected_language_action.setChecked(True)
-
+        self.language_action_group = QActionGroup(self)
+        self.language_action_group.setExclusive(True)
+        self.english_action = QAction(
+            "English", self, checked=language == "en_us", checkable=True
+        )
+        self.portuguese_action = QAction(
+            "Portuguese", self, checked=language == "pt_br", checkable=True
+        )
+        self.log_level_action_group = QActionGroup(self)
+        self.log_level_action_group.setExclusive(True)
         self.log_level_menu = QMenu(translate("MainWindow", "Log level"), self)
-        self.debug_level_action = QAction(translate("MainWindow", "Debug"), self)
-        self.info_level_action = QAction(translate("MainWindow", "Info"), self)
-        self.warning_level_action = QAction(translate("MainWindow", "Warning"), self)
-        self.error_level_action = QAction(translate("MainWindow", "Error"), self)
-
-        selected_log_level_action = self.__get_log_level_action(config.get("log_level"))
-        selected_log_level_action.setCheckable(True)
-        selected_log_level_action.setChecked(True)
-
+        self.debug_level_action = QAction(
+            translate("MainWindow", "Debug"),
+            self,
+            checked=log_level == logging.DEBUG,
+            checkable=True,
+        )
+        self.info_level_action = QAction(
+            translate("MainWindow", "Info"),
+            self,
+            checked=log_level == logging.INFO,
+            checkable=True,
+        )
+        self.warning_level_action = QAction(
+            translate("MainWindow", "Warning"),
+            self,
+            checked=log_level == logging.WARNING,
+            checkable=True,
+        )
+        self.error_level_action = QAction(
+            translate("MainWindow", "Error"),
+            self,
+            checked=log_level == logging.ERROR,
+            checkable=True,
+        )
         self.new_action = QAction(translate("MainWindow", "New file"), self)
         self.load_action = QAction(translate("MainWindow", "Load"), self)
         self.save_action = QAction(translate("MainWindow", "Save"), self)
@@ -159,16 +176,21 @@ class Main(QMainWindow):
         self.setMenuBar(self.menu_bar)
         for menu in (self.file_menu, self.config_menu, self.edit_menu, self.help_menu):
             self.menu_bar.addMenu(menu)
+        language_actions = (self.english_action, self.portuguese_action)
+        for a in language_actions:
+            self.language_action_group.addAction(a)
+        self.language_menu.addActions(language_actions)
         self.config_menu.addMenu(self.log_level_menu)
         self.config_menu.addMenu(self.language_menu)
-        self.log_level_menu.addActions(
-            (
-                self.debug_level_action,
-                self.info_level_action,
-                self.warning_level_action,
-                self.error_level_action,
-            )
+        log_level_actions = (
+            self.debug_level_action,
+            self.info_level_action,
+            self.warning_level_action,
+            self.error_level_action,
         )
+        self.log_level_menu.addActions(log_level_actions)
+        for a in log_level_actions:
+            self.log_level_action_group.addAction(a)
         self.file_menu.addActions(
             (
                 self.new_action,
@@ -200,7 +222,6 @@ class Main(QMainWindow):
                 self.messages_list_widget.remove_all_action,
             )
         )
-        self.language_menu.addActions((self.english_action, self.portuguese_action))
 
     def setup_layout(self):
         central_widget = QWidget()
@@ -355,16 +376,12 @@ class Main(QMainWindow):
         }
         return log_level_actions[log_level]
 
-    def config_log_level(self, level: int):
-        log_level_action = self.__get_log_level_action(config.get("log_level"))
-        log_level_action.setChecked(False)
+    @staticmethod
+    def config_log_level(level: int):
         logger.setLevel(level)
         logging.getLogger("bot").setLevel(level)
         config.set("log_level", level)
         config.save()
-        log_level_action = self.__get_log_level_action(level)
-        log_level_action.setCheckable(True)
-        log_level_action.setChecked(True)
 
     def quit_selected_group(self):
         if self.__is_selecting_group():
