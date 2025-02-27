@@ -36,6 +36,7 @@ from interfaces.credits.credits import CreditsWindow
 from interfaces.group.group import GroupWindow
 from interfaces.main.bot_thread import QBotThread
 from interfaces.main.log_handler import log_handler
+from interfaces.main.messages_list import QMessagesList
 from interfaces.newmessage.main import EditMessageWindow, NewMessageWindow
 
 
@@ -148,26 +149,6 @@ class Main(QMainWindow):
         discord_applications.triggered.connect(
             lambda: webbrowser.open("https://discord.com/developers/applications/")
         )
-        self.new_message_action = QAction(translate("MainWindow", "New message"), self)
-        self.new_message_action.triggered.connect(self.new_message)
-        self.new_message_action.setShortcut("Ctrl+N")
-        self.edit_message_action = QAction(
-            translate("MainWindow", "Edit message"), self
-        )
-        self.edit_message_action.triggered.connect(self.edit_selected_message)
-        self.edit_message_action.setShortcut("Ctrl+E")
-        self.remove_selected_message_action = QAction(
-            translate("MainWindow", "Remove message"), self
-        )
-        self.remove_selected_message_action.triggered.connect(
-            self.confirm_remove_selected_message
-        )
-        self.remove_selected_message_action.setShortcut("Delete")
-        self.remove_all_message_action = QAction(
-            translate("MainWindow", "Remove all messages"), self
-        )
-        self.remove_all_message_action.triggered.connect(self.confirm_remove_messages)
-        self.remove_all_message_action.setShortcut("Ctrl+Delete")
 
         self.config_group_action = QAction(
             translate("MainWindow", "Config group"), self
@@ -176,37 +157,6 @@ class Main(QMainWindow):
 
         self.quit_group_action = QAction(translate("MainWindow", "Quit group"), self)
         self.quit_group_action.triggered.connect(self.quit_selected_group)
-
-        self.log_level_menu.addActions(
-            (
-                self.debug_level_action,
-                self.info_level_action,
-                self.warning_level_action,
-                self.error_level_action,
-            )
-        )
-        file_menu.addActions(
-            (
-                new_action,
-                load_action,
-                save_action,
-                save_as_action,
-                exit_action,
-            )
-        )
-        self.addActions(
-            (
-                self.new_message_action,
-                self.edit_message_action,
-                self.remove_selected_message_action,
-                self.remove_all_message_action,
-            )
-        )
-        help_menu.addActions(
-            (discord_applications, credits_action, project_action, report_action)
-        )
-        edit_menu.addAction(self.new_message_action)
-        edit_menu.addAction(self.remove_all_message_action)
 
         # Central Widget and Layouts
         central_widget = QWidget()
@@ -302,12 +252,17 @@ class Main(QMainWindow):
         left_widget.addTab(messages_widget, translate("MainWindow", "Messages"))
         left_widget.addTab(groups_widget, translate("MainWindow", "Groups"))
 
-        self.messages_list_widget = QListWidget()
-        self.messages_list_widget.setContextMenuPolicy(
-            Qt.ContextMenuPolicy.CustomContextMenu
+        self.messages_list_widget = QMessagesList()
+
+        self.messages_list_widget.new_action.triggered.connect(self.new_message)
+        self.messages_list_widget.edit_action.triggered.connect(
+            self.edit_selected_message
         )
-        self.messages_list_widget.customContextMenuRequested.connect(
-            self.message_context_menu_event
+        self.messages_list_widget.remove_action.triggered.connect(
+            self.confirm_remove_selected_message
+        )
+        self.messages_list_widget.remove_all_action.triggered.connect(
+            self.confirm_remove_messages
         )
 
         new_message_button = QCustomButton(translate("MainWindow", "New"))
@@ -352,6 +307,37 @@ class Main(QMainWindow):
             config.set("file", "")
             config.save()
             self.set_window_title()
+
+        self.log_level_menu.addActions(
+            (
+                self.debug_level_action,
+                self.info_level_action,
+                self.warning_level_action,
+                self.error_level_action,
+            )
+        )
+        file_menu.addActions(
+            (
+                new_action,
+                load_action,
+                save_action,
+                save_as_action,
+                exit_action,
+            )
+        )
+        self.addActions(
+            (
+                self.messages_list_widget.new_action,
+                self.messages_list_widget.edit_action,
+                self.messages_list_widget.remove_action,
+                self.messages_list_widget.remove_all_action,
+            )
+        )
+        help_menu.addActions(
+            (discord_applications, credits_action, project_action, report_action)
+        )
+        edit_menu.addAction(self.messages_list_widget.new_action)
+        edit_menu.addAction(self.messages_list_widget.remove_all_action)
 
     def config_selected_group(self):
         if self.__is_selecting_group():
@@ -717,16 +703,6 @@ class Main(QMainWindow):
     def on_bot_thread_finished(self):
         self.turn_off_bot_button.setDisabled(False)
         self.update_bot_button()
-
-    def message_context_menu_event(self, position: QPoint):
-        context_menu = QMenu(self)
-        context_menu.addAction(self.new_message_action)
-        if self.__is_selecting_message():
-            context_menu.addActions(
-                (self.edit_message_action, self.remove_selected_message_action)
-            )
-        context_menu.addAction(self.remove_all_message_action)
-        context_menu.exec(self.messages_list_widget.mapToGlobal(position))
 
     def group_context_menu_event(self, position: QPoint):
         context_menu = QMenu(self)
