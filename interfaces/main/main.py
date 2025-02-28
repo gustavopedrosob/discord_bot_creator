@@ -2,11 +2,10 @@ import html
 import logging
 import os
 import typing
-import webbrowser
 from pathlib import Path
 
 from PySide6.QtCore import QCoreApplication
-from PySide6.QtGui import QIcon, QAction, Qt, QCloseEvent, QTextCursor, QActionGroup
+from PySide6.QtGui import QIcon, Qt, QCloseEvent, QTextCursor
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -34,7 +33,9 @@ from interfaces.classes.custom_button import QCustomButton
 from interfaces.credits.credits import CreditsWindow
 from interfaces.group.group import GroupWindow
 from interfaces.main.bot_thread import QBotThread
+from interfaces.main.file_menu import QFileMenu
 from interfaces.main.groups_list import QGroupsList
+from interfaces.main.help_menu import QHelpMenu
 from interfaces.main.language_menu import QLanguageMenu
 from interfaces.main.log_handler import log_handler
 from interfaces.main.log_level_menu import QLogLevelMenu
@@ -63,26 +64,15 @@ class Main(QMainWindow):
         log_handler.set_signal(self.bot_thread.log)
 
         self.menu_bar = QMenuBar(self)
-        self.file_menu = QMenu(translate("MainWindow", "File"), self)
+        self.file_menu = QFileMenu(translate("MainWindow", "File"), self)
         self.config_menu = QMenu(translate("MainWindow", "Config"), self)
         self.edit_menu = QMenu(translate("MainWindow", "Edit"), self)
-        self.help_menu = QMenu(translate("MainWindow", "Help"), self)
+        self.help_menu = QHelpMenu(translate("MainWindow", "Help"), self)
         self.language_menu = QLanguageMenu(
             translate("MainWindow", "Language"), self, language
         )
         self.log_level_menu = QLogLevelMenu(
             translate("MainWindow", "Log level"), self, log_level
-        )
-        self.new_action = QAction(translate("MainWindow", "New file"), self)
-        self.load_action = QAction(translate("MainWindow", "Load"), self)
-        self.save_action = QAction(translate("MainWindow", "Save"), self)
-        self.save_as_action = QAction(translate("MainWindow", "Save as"), self)
-        self.exit_action = QAction(translate("MainWindow", "Exit"), self)
-        self.credits_action = QAction(translate("MainWindow", "Credits"), self)
-        self.project_action = QAction(translate("MainWindow", "Project"), self)
-        self.report_action = QAction(translate("MainWindow", "Report bug"), self)
-        self.discord_applications = QAction(
-            translate("MainWindow", "Discord applications"), self
         )
 
         self.logs_text_edit = QTextEdit()
@@ -150,29 +140,12 @@ class Main(QMainWindow):
             self.menu_bar.addMenu(menu)
         self.config_menu.addMenu(self.log_level_menu)
         self.config_menu.addMenu(self.language_menu)
-        self.file_menu.addActions(
-            (
-                self.new_action,
-                self.load_action,
-                self.save_action,
-                self.save_as_action,
-                self.exit_action,
-            )
-        )
         self.addActions(
             (
                 self.messages_list_widget.new_action,
                 self.messages_list_widget.edit_action,
                 self.messages_list_widget.remove_action,
                 self.messages_list_widget.remove_all_action,
-            )
-        )
-        self.help_menu.addActions(
-            (
-                self.discord_applications,
-                self.credits_action,
-                self.project_action,
-                self.report_action,
             )
         )
         self.edit_menu.addActions(
@@ -242,37 +215,12 @@ class Main(QMainWindow):
         self.messages_list_widget.remove_all_action.triggered.connect(
             self.confirm_remove_messages
         )
-        self.discord_applications.triggered.connect(
-            lambda: webbrowser.open("https://discord.com/developers/applications/")
-        )
-        self.report_action.triggered.connect(
-            lambda: webbrowser.open(
-                "https://github.com/gustavopedrosob/bot_discord_easy_creator/issues/new"
-            )
-        )
-        self.project_action.triggered.connect(
-            lambda: webbrowser.open(
-                "https://github.com/gustavopedrosob/bot_discord_easy_creator"
-            )
-        )
-        self.credits_action.triggered.connect(self.credits_window.window.show)
-        self.exit_action.triggered.connect(self.close)
-        self.save_as_action.triggered.connect(self.on_save_as_action)
-        self.save_action.triggered.connect(self.on_save_action)
-        self.load_action.triggered.connect(self.on_load_action)
-        self.new_action.triggered.connect(self.on_new_action)
-        self.log_level_menu.error_level_action.triggered.connect(
-            lambda: self.config_log_level(logging.ERROR)
-        )
-        self.log_level_menu.warning_level_action.triggered.connect(
-            lambda: self.config_log_level(logging.WARNING)
-        )
-        self.log_level_menu.info_level_action.triggered.connect(
-            lambda: self.config_log_level(logging.INFO)
-        )
-        self.log_level_menu.debug_level_action.triggered.connect(
-            lambda: self.config_log_level(logging.DEBUG)
-        )
+        self.help_menu.credits_action.triggered.connect(self.credits_window.window.show)
+        self.file_menu.exit_action.triggered.connect(self.close)
+        self.file_menu.save_as_action.triggered.connect(self.on_save_as_action)
+        self.file_menu.save_action.triggered.connect(self.on_save_action)
+        self.file_menu.load_action.triggered.connect(self.on_load_action)
+        self.file_menu.new_action.triggered.connect(self.on_new_action)
         self.language_menu.english_action.triggered.connect(
             lambda: self.set_language("en_us")
         )
@@ -329,13 +277,6 @@ class Main(QMainWindow):
         groups = interactions.get("groups")
         groups[str(group_id)] = data
         self.on_save_action()
-
-    @staticmethod
-    def config_log_level(level: int):
-        logger.setLevel(level)
-        logging.getLogger("bot").setLevel(level)
-        config.set("log_level", level)
-        config.save()
 
     def quit_selected_group(self):
         if self.__is_selecting_group():

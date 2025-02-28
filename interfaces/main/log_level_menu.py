@@ -4,6 +4,8 @@ from PySide6.QtCore import QCoreApplication
 from PySide6.QtGui import QAction, QActionGroup
 from PySide6.QtWidgets import QWidget, QMenu
 
+from core.functions import config_log_level
+
 translate = QCoreApplication.translate
 
 
@@ -40,6 +42,7 @@ class QLogLevelMenu(QMenu):
         )
 
         self.setup_actions()
+        self.setup_binds()
 
     def setup_actions(self):
         log_level_actions = (
@@ -51,3 +54,15 @@ class QLogLevelMenu(QMenu):
         self.addActions(log_level_actions)
         for a in log_level_actions:
             self.action_group.addAction(a)
+
+    def setup_binds(self):
+        self.error_level_action.triggered.connect(
+            lambda: config_log_level(logging.ERROR)
+        )
+        self.warning_level_action.triggered.connect(
+            lambda: config_log_level(logging.WARNING)
+        )
+        self.info_level_action.triggered.connect(lambda: config_log_level(logging.INFO))
+        self.debug_level_action.triggered.connect(
+            lambda: config_log_level(logging.DEBUG)
+        )
