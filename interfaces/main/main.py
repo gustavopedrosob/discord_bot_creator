@@ -12,8 +12,6 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QTextEdit,
     QLabel,
-    QMenuBar,
-    QMenu,
     QComboBox,
     QMessageBox,
     QListWidgetItem,
@@ -33,12 +31,9 @@ from interfaces.classes.custom_button import QCustomButton
 from interfaces.credits.credits import CreditsWindow
 from interfaces.group.group import GroupWindow
 from interfaces.main.bot_thread import QBotThread
-from interfaces.main.file_menu import QFileMenu
 from interfaces.main.groups_list import QGroupsList
-from interfaces.main.help_menu import QHelpMenu
-from interfaces.main.language_menu import QLanguageMenu
 from interfaces.main.log_handler import log_handler
-from interfaces.main.log_level_menu import QLogLevelMenu
+from interfaces.main.menu_bar import MenuBar
 from interfaces.main.messages_list import QMessagesList
 from interfaces.messages.messages import EditMessageWindow, NewMessageWindow
 
@@ -55,25 +50,12 @@ class Main(QMainWindow):
         self.resize(1000, 800)
         self.setWindowIcon(QIcon("source/icons/window-icon.svg"))
 
-        language = config.get("language")
-        log_level = config.get("log_level")
         self.group_window = None
         self.message_window = None
         self.credits_window = CreditsWindow()
         self.bot_thread = QBotThread()
+        self.menu_bar = MenuBar(self)
         log_handler.set_signal(self.bot_thread.log)
-
-        self.menu_bar = QMenuBar(self)
-        self.file_menu = QFileMenu(translate("MainWindow", "File"), self)
-        self.config_menu = QMenu(translate("MainWindow", "Config"), self)
-        self.edit_menu = QMenu(translate("MainWindow", "Edit"), self)
-        self.help_menu = QHelpMenu(translate("MainWindow", "Help"), self)
-        self.language_menu = QLanguageMenu(
-            translate("MainWindow", "Language"), self, language
-        )
-        self.log_level_menu = QLogLevelMenu(
-            translate("MainWindow", "Log level"), self, log_level
-        )
 
         self.logs_text_edit = QTextEdit()
         self.logs_text_edit.setPlaceholderText(
@@ -136,10 +118,6 @@ class Main(QMainWindow):
 
     def setup_menus(self):
         self.setMenuBar(self.menu_bar)
-        for menu in (self.file_menu, self.config_menu, self.edit_menu, self.help_menu):
-            self.menu_bar.addMenu(menu)
-        self.config_menu.addMenu(self.log_level_menu)
-        self.config_menu.addMenu(self.language_menu)
         self.addActions(
             (
                 self.messages_list_widget.new_action,
@@ -148,7 +126,7 @@ class Main(QMainWindow):
                 self.messages_list_widget.remove_all_action,
             )
         )
-        self.edit_menu.addActions(
+        self.menu_bar.edit.addActions(
             (
                 self.messages_list_widget.new_action,
                 self.messages_list_widget.remove_all_action,
@@ -215,16 +193,16 @@ class Main(QMainWindow):
         self.messages_list_widget.remove_all_action.triggered.connect(
             self.confirm_remove_messages
         )
-        self.help_menu.credits_action.triggered.connect(self.credits_window.window.show)
-        self.file_menu.exit_action.triggered.connect(self.close)
-        self.file_menu.save_as_action.triggered.connect(self.on_save_as_action)
-        self.file_menu.save_action.triggered.connect(self.on_save_action)
-        self.file_menu.load_action.triggered.connect(self.on_load_action)
-        self.file_menu.new_action.triggered.connect(self.on_new_action)
-        self.language_menu.english_action.triggered.connect(
+        self.menu_bar.help.credits.triggered.connect(self.credits_window.window.show)
+        self.menu_bar.file.exit.triggered.connect(self.close)
+        self.menu_bar.file.save_as.triggered.connect(self.on_save_as_action)
+        self.menu_bar.file.save.triggered.connect(self.on_save_action)
+        self.menu_bar.file.load.triggered.connect(self.on_load_action)
+        self.menu_bar.file.new.triggered.connect(self.on_new_action)
+        self.menu_bar.config.language.english.triggered.connect(
             lambda: self.set_language("en_us")
         )
-        self.language_menu.portuguese_action.triggered.connect(
+        self.menu_bar.config.language.portuguese.triggered.connect(
             lambda: self.set_language("pt_br")
         )
         self.bot_thread.finished.connect(self.on_bot_thread_finished)

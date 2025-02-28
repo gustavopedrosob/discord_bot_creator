@@ -10,9 +10,9 @@ translate = QCoreApplication.translate
 class QHelpMenu(QMenu):
     def __init__(self, text: str, parent: QWidget):
         super().__init__(text, parent)
-        self.credits_action = QAction(translate("MainWindow", "Credits"), self)
-        self.project_action = QAction(translate("MainWindow", "Project"), self)
-        self.report_action = QAction(translate("MainWindow", "Report bug"), self)
+        self.credits = QAction(translate("MainWindow", "Credits"), self)
+        self.project = QAction(translate("MainWindow", "Project"), self)
+        self.report = QAction(translate("MainWindow", "Report bug"), self)
         self.discord_applications = QAction(
             translate("MainWindow", "Discord applications"), self
         )
@@ -24,9 +24,9 @@ class QHelpMenu(QMenu):
         self.addActions(
             (
                 self.discord_applications,
-                self.credits_action,
-                self.project_action,
-                self.report_action,
+                self.credits,
+                self.project,
+                self.report,
             )
         )
 
@@ -34,12 +34,12 @@ class QHelpMenu(QMenu):
         self.discord_applications.triggered.connect(
             lambda: webbrowser.open("https://discord.com/developers/applications/")
         )
-        self.report_action.triggered.connect(
+        self.report.triggered.connect(
             lambda: webbrowser.open(
                 "https://github.com/gustavopedrosob/bot_discord_easy_creator/issues/new"
             )
         )
-        self.project_action.triggered.connect(
+        self.project.triggered.connect(
             lambda: webbrowser.open(
                 "https://github.com/gustavopedrosob/bot_discord_easy_creator"
             )

@@ -4,15 +4,17 @@ from PySide6.QtCore import QCoreApplication
 from PySide6.QtGui import QAction, QActionGroup
 from PySide6.QtWidgets import QWidget, QMenu
 
+from core.config import instance as config
 from core.functions import config_log_level
 
 translate = QCoreApplication.translate
 
 
 class QLogLevelMenu(QMenu):
-    def __init__(self, text: str, parent: QWidget, log_level: int):
+    def __init__(self, text: str, parent: QWidget):
         super().__init__(text, parent)
 
+        log_level = config.get("log_level")
         self.action_group = QActionGroup(self)
         self.action_group.setExclusive(True)
 
