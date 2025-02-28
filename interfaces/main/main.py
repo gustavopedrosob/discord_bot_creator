@@ -222,8 +222,9 @@ class Main(QMainWindow):
         self.cmd_combobox.lineEdit().returnPressed.connect(self.entry_command)
 
     def config_selected_group(self):
-        if self.__is_selecting_group():
-            selected_group_id = self.__get_selected_group_user_data()
+        if bool(self.groups_list_widget.selectedIndexes()):
+            group_item = self.groups_list_widget.selectedItems()[0]
+            selected_group_id = group_item.data(Qt.ItemDataRole.UserRole)
             groups = interactions.get("groups")
             group = self.bot_thread.groups()[selected_group_id]
             group_interaction = groups.get(str(selected_group_id))
@@ -239,7 +240,7 @@ class Main(QMainWindow):
                 welcome_message = group_interaction["welcome_message"]
 
             self.group_window = GroupWindow(
-                self.__get_selected_group_text(),
+                group_item.text(),
                 group.text_channels,
                 group.voice_channels,
                 welcome_message_channel,
@@ -257,11 +258,11 @@ class Main(QMainWindow):
         self.on_save_action()
 
     def quit_selected_group(self):
-        if self.__is_selecting_group():
-            selected_group = self.__get_selected_group()
-            item = self.groups_list_widget.item(selected_group)
+        selection = self.groups_list_widget.selectedIndexes()
+        if bool(selection):
+            item = self.groups_list_widget.item(selection[0].row())
             group_id = item.data(Qt.ItemDataRole.UserRole)
-            self.groups_list_widget.takeItem(selected_group)
+            self.groups_list_widget.takeItem(selection[0].row())
             self.bot_thread.leave_group(group_id)
 
     def update_groups(self):
@@ -411,8 +412,8 @@ class Main(QMainWindow):
 
     def edit_selected_message(self):
         """Opens the NewMessage interface and loads saved information."""
-        if self.__is_selecting_message():
-            selected_message = self.__get_selected_message_text()
+        if bool(self.messages_list_widget.selectedIndexes()):
+            selected_message = self.messages_list_widget.selectedItems()[0].text()
             self.message_window = EditMessageWindow(
                 self, selected_message, interactions.get("messages")[selected_message]
             )
@@ -442,55 +443,28 @@ class Main(QMainWindow):
         messages[message_name] = message_data
         self.messages_list_widget.addItem(message_name)
 
-    def __get_selected_message(self) -> int:
-        return self.messages_list_widget.selectedIndexes()[0].row()
-
-    def __get_selected_group(self) -> int:
-        return self.groups_list_widget.selectedIndexes()[0].row()
-
-    def __get_selected_group_user_data(self) -> int:
-        return self.groups_list_widget.selectedIndexes()[0].data(
-            Qt.ItemDataRole.UserRole
-        )
-
-    def __get_list_item_message(self, message: str) -> QListWidgetItem:
-        return self.messages_list_widget.item(
-            next(
-                filter(
-                    lambda i: self.messages_list_widget.item(i).text() == message,
-                    range(self.messages_list_widget.count()),
-                )
-            )
-        )
+    def __get_list_item_message(self, message: str) -> typing.Optional[QListWidgetItem]:
+        for i in self.messages_list_widget.selectedItems():
+            if i.text() == message:
+                return i
 
     def update_bot_button(self):
         on = self.bot_thread.isRunning()
         self.turn_on_bot_button.setHidden(on)
         self.turn_off_bot_button.setHidden(not on)
 
-    def __get_selected_message_text(self) -> str:
-        return self.messages_list_widget.selectedItems()[0].text()
-
-    def __get_selected_group_text(self) -> str:
-        return self.groups_list_widget.selectedItems()[0].text()
-
-    def __is_selecting_message(self) -> bool:
-        return bool(self.messages_list_widget.selectedIndexes())
-
-    def __is_selecting_group(self) -> bool:
-        return bool(self.groups_list_widget.selectedIndexes())
-
     def remove_selected_message(self):
         """Removes the selected message from the messages list and deletes it from "message and reply.json"."""
-        selected_row = self.__get_selected_message()
-        selected_message = self.__get_selected_message_text()
-        self.messages_list_widget.takeItem(selected_row)
-        messages = interactions.get("messages")
-        messages.pop(selected_message)
+        message_indexes = self.messages_list_widget.selectedIndexes()
+        if message_indexes:
+            row = message_indexes[0].row()
+            self.messages_list_widget.takeItem(row)
+            messages = interactions.get("messages")
+            messages.pop(self.messages_list_widget.item(row).text())
 
     def confirm_remove_selected_message(self):
         """Asks the user if they want to remove the selected message."""
-        if self.__is_selecting_message():
+        if bool(self.messages_list_widget.selectedIndexes()):
             self.confirm_message_box(
                 translate("MainWindow", "Remove message"),
                 translate(
