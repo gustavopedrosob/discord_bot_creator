@@ -1,4 +1,5 @@
 import typing
+from functools import partial
 
 from PySide6.QtCore import (
     Qt,
@@ -25,12 +26,14 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QTextEdit,
     QListWidgetItem,
+    QCheckBox,
 )
 from emojis import emojis
 from emojis.db import Emoji
 from extra_qwidgets.utils import get_awesome_icon, colorize_icon
 from extra_qwidgets.widgets import QThemeResponsiveButton
 from extra_qwidgets.widgets.checkbox_group import QCheckBoxGroup
+from extra_qwidgets.widgets.checkboxes import QCheckBoxes
 from extra_qwidgets.widgets.collapse_group import QCollapseGroup
 from extra_qwidgets.widgets.color_button import QColorButton
 from extra_qwidgets.widgets.emoji_picker.emoji_validator import QEmojiValidator
@@ -203,47 +206,43 @@ class MessageWindow:
         left_layout.setSpacing(0)
         left_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.group_pin_or_del = QCheckBoxGroup(
+        self.group_pin_or_del = QCheckBoxes(
             QLabel(translate("MessageWindow", "Action"))
         )
-        self.group_pin_or_del.add_checkbox(
-            "pin", QCustomCheckBox(translate("MessageWindow", "Pin"))
-        )
-        del_checkbox = QCustomCheckBox(translate("MessageWindow", "Delete"))
+        del_checkbox = QCustomCheckBox("delete", translate("MessageWindow", "Delete"))
         del_checkbox.checkStateChanged.connect(self.__del_checked)
-        self.group_pin_or_del.add_checkbox("delete", del_checkbox)
+        self.group_pin_or_del.add_checkboxes(
+            QCustomCheckBox("pin", translate("MessageWindow", "Pin")), del_checkbox
+        )
         right_layout.addWidget(self.group_pin_or_del)
 
-        self.group_kick_or_ban = QCheckBoxGroup(
+        self.group_kick_or_ban = QCheckBoxes(
             QLabel(translate("MessageWindow", "Penalty"))
         )
-        self.group_kick_or_ban.add_checkbox(
-            "kick", QCustomCheckBox(translate("MessageWindow", "Kick"))
-        )
-        self.group_kick_or_ban.add_checkbox(
-            "ban", QCustomCheckBox(translate("MessageWindow", "Ban"))
+        self.group_kick_or_ban.add_checkboxes(
+            QCustomCheckBox("kick", translate("MessageWindow", "Kick")),
+            QCustomCheckBox("ban", translate("MessageWindow", "Ban")),
         )
         right_layout.addWidget(self.group_kick_or_ban)
 
-        self.group_where_reply = QCheckBoxGroup(
+        self.group_where_reply = QCheckBoxes(
             QLabel(translate("MessageWindow", "Where reply"))
         )
-        self.group_where_reply.add_checkbox(
-            "group", QCustomCheckBox(translate("MessageWindow", "Group"))
-        )
-        self.group_where_reply.add_checkbox(
-            "private", QCustomCheckBox(translate("MessageWindow", "Private"))
+        self.group_where_reply.add_checkboxes(
+            QCustomCheckBox("group", translate("MessageWindow", "Group")),
+            QCustomCheckBox("private", translate("MessageWindow", "Private")),
         )
         right_layout.addWidget(self.group_where_reply)
 
-        self.group_where_react = QCheckBoxGroup(
+        self.group_where_react = QCheckBoxes(
             QLabel(translate("MessageWindow", "Where react"))
         )
-        author_checkbox = QCustomCheckBox(translate("MessageWindow", "Author"))
+        author_checkbox = QCustomCheckBox(
+            "author", translate("MessageWindow", "Author")
+        )
         author_checkbox.checkStateChanged.connect(self.__author_checked)
-        self.group_where_react.add_checkbox("author", author_checkbox)
-        self.group_where_react.add_checkbox(
-            "bot", QCustomCheckBox(translate("MessageWindow", "Bot"))
+        self.group_where_react.add_checkboxes(
+            author_checkbox, QCustomCheckBox("bot", translate("MessageWindow", "Bot"))
         )
         right_layout.addWidget(self.group_where_react)
 
@@ -378,11 +377,11 @@ class MessageWindow:
         return self.name_entry.text()
 
     def __del_checked(self, check_state: int):
-        author_checkbox = self.group_where_react.get_checkbox("author")
+        author_checkbox = self.group_where_react.findChild(QCheckBox, "author")
         author_checkbox.setDisabled(check_state == Qt.CheckState.Checked)
 
     def __author_checked(self, check_state: int):
-        del_checkbox = self.group_pin_or_del.get_checkbox("delete")
+        del_checkbox = self.group_pin_or_del.findChild(QCheckBox, "delete")
         del_checkbox.setDisabled(check_state == Qt.CheckState.Checked)
 
     @staticmethod
@@ -408,10 +407,10 @@ class MessageWindow:
             map(lambda reactions: list(emojis.get(reactions)), reactions_list)
         )
         result["conditions"] = self.listbox_conditions.get_items_userdata()
-        result["pin or del"] = self.group_pin_or_del.get_current_name()
-        result["kick or ban"] = self.group_kick_or_ban.get_current_name()
-        result["where reply"] = self.group_where_reply.get_current_name()
-        result["where reaction"] = self.group_where_react.get_current_name()
+        result["pin or del"] = self.group_pin_or_del.get_checked_name()
+        result["kick or ban"] = self.group_kick_or_ban.get_checked_name()
+        result["where reply"] = self.group_where_reply.get_checked_name()
+        result["where reaction"] = self.group_where_react.get_checked_name()
         result["delay"] = self.delay.value()
 
         return result
@@ -434,22 +433,24 @@ class EditMessageWindow(MessageWindow):
         for condition in data["conditions"]:
             self._add_condition(condition)
 
-        pin_or_del = self.group_pin_or_del.get_checkbox(data["pin or del"])
-        if pin_or_del:
+        pin_or_del = self.group_pin_or_del.findChild(QCheckBox, data["pin or del"])
+        if pin_or_del and data["pin or del"]:
             pin_or_del.setChecked(True)
 
         self.delay.setValue(data["delay"])
 
-        kick_or_ban = self.group_kick_or_ban.get_checkbox(data["kick or ban"])
-        if kick_or_ban:
+        kick_or_ban = self.group_kick_or_ban.findChild(QCheckBox, data["kick or ban"])
+        if kick_or_ban and data["kick or ban"]:
             kick_or_ban.setChecked(True)
 
-        where_reply = self.group_where_reply.get_checkbox(data["where reply"])
-        if where_reply:
+        where_reply = self.group_where_reply.findChild(QCheckBox, data["where reply"])
+        if where_reply and data["where reply"]:
             where_reply.setChecked(True)
 
-        where_reaction = self.group_where_react.get_checkbox(data["where reaction"])
-        if where_reaction:
+        where_reaction = self.group_where_react.findChild(
+            QCheckBox, data["where reaction"]
+        )
+        if where_reaction and data["where reaction"]:
             where_reaction.setChecked(True)
 
     def is_name_valid(self) -> bool:
