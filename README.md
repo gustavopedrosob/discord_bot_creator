@@ -2,11 +2,11 @@
   <img src="source/icons/icon.svg" alt="Logo">
 </p>
 
-# Bot Discord Easy Creator
+# Discord Bot Creator
 
 ## Sobre:
 
-**Bot Discord Easy Creator**, é um software gratuito para criação de bots no Discord, com interface interativa capaz
+**Discord Bot Creator**, é um software gratuito para criação de bots no Discord, com interface interativa capaz
 de executar o bot.
 
 ## Como iniciar:

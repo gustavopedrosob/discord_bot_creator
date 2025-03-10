@@ -297,9 +297,9 @@ class Main(QMainWindow):
         )
 
     def set_window_title(self, file: typing.Optional[Path] = None):
-        title = "Bot Discord Easy Creator"
+        title = "Discord Bot Creator"
         if file and file.exists():
-            title = f"Bot Discord Easy Creator - {file.name}"
+            title = f"Discord Bot Creator - {file.name}"
         self.setWindowTitle(title)
 
     def on_new_action(self):

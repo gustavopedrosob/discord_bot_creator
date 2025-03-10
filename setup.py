@@ -1,9 +1,9 @@
 from cx_Freeze import setup, Executable
 
 setup(
-    name="Bot Discord Easy Creator",
-    version="1.0",
-    description="Um software para o desenvolvimento de bot no Discord.",
+    name="Discord Bot Creator",
+    version="1.0.1",
+    description="Discord Bot Creator",
     options={
         "build_exe": {
             "include_files": [
