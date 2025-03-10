@@ -2,7 +2,6 @@ import asyncio
 import logging
 import random
 import typing
-from typing import Any, Coroutine
 
 import discord
 from PySide6.QtCore import QTranslator, QCoreApplication
