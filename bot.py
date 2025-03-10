@@ -2,10 +2,11 @@ import asyncio
 import logging
 import random
 import typing
+from typing import Any, Coroutine
 
 import discord
 from PySide6.QtCore import QTranslator, QCoreApplication
-from discord import Intents, Client
+from discord import Intents, Client, Message
 from discord.abc import Messageable
 
 from core.config import instance as config
@@ -132,8 +133,8 @@ class Bot(Client):
                         'Replying on group "{}" to the message "{}" by the author {}.',
                     ).format(reply, message.clean_content, message.author)
                 )
-                reply_message = await message.channel.send(reply)
-                if where_reaction == "bot":
+                reply_message = await self.send_message(message.channel, reply)
+                if where_reaction == "bot" and reply_message:
                     await self.send_reaction(reactions, reply_message)
             elif where == "private":
                 logger.info(
@@ -143,9 +144,26 @@ class Bot(Client):
                     ).format(reply, message.clean_content, message.author)
                 )
                 dm_channel = await message.author.create_dm()
-                reply_message = await dm_channel.send(reply)
-                if where_reaction == "bot":
+                reply_message = await self.send_message(dm_channel, reply)
+                if where_reaction == "bot" and reply_message:
                     await self.send_reaction(reactions, reply_message)
+
+    @staticmethod
+    async def send_message(
+        channel: discord.abc.Messageable, message: str
+    ) -> Message | None:
+        try:
+            reply = await channel.send(message)
+        except discord.errors.HTTPException as exception:
+            if exception.code == 50035 and exception.status == 400:
+                logger.error(
+                    translate(
+                        "Bot",
+                        "Content must be 2000 or fewer in length.",
+                    ).format(message, channel)
+                )
+        else:
+            return reply
 
     @staticmethod
     async def remove_message(message: discord.Message):

@@ -12,5 +12,5 @@ setup(
             ],
         }
     },
-    executables=[Executable("main.py", icon="logo.ico")],
+    executables=[Executable("main.py", base="Win32GUI", icon="logo.ico")],
 )
