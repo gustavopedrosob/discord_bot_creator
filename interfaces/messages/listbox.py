@@ -63,6 +63,7 @@ class QListBox(QScrollArea):
         ]
 
     def add_item(self, *args):
+        # noinspection PyArgumentList
         self.__list.addItem(*args)
 
     def add_items(self, items: typing.List[str]):

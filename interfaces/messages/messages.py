@@ -1,5 +1,4 @@
 import typing
-from functools import partial
 
 from PySide6.QtCore import (
     Qt,
@@ -32,7 +31,6 @@ from emojis import emojis
 from emojis.db import Emoji
 from extra_qwidgets.utils import get_awesome_icon, colorize_icon
 from extra_qwidgets.widgets import QThemeResponsiveButton
-from extra_qwidgets.widgets.checkbox_group import QCheckBoxGroup
 from extra_qwidgets.widgets.checkboxes import QCheckBoxes
 from extra_qwidgets.widgets.collapse_group import QCollapseGroup
 from extra_qwidgets.widgets.color_button import QColorButton
@@ -44,7 +42,6 @@ from interfaces.classes.custom_button import QCustomButton
 from interfaces.classes.custom_checkbox import QCustomCheckBox
 from interfaces.classes.emoji_picker import QEmojiPickerPopup
 from interfaces.messages.listbox import QListBox
-
 
 translate = QCoreApplication.translate
 

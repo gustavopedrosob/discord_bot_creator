@@ -22,8 +22,10 @@ class MessageConditions:
         not_mention_everyone = not mention_everyone
         author_is_bot = message.author.bot
         not_author_is_bot = not author_is_bot
+        # noinspection PyTypeChecker
         number_in_message = has_number(message.clean_content)
         not_number_in_message = not number_in_message
+        # noinspection PyTypeChecker
         symbols_in_message = has_symbols(message.clean_content)
         not_symbols_in_message = not symbols_in_message
         emojis_in_message = emojis.count(message.clean_content)

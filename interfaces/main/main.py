@@ -219,6 +219,7 @@ class Main(QMainWindow):
         self.config_group_button.clicked.connect(self.config_selected_group)
         self.quit_group_button.clicked.connect(self.quit_selected_group)
         self.token_widget.line_edit.textEdited.connect(self.update_token)
+        # noinspection PyUnresolvedReferences
         self.cmd_combobox.lineEdit().returnPressed.connect(self.entry_command)
 
     def config_selected_group(self):

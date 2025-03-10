@@ -1,8 +1,6 @@
 import logging
 import re
 from datetime import datetime
-from PySide6.QtCore import QSettings
-from PySide6.QtGui import QPixmap, Qt, QPainter, QColor, QIcon
 
 from core.config import instance as config
 

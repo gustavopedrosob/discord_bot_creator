@@ -1,14 +1,7 @@
-from typing import Sequence
-
 import discord
 from PySide6.QtCore import Signal, QThread
 from discord import (
     LoginFailure,
-    VoiceChannel,
-    StageChannel,
-    ForumChannel,
-    TextChannel,
-    CategoryChannel,
 )
 
 from bot import IntegratedBot

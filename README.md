@@ -122,7 +122,7 @@ pyside6-lupdate -extensions py .venv/Lib/site-packages/extra_qwidgets ./interfac
 pyside6-lupdate -extensions py .venv/Lib/site-packages/extra_qwidgets ./interfaces bot.py -ts translations/en_us.ts
 ```
 
-Agora abra o arquivo .ts gerado e traduza cada widget, após isso, compile o arquivo .ts para .qm com o comando:
+Agora abra o arquivo .ts gerado e traduza cada widget, após isso, compile o arquivo com o comando:
 
 ```bash
 pyside6-lrelease translations/pt_br.ts -qm translations/build/pt_br.qm
