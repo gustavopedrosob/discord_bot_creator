@@ -15,13 +15,7 @@ de executar o bot.
 
 ##### Linguagens:
 
-* [Python 3.12.6](https://www.python.org/downloads/release/python-3126/)
-
-##### Bibliotecas Python:
-
-* [discord.py](https://pypi.org/project/discord.py/) - 2.4.0
-* [emojis](https://pypi.org/project/emojis/) - 0.7.0
-* [PySide6](https://pypi.org/project/PySide6/) - 6.8.1.1
+* [Python 3.13.2](https://www.python.org/downloads/release/python-3132/)
 
 #### Instalação:
 
@@ -38,7 +32,7 @@ Esse processo pode ser realizado a partir da interface.
 Para iniciar a interface do bot, digite no cmd:
 
 ```bash
-python messages.py
+python main.py
 ```
 
 ### 3º Passo: Inserindo o token
