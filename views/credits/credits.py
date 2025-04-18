@@ -3,7 +3,7 @@ from PySide6.QtGui import QIcon, QPixmap, Qt
 from PySide6.QtWidgets import QDialog, QLabel, QVBoxLayout
 
 
-class CreditsWindow:
+class CreditsView:
     def __init__(self):
         self.window = QDialog()
         self.window.setWindowTitle(QCoreApplication.translate("MainWindow", "Credits"))

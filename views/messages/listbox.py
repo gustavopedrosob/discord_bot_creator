@@ -69,6 +69,13 @@ class QListBox(QScrollArea):
     def add_items(self, items: typing.List[str]):
         self.__list.addItems(items)
 
+    def reset(self):
+        if isinstance(self.__line_edit, QComboBox):
+            self.__line_edit.setCurrentIndex(0)
+        else:
+            self.__line_edit.setText("")
+        self.__list.clear()
+
     def entry_layout(self) -> QHBoxLayout:
         return self.__horizontal_layout
 

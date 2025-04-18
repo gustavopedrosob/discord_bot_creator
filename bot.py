@@ -10,7 +10,7 @@ from discord.abc import Messageable
 
 from core.config import instance as config
 from core.interactions import interactions
-from interfaces.main.log_handler import log_handler
+from views.main.log_handler import log_handler
 from interpreter.conditions import MessageConditions
 from interpreter.variable import Variable
 
@@ -161,6 +161,8 @@ class Bot(Client):
                         "Content must be 2000 or fewer in length.",
                     ).format(message, channel)
                 )
+                return None
+            return None
         else:
             return reply
 
