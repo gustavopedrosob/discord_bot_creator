@@ -35,7 +35,9 @@ class VoiceChannelItem(QStandardItem):
 class GroupView:
     def __init__(self):
         self.window = QDialog()
-        self.window.setWindowFlags(self.window.windowFlags() | Qt.WindowType.WindowMaximizeButtonHint)
+        self.window.setWindowFlags(
+            self.window.windowFlags() | Qt.WindowType.WindowMaximizeButtonHint
+        )
         self.window.setWindowIcon(QIcon("source/icons/window-icon.svg"))
         self.window.setMinimumSize(800, 600)
         self.window.resize(1000, 800)

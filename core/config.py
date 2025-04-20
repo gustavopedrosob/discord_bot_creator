@@ -13,7 +13,7 @@ class Config:
             self.__content = {
                 "token": "",
                 "language": "en_us",
-                "file": "source/message and reply.json",
+                "database": ":memory:",
                 "log_level": logging.INFO,
             }
             self.save()

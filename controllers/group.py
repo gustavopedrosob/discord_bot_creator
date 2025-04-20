@@ -1,18 +1,19 @@
 import typing
-
 from PySide6.QtCore import Qt, QCoreApplication
-from discord import TextChannel, VoiceChannel
-
-from core.interactions import interactions
+from discord import Guild
+from core.database import Database
+from models.group import Group
 from views.group.group import GroupView, TextChannelItem, VoiceChannelItem
 
 translate = QCoreApplication.translate
 
+
 class GroupController:
-    def __init__(self):
+    def __init__(self, database: Database):
         self.view = GroupView()
-        self.welcome_message_channel = None
-        self.group_id = None
+        self.database = database
+        self.group: typing.Optional[Group] = None
+        self.discord_group: typing.Optional[Guild] = None
         self.setup_binds()
 
     def setup_binds(self):
@@ -31,11 +32,13 @@ class GroupController:
             selected = self.view.channels_model.itemFromIndex(selection[0])
             if selected not in (self.view.text_item, self.view.voice_item):
                 self.update_welcome_message_channel(selected.text())
-                self.welcome_message_channel = selected.data(Qt.ItemDataRole.UserRole)
+                self.group.welcome_message_channel = selected.data(
+                    Qt.ItemDataRole.UserRole
+                )
 
     def unselect_welcome_message_channel(self):
         self.update_welcome_message_channel(translate("GroupWindow", "Undefined"))
-        self.welcome_message_channel = None
+        self.group.welcome_message_channel = None
 
     def update_welcome_message_channel(self, welcome_message_channel: str):
         self.view.welcome_message_channel_label.setText(
@@ -44,54 +47,67 @@ class GroupController:
             )
         )
 
-    def update_channels(
-        self, text_channels: list[TextChannel], voice_channels: list[VoiceChannel]
-    ):
+    def _get_welcome_message_channel(self):
+        return self.discord_group.get_channel(self.group.welcome_message_channel)
+
+    def update_channels(self, group: Guild):
         self.view.channels_model.clear()
         self.view.channels_model.setHorizontalHeaderLabels(
             [translate("GroupWindow", "Channels")]
         )
-        self.view.text_item.appendRows([TextChannelItem(tc) for tc in text_channels])
+        self.view.text_item.appendRows(
+            [TextChannelItem(tc) for tc in group.text_channels]
+        )
         self.view.channels_model.appendRow(self.view.text_item)
-        self.view.voice_item.appendRows([VoiceChannelItem(vc) for vc in voice_channels])
+        self.view.voice_item.appendRows(
+            [VoiceChannelItem(vc) for vc in group.voice_channels]
+        )
         self.view.channels_model.appendRow(self.view.voice_item)
         self.view.channels_treeview.expandAll()
 
-    def get_data(self) -> dict:
-        return dict(
+    def get_data(self) -> Group:
+        welcome_message_channel = self._get_welcome_message_channel()
+        return Group(
+            id=self.discord_group.id,
             welcome_message=self.view.welcome_message_textedit.toPlainText(),
-            welcome_message_channel=self.welcome_message_channel,
+            welcome_message_channel=(
+                welcome_message_channel.id if welcome_message_channel else None
+            ),
         )
 
     def save_group(self):
-        data = self.get_data()
-        groups = interactions.get("groups")
-        groups[str(self.group_id)] = data
+        session = self.database.get_session()
+        session.merge(self.get_data())
 
     def reset(self):
-        self.view.welcome_message_textedit.clear()
+        self.view.welcome_message_textedit.setPlainText("")
+        self.view.text_item.removeRows(0, self.view.text_item.rowCount())
+        self.view.voice_item.removeRows(0, self.view.voice_item.rowCount())
 
-    def config(self,
-        group_id: str,
-        name: str,
-        text_channels: list[TextChannel],
-        voice_channels: list[VoiceChannel],
-        welcome_message_channel: typing.Optional[
-            typing.Union[TextChannel, VoiceChannel]
-        ] = None,
-        welcome_message: typing.Optional[str] = None,
+    def config(
+        self,
+        discord_group: Guild,
+        group: typing.Optional[Group] = None,
     ):
         self.reset()
-        self.group_id = group_id
-        self.view.window.setWindowTitle(translate("GroupWindow", "Group {}").format(name))
-        if welcome_message_channel is None:
-            welcome_message_channel = translate("GroupWindow", "Undefined")
-            self.welcome_message_channel = None
+        self.discord_group = discord_group
+        if group:
+            self.group = group
+            welcome_message_channel = self._get_welcome_message_channel()
+            if group.welcome_message:
+                self.view.welcome_message_textedit.insertPlainText(
+                    group.welcome_message
+                )
+            if welcome_message_channel:
+                self.update_welcome_message_channel(welcome_message_channel.name)
+            else:
+                self.update_welcome_message_channel(
+                    translate("GroupWindow", "Undefined")
+                )
         else:
-            self.welcome_message_channel = welcome_message_channel.id
-            welcome_message_channel = welcome_message_channel.name
-
-        if welcome_message:
-            self.view.welcome_message_textedit.insertPlainText(welcome_message)
-        self.update_welcome_message_channel(welcome_message_channel)
-        self.update_channels(text_channels, voice_channels)
+            self.group = Group(id=discord_group.id)
+            self.unselect_welcome_message_channel()
+        self.view.window.setWindowTitle(
+            translate("GroupWindow", "Group {}").format(discord_group.name)
+        )
+        self.update_channels(discord_group)

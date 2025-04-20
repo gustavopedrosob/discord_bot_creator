@@ -36,11 +36,11 @@ class QHelpMenu(QMenu):
         )
         self.report.triggered.connect(
             lambda: webbrowser.open(
-                "https://github.com/gustavopedrosob/bot_discord_easy_creator/issues/new"
+                "https://github.com/gustavopedrosob/discord_bot_creator/issues/new"
             )
         )
         self.project.triggered.connect(
             lambda: webbrowser.open(
-                "https://github.com/gustavopedrosob/bot_discord_easy_creator"
+                "https://github.com/gustavopedrosob/discord_bot_creator"
             )
         )

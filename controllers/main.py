@@ -9,7 +9,7 @@ from PySide6.QtGui import QTextCursor, QCloseEvent
 from PySide6.QtWidgets import QMessageBox, QListWidgetItem, QFileDialog
 
 from core.config import instance as config
-from core.interactions import interactions, Interactions
+from core.database import Database
 from views.classes.confirm_message_box import QConfirmMessageBox
 from core.bot_thread import QBotThread
 from views.main.main import MainView
@@ -19,35 +19,28 @@ translate = QCoreApplication.translate
 
 
 class MainController:
-    def __init__(self, bot_thread: QBotThread):
+    def __init__(self, database: Database, bot_thread: QBotThread):
         self.view = MainView()
+        self.database = database
         self.bot_thread = bot_thread
-
-        file = Path(config.get("file"))
-
-        if file.name == "":
-            self.set_window_title()
-        elif file.exists() and file.is_file():
-            self.load_interactions(file)
-            self.set_window_title(file)
-        else:
-            self.file_dont_exists_message_box()
-            config.set("file", "")
-            config.save()
-            self.set_window_title()
-
         self.setup_binds()
         self.update_bot_button()
 
     def setup_binds(self):
-        self.view.remove_message_button.clicked.connect(self.confirm_remove_selected_message)
-        self.view.remove_all_message_button.clicked.connect(self.confirm_remove_messages)
+        self.view.remove_message_button.clicked.connect(
+            self.confirm_remove_selected_message
+        )
+        self.view.remove_all_message_button.clicked.connect(
+            self.confirm_remove_messages
+        )
         self.view.turn_on_bot_button.clicked.connect(self.start_turn_on_bot_thread)
         self.view.turn_off_bot_button.clicked.connect(self.turn_off_bot)
         self.__setup_message_list_binds(self.view.messages_list_widget)
         self.__setup_menu_bar_binds(self.view.menu_bar)
         self.__setup_bot_thread_binds(self.bot_thread)
-        self.view.groups_list_widget.quit_action.triggered.connect(self.quit_selected_group)
+        self.view.groups_list_widget.quit_action.triggered.connect(
+            self.quit_selected_group
+        )
         self.view.quit_group_button.clicked.connect(self.quit_selected_group)
         self.view.token_widget.line_edit.textEdited.connect(self.update_token)
         # noinspection PyUnresolvedReferences
@@ -57,7 +50,7 @@ class MainController:
     def __setup_menu_bar_binds(self, menu_bar):
         menu_bar.file.exit.triggered.connect(self.view.window.close)
         menu_bar.file.load.triggered.connect(self.on_load_action)
-        menu_bar.file.new.triggered.connect(self.on_new_action)
+
         menu_bar.config.language.english.triggered.connect(
             lambda: self.set_language("en_us")
         )
@@ -69,9 +62,7 @@ class MainController:
         message_list.remove_action.triggered.connect(
             self.confirm_remove_selected_message
         )
-        message_list.remove_all_action.triggered.connect(
-            self.confirm_remove_messages
-        )
+        message_list.remove_all_action.triggered.connect(self.confirm_remove_messages)
 
     def __setup_bot_thread_binds(self, bot_thread):
         bot_thread.finished.connect(self.on_bot_thread_finished)
@@ -120,30 +111,33 @@ class MainController:
             QMessageBox.StandardButton.Ok,
         )
 
-    def set_window_title(self, file: typing.Optional[Path] = None):
+    def update_window_title(self):
         title = "Discord Bot Creator"
-        if file and file.exists():
-            title = f"Discord Bot Creator - {file.name}"
+        database_path = Path(config.get("database"))
+        if database_path and database_path.exists():
+            title = f"Discord Bot Creator - {database_path.name}"
         self.view.window.setWindowTitle(title)
 
-    def on_new_action(self):
-        config.set("file", "")
-        config.save()
-        interactions.clear()
-        self.set_window_title()
-        self.view.messages_list_widget.clear()
-
     def on_load_action(self):
-        file_path, file_extension = QFileDialog.getOpenFileName(
+        database_path = self.select_file_dialog()
+        if database_path:
+            config.set("database", str(database_path))
+            config.save()
+            self.database.new_session(database_path)
+            self.load_data()
+            self.update_window_title()
+            self.bot_thread.update_database_session()
+
+    def select_file_dialog(self) -> typing.Optional[Path]:
+        file_path, _ = QFileDialog.getOpenFileName(
             self.view.window,
             translate("MainWindow", "Open File"),
             os.getcwd(),
-            "JSON Files (*.json)",
+            "DB Files (*.db)",
         )
         if file_path:
-            file = Path(file_path)
-            self.load_interactions(file)
-            self.set_window_title(file)
+            return Path(file_path)
+        return None
 
     def saved_successfully_message_box(self):
         self.information_message_box(
@@ -152,12 +146,6 @@ class MainController:
                 "MainWindow",
                 "The file has been saved successfully.",
             ),
-        )
-
-    def file_dont_exists_message_box(self):
-        self.warning_message_box(
-            translate("MainWindow", "Warning"),
-            translate("MainWindow", "The file don't exists anymore."),
         )
 
     def set_language(self, language: str):
@@ -215,11 +203,13 @@ class MainController:
 
     def remove_selected_message(self):
         """Removes the selected message from the message list and deletes it from "message and reply.json"."""
-        message_indexes = self.view.messages_list_widget.selectedIndexes()
-        if message_indexes:
-            row = message_indexes[0].row()
-            messages = interactions.get("messages")
-            messages.pop(self.view.messages_list_widget.item(row).text())
+        selected_messages = self.view.messages_list_widget.selectedItems()
+        if selected_messages:
+            message = self.database.get_message(selected_messages[0].text())
+            self.database.get_session().delete(message)
+            row = self.view.messages_list_widget.indexFromItem(
+                selected_messages[0]
+            ).row()
             self.view.messages_list_widget.takeItem(row)
 
     def confirm_remove_selected_message(self):
@@ -251,29 +241,23 @@ class MainController:
     def remove_messages(self):
         """Removes all messages from the list."""
         self.view.messages_list_widget.clear()
-        interactions.set("messages", {})
+        self.database.delete_messages()
 
-    def load_interactions(self, path: Path):
+    def load_data(self):
         """
-        Loads all messages from a file in a path and inserts them into the message list.
-        If it's an invalid file raises a warning window.
-        Saves the file path on a config file if it's valid.
+        Loads all messages from the database and inserts them into the message list.
         """
-        temp_interactions = Interactions()
-        temp_interactions.load(path)
-        if temp_interactions.is_valid():
-            interactions.set("messages", temp_interactions.get("messages"))
-            interactions.set("groups", temp_interactions.get("groups"))
-            self.view.messages_list_widget.clear()
-            for message_name in interactions.message_names():
-                self.view.messages_list_widget.addItem(message_name)
-            config.set("file", str(path))
-            config.save()
-        else:
-            self.warning_message_box(
-                translate("MainWindow", "Invalid file"),
-                translate("MainWindow", "This file can't be loaded."),
-            )
+        self.update_window_title()
+        database = self.database
+        self.view.messages_list_widget.clear()
+        for message_name in database.message_names():
+            self.view.messages_list_widget.addItem(message_name)
+
+    def invalid_file_alert(self):
+        self.warning_message_box(
+            translate("MainWindow", "Invalid file"),
+            translate("MainWindow", "This file can't be loaded."),
+        )
 
     def log(self, message: str, level: typing.Optional[int] = None):
         if level is None:
@@ -292,7 +276,9 @@ class MainController:
             f'<span style="{styles[level]}">{html.escape(message)}</span><br>'
         )
 
-    def accepted_edit_selected_message(self, old_message_name: str, new_message_name: str):
+    def accepted_edit_selected_message(
+        self, old_message_name: str, new_message_name: str
+    ):
         self.__get_list_item_message(old_message_name).setText(new_message_name)
 
     def accepted_new_message(self, message_name: str):

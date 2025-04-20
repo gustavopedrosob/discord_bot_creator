@@ -4,8 +4,8 @@ from discord import (
     LoginFailure,
 )
 
-from bot import IntegratedBot
 from core.config import instance as config
+from core.integrated_bot import IntegratedBot
 
 
 class QBotThread(QThread):
@@ -18,14 +18,18 @@ class QBotThread(QThread):
 
     def __init__(self):
         super().__init__()
-        self.__bot = None
+        self.__bot = IntegratedBot(self)
 
     def run(self):
-        self.__bot = IntegratedBot(self)
+        if self.__bot.is_closed():
+            self.__bot = IntegratedBot(self)
         try:
             self.__bot.run(config.get("token"))
         except LoginFailure:
             self.login_failure.emit()
+
+    def update_database_session(self):
+        self.__bot.database.new_session(config.get("database"))
 
     def groups(self) -> dict[int, discord.Guild]:
         return {guild.id: guild for guild in self.__bot.guilds}

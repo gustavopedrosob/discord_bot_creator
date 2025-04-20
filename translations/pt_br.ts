@@ -4,92 +4,96 @@
 <context>
     <name>Bot</name>
     <message>
-        <location filename="../bot.py" line="28"/>
+        <location filename="../core/bot.py" line="28"/>
         <source>Bot started!</source>
         <translation>Bot iniciado!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="46"/>
+        <location filename="../core/bot.py" line="39"/>
         <source>Sending welcome message &quot;{}&quot; on channel &quot;{}&quot; at &quot;{}&quot; group.</source>
         <translation>Enviando mensagem de boas-vindas &quot;{}&quot; no canal &quot;{}&quot; do grupo &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="52"/>
+        <location filename="../core/bot.py" line="45"/>
         <source>Identified message &quot;{}&quot;.</source>
         <translation>Identificada mensagem &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="65"/>
+        <location filename="../core/bot.py" line="56"/>
         <source>Validating message conditions {}: {}</source>
         <translation>Verificando condições da mensagem {}: {}</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="95"/>
+        <location filename="../core/bot.py" line="83"/>
         <source>Waiting {} seconds delay to next execution!</source>
         <translation>Aguardando delay de {} segundos para a proxima execução!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="112"/>
+        <location filename="../core/bot.py" line="101"/>
         <source>Adding reaction &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Adicionando a reação &quot;{}&quot; a mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="133"/>
+        <location filename="../core/bot.py" line="141"/>
         <source>Replying on group &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Enviando no grupo a resposta &quot;{}&quot; à mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="143"/>
+        <location filename="../core/bot.py" line="146"/>
         <source>Replying on private &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Enviando no privado a resposta &quot;{}&quot; à mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="162"/>
+        <source>Replying on {} &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
+        <translation type="vanished">Enviando no {} a resposta &quot;{}&quot; à mensagem &quot;{}&quot; do autor {}.</translation>
+    </message>
+    <message>
+        <location filename="../core/bot.py" line="164"/>
         <source>Content must be 2000 or fewer in length.</source>
         <translation>O conteúdo deve ter 2.000 ou menos de comprimento.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="176"/>
+        <location filename="../core/bot.py" line="180"/>
         <source>Don&apos;t have permission to remove message &quot;{}&quot; by the author {}.</source>
         <translation>Não tem permissão para remover a mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="180"/>
+        <location filename="../core/bot.py" line="184"/>
         <source>Removing message &quot;{}&quot; by the author {}.</source>
         <translation>Removendo mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="189"/>
+        <location filename="../core/bot.py" line="193"/>
         <source>Pinning message &quot;{}&quot; by the author {}.</source>
         <translation>Fixando mensagem &quot;{}&quot; do autor {}.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="200"/>
+        <location filename="../core/bot.py" line="204"/>
         <source>Don&apos;t have permission to kick &quot;{}&quot;.</source>
         <translation>Não tem permissão para expulsar &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="205"/>
+        <location filename="../core/bot.py" line="209"/>
         <source>Kicking member &quot;{}&quot;.</source>
         <translation>Expulsando membro &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="213"/>
+        <location filename="../core/bot.py" line="217"/>
         <source>Don&apos;t have permission to ban &quot;{}&quot;.</source>
         <translation>Não tem permissão para banir &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="218"/>
+        <location filename="../core/bot.py" line="222"/>
         <source>Banning member &quot;{}&quot;.</source>
         <translation>Banindo membro &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="222"/>
+        <location filename="../core/bot.py" line="226"/>
         <source>Bot finished!</source>
         <translation>Bot desligado!</translation>
     </message>
     <message>
-        <location filename="../bot.py" line="227"/>
+        <location filename="../core/bot.py" line="231"/>
         <source>Leaving guild &quot;{}&quot;</source>
         <translation>Saindo do grupo &quot;{}&quot;</translation>
     </message>
@@ -97,82 +101,82 @@
 <context>
     <name>Conditions</name>
     <message>
-        <location filename="../views/messages/messages.py" line="83"/>
+        <location filename="../views/messages/messages.py" line="84"/>
         <source>expected message</source>
         <translation>Mensagem esperada</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="84"/>
+        <location filename="../views/messages/messages.py" line="85"/>
         <source>not expected message</source>
         <translation>Mensagem não esperada</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="85"/>
+        <location filename="../views/messages/messages.py" line="86"/>
         <source>mention bot</source>
         <translation>Menciona o bot</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="86"/>
+        <location filename="../views/messages/messages.py" line="87"/>
         <source>not mention bot</source>
         <translation>Não menciona o bot</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="87"/>
+        <location filename="../views/messages/messages.py" line="88"/>
         <source>mention someone</source>
         <translation>Mencionou alguém</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="88"/>
+        <location filename="../views/messages/messages.py" line="89"/>
         <source>not mention someone</source>
         <translation>Não mencionou alguém</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="89"/>
+        <location filename="../views/messages/messages.py" line="90"/>
         <source>mention everyone</source>
         <translation>Mencionou todos</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="90"/>
+        <location filename="../views/messages/messages.py" line="91"/>
         <source>not mention everyone</source>
         <translation>Não mencionou todos</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="91"/>
+        <location filename="../views/messages/messages.py" line="92"/>
         <source>author is bot</source>
         <translation>Autor é bot</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="92"/>
+        <location filename="../views/messages/messages.py" line="93"/>
         <source>not author is bot</source>
         <translation>Autor não é bot</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="93"/>
+        <location filename="../views/messages/messages.py" line="94"/>
         <source>number in message</source>
         <translation>Número na mensagem</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="94"/>
+        <location filename="../views/messages/messages.py" line="95"/>
         <source>not number in message</source>
         <translation>Sem número na mensagem</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="95"/>
+        <location filename="../views/messages/messages.py" line="96"/>
         <source>symbols in message</source>
         <translation>Símbolos na mensagem</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="96"/>
+        <location filename="../views/messages/messages.py" line="97"/>
         <source>not symbols in message</source>
         <translation>Sem símbolos na mensagem</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="97"/>
+        <location filename="../views/messages/messages.py" line="98"/>
         <source>emojis in message</source>
         <translation>Emojis na mensagem</translation>
     </message>
     <message>
-        <location filename="../views/messages/messages.py" line="98"/>
+        <location filename="../views/messages/messages.py" line="99"/>
         <source>not emojis in message</source>
         <translation>Sem emojis na mensagem</translation>
     </message>
@@ -180,13 +184,13 @@
 <context>
     <name>GroupWindow</name>
     <message>
-        <location filename="../controllers/group.py" line="86"/>
+        <location filename="../controllers/group.py" line="107"/>
         <source>Group {}</source>
         <translation>Grupo {}</translation>
     </message>
     <message>
-        <location filename="../controllers/group.py" line="37"/>
-        <location filename="../controllers/group.py" line="89"/>
+        <location filename="../controllers/group.py" line="40"/>
+        <location filename="../controllers/group.py" line="103"/>
         <source>Undefined</source>
         <translation>Indefinido</translation>
     </message>
@@ -206,12 +210,12 @@
         <translation>Messagem de boas-vindas:</translation>
     </message>
     <message>
-        <location filename="../controllers/group.py" line="42"/>
+        <location filename="../controllers/group.py" line="45"/>
         <source>Welcome message channel: {}</source>
         <translation>Canal de mensagem de boas-vindas: {}</translation>
     </message>
     <message>
-        <location filename="../controllers/group.py" line="53"/>
+        <location filename="../controllers/group.py" line="57"/>
         <source>Channels</source>
         <translation>Canais</translation>
     </message>
@@ -234,13 +238,13 @@
         <translation>Arquivo</translation>
     </message>
     <message>
-        <location filename="../views/main/main.py" line="69"/>
+        <location filename="../views/main/main.py" line="66"/>
         <location filename="../views/main/menu_bar.py" line="15"/>
         <source>Config</source>
         <translation>Configuração</translation>
     </message>
     <message>
-        <location filename="../views/main/main.py" line="73"/>
+        <location filename="../views/main/main.py" line="70"/>
         <location filename="../views/main/menu_bar.py" line="16"/>
         <source>Edit</source>
         <translation>Editar</translation>
@@ -338,13 +342,13 @@
     </message>
     <message>
         <location filename="../views/main/messages_list.py" line="19"/>
-        <location filename="../controllers/main.py" line="229"/>
+        <location filename="../controllers/main.py" line="214"/>
         <source>Remove message</source>
         <translation>Remover mensagem</translation>
     </message>
     <message>
         <location filename="../views/main/messages_list.py" line="22"/>
-        <location filename="../controllers/main.py" line="239"/>
+        <location filename="../controllers/main.py" line="224"/>
         <source>Remove all messages</source>
         <translation>Remover todas mensagens</translation>
     </message>
@@ -359,97 +363,99 @@
         <translation>Sair do grupo</translation>
     </message>
     <message>
-        <location filename="../views/main/main.py" line="41"/>
+        <location filename="../views/main/main.py" line="38"/>
         <source>No logs at moment</source>
         <translation>Sem logs no momento</translation>
     </message>
     <message>
-        <location filename="../views/main/main.py" line="56"/>
+        <location filename="../views/main/main.py" line="53"/>
         <source>Turn on bot</source>
         <translation>Ligar bot</translation>
     </message>
     <message>
-        <location filename="../views/main/main.py" line="62"/>
+        <location filename="../views/main/main.py" line="59"/>
         <source>Turn off bot</source>
         <translation>Desligar bot</translation>
     </message>
     <message>
-        <location filename="../views/main/main.py" line="70"/>
+        <location filename="../views/main/main.py" line="67"/>
         <source>Quit</source>
         <translation>Sair</translation>
     </message>
     <message>
-        <location filename="../views/main/main.py" line="127"/>
+        <location filename="../views/main/main.py" line="124"/>
         <source>Messages</source>
         <translation>Mensagens</translation>
     </message>
     <message>
-        <location filename="../views/main/main.py" line="128"/>
+        <location filename="../views/main/main.py" line="125"/>
         <source>Groups</source>
         <translation>Grupos</translation>
     </message>
     <message>
-        <location filename="../views/main/main.py" line="72"/>
+        <location filename="../views/main/main.py" line="69"/>
         <source>New</source>
         <translation>Nova</translation>
     </message>
     <message>
-        <location filename="../views/main/main.py" line="74"/>
+        <location filename="../views/main/main.py" line="71"/>
         <source>Remove</source>
         <translation>Remover</translation>
     </message>
     <message>
-        <location filename="../views/main/main.py" line="77"/>
+        <location filename="../views/main/main.py" line="74"/>
         <source>Remove all</source>
         <translation>Remover todas</translation>
     </message>
     <message>
+        <location filename="../controllers/main.py" line="93"/>
         <source>Login failure</source>
-        <translation type="vanished">Falha de login</translation>
+        <translation>Falha de login</translation>
     </message>
     <message>
+        <location filename="../controllers/main.py" line="94"/>
         <source>Improper token has been passed.</source>
-        <translation type="vanished">Um Token inválido foi passado.</translation>
+        <translation>Um Token inválido foi passado.</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="139"/>
+        <location filename="../controllers/main.py" line="131"/>
         <source>Open File</source>
         <translation>Abrir Arquivo</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="150"/>
+        <location filename="../controllers/main.py" line="141"/>
         <source>Saving</source>
         <translation>Salvando</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="154"/>
+        <location filename="../controllers/main.py" line="145"/>
         <source>The file has been saved successfully.</source>
         <translation>O arquivo foi salvo com sucesso.</translation>
     </message>
     <message>
         <location filename="../views/main/log_level_menu.py" line="34"/>
-        <location filename="../controllers/main.py" line="159"/>
-        <location filename="../controllers/main.py" line="165"/>
+        <location filename="../controllers/main.py" line="150"/>
+        <location filename="../core/app.py" line="151"/>
         <source>Warning</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="160"/>
+        <location filename="../core/app.py" line="154"/>
         <source>The file don&apos;t exists anymore.</source>
         <translation>O arquivo não existe mais.</translation>
     </message>
     <message>
-        <location filename="../main.py" line="125"/>
+        <location filename="../core/app.py" line="129"/>
         <source>Save File</source>
         <translation>Salvar Arquivo</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="169"/>
+        <location filename="../controllers/main.py" line="154"/>
         <source>You need to restart the application to apply the changes.</source>
         <translation>Você precisa reiniciar a aplicação para aplicar as mudanças.</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="232"/>
+        <location filename="../controllers/main.py" line="217"/>
         <source>Are you sure you want to remove this message?</source>
         <translation>Você tem certeza que deseja remover esta mensagem?</translation>
     </message>
@@ -464,17 +470,17 @@
         <translation>Não</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="240"/>
+        <location filename="../controllers/main.py" line="225"/>
         <source>Are you sure you want to remove all messages?</source>
         <translation>Você tem certeza que deseja remover todas as mensagens?</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="274"/>
+        <location filename="../controllers/main.py" line="253"/>
         <source>Invalid file</source>
         <translation>Arquivo inválido</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="275"/>
+        <location filename="../controllers/main.py" line="254"/>
         <source>This file can&apos;t be loaded.</source>
         <translation>Esse arquivo não pode ser carregado.</translation>
     </message>
@@ -593,22 +599,22 @@
         <translation>Confirmar e salvar</translation>
     </message>
     <message>
-        <location filename="../controllers/message.py" line="99"/>
+        <location filename="../controllers/message.py" line="127"/>
         <source>Name already exists</source>
         <translation>Nome já existe</translation>
     </message>
     <message>
-        <location filename="../controllers/message.py" line="106"/>
+        <location filename="../controllers/message.py" line="134"/>
         <source>You can&apos;t set a message with a name that already exists.</source>
         <translation>Você não pode definir uma mensagem com um nome que já existe.</translation>
     </message>
     <message>
-        <location filename="../controllers/message.py" line="112"/>
+        <location filename="../controllers/message.py" line="140"/>
         <source>Opposite conditions</source>
         <translation>Condições opostas</translation>
     </message>
     <message>
-        <location filename="../controllers/message.py" line="119"/>
+        <location filename="../controllers/message.py" line="147"/>
         <source>You can&apos;t have opposite conditions, please remove them.</source>
         <translation>Você não pode ter condições opostas, por favor remova elas.</translation>
     </message>
@@ -692,14 +698,12 @@
 <context>
     <name>self.view.window</name>
     <message>
-        <location filename="../controllers/main.py" line="102"/>
         <source>Login failure</source>
-        <translation>Falha de login</translation>
+        <translation type="vanished">Falha de login</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="103"/>
         <source>Improper token has been passed.</source>
-        <translation>Um Token inválido foi passado.</translation>
+        <translation type="vanished">Um Token inválido foi passado.</translation>
     </message>
 </context>
 </TS>

@@ -1,28 +1,23 @@
+from typing import Union
+
+from core.database import Database
 from core.translator import Translator
 import locale
 import logging
 import os
 import sys
 from pathlib import Path
-
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QApplication, QDialog, QFileDialog
-from discord.abc import Messageable
-
+from PySide6.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox
 from controllers.credits import CreditsController
 from controllers.group import GroupController
 from controllers.main import MainController
 from controllers.message import MessageController
 from core.config import instance as config
-from core.interactions import interactions
-
-
 from views.credits.credits import CreditsView
-from views.group.group import GroupView
 from core.bot_thread import QBotThread
 from views.main.log_handler import log_handler
 from views.main.main import MainView
-from views.messages.messages import MessageView
 
 
 logger = logging.getLogger(__name__)
@@ -42,18 +37,43 @@ class Application(QApplication):
         self.installTranslator(Translator.get_instance())
         self.bot_thread = QBotThread()
         log_handler.set_signal(self.bot_thread.log)
-        self.main_controller = MainController(self.bot_thread)
-        self.message_controller = MessageController()
-        self.group_controller = GroupController()
+        self.database = Database(self.get_database_path())
+        self.main_controller = MainController(self.database, self.bot_thread)
+        self.message_controller = MessageController(self.database)
+        self.group_controller = GroupController(self.database)
         self.credits_controller = CreditsController()
-        self.setup_binds(self.main_controller.view, self.message_controller.view, self.group_controller.view,
-                         self.credits_controller.view)
+        self.setup_binds(
+            self.main_controller.view,
+            self.credits_controller.view,
+        )
+        self.main_controller.load_data()
 
-    def setup_binds(self, main_view: MainView, message_view: MessageView, group_view: GroupView,
-                    credits_view: CreditsView):
+    def on_new_action(self):
+        config.set("database", ":memory:")
+        config.save()
+        self.database.new_session(":memory:")
+        self.main_controller.load_data()
+        self.bot_thread.update_database_session()
+
+    def get_database_path(self) -> str:
+        database_path = Path(config.get("database"))
+        if database_path.name == ":memory:":
+            return ":memory:"
+        elif database_path.exists() and database_path.is_file():
+            return str(database_path)
+        else:
+            self.file_dont_exists_message_box()
+            return ":memory:"
+
+    def setup_binds(
+        self,
+        main_view: MainView,
+        credits_view: CreditsView,
+    ):
         main_view.menu_bar.help.credits.triggered.connect(credits_view.window.show)
         main_view.menu_bar.file.save_as.triggered.connect(self.on_save_as_action)
         main_view.menu_bar.file.save.triggered.connect(self.on_save_action)
+        main_view.menu_bar.file.new.triggered.connect(self.on_new_action)
         main_view.new_message_button.clicked.connect(self.new_message)
         main_view.edit_messages_button.clicked.connect(self.edit_selected_message)
         main_view.messages_list_widget.new_action.triggered.connect(self.new_message)
@@ -69,81 +89,77 @@ class Application(QApplication):
         if bool(self.main_controller.view.groups_list_widget.selectedIndexes()):
             group_item = self.main_controller.view.groups_list_widget.selectedItems()[0]
             selected_group_id = group_item.data(Qt.ItemDataRole.UserRole)
-            groups = interactions.get("groups")
             group = self.bot_thread.groups()[selected_group_id]
-            group_interaction = groups.get(str(selected_group_id))
-            welcome_message_channel, welcome_message = None, None
-            if group_interaction:
-                channels = {
-                    c.id: c for c in group.channels if isinstance(c, Messageable)
-                }
-                if group_interaction["welcome_message_channel"]:
-                    welcome_message_channel = channels[
-                        group_interaction["welcome_message_channel"]
-                    ]
-                welcome_message = group_interaction["welcome_message"]
-
+            group_interaction = self.database.get_group(group.id)
             self.group_controller.config(
-                str(selected_group_id),
-                group_item.text(),
-                group.text_channels,
-                group.voice_channels,
-                welcome_message_channel,
-                welcome_message,
+                group,
+                group_interaction,
             )
             result = self.group_controller.view.window.exec()
             if result == QDialog.DialogCode.Accepted:
                 self.on_save_action()
+                self.bot_thread.update_database_session()
 
     def new_message(self):
-        self.message_controller.current_message = None
-        self.message_controller.config(
-            "",
-            {"expected message": [], "reply": [], "reaction": [], "conditions": [], "pin or del": None,
-             "kick or ban": None, "where reply": None, "where reaction": None, "delay": 0})
+        self.message_controller.reset()
         result = self.message_controller.view.window.exec()
-        if result == "save":
+        if result == 2:
             self.on_save_action()
-        if result in ("save", QDialog.DialogCode.Accepted):
-            self.main_controller.accepted_new_message(self.message_controller.get_name())
+        if result in (2, QDialog.DialogCode.Accepted):
+            self.main_controller.accepted_new_message(
+                self.message_controller.get_name()
+            )
 
     def edit_selected_message(self):
         """Opens the NewMessage interface and loads saved information."""
         if bool(self.main_controller.view.messages_list_widget.selectedIndexes()):
-            selected_message = self.main_controller.view.messages_list_widget.selectedItems()[0].text()
-            self.message_controller.current_message = selected_message
-            self.message_controller.config(selected_message, interactions.get("messages")[selected_message])
+            selected_message = (
+                self.main_controller.view.messages_list_widget.selectedItems()[0].text()
+            )
+            self.message_controller.config(self.database.get_message(selected_message))
             result = self.message_controller.view.window.exec()
-            if result == "save":
+            if result == 2:
                 self.on_save_action()
-            if result in ("save", QDialog.DialogCode.Accepted):
-                self.main_controller.accepted_edit_selected_message(selected_message, self.message_controller.get_name())
+            if result in (2, QDialog.DialogCode.Accepted):
+                self.main_controller.accepted_edit_selected_message(
+                    selected_message, self.message_controller.get_name()
+                )
 
     def on_save_as_action(self):
-        file_path, file_extension = QFileDialog.getSaveFileName(
+        file_path, _ = QFileDialog.getSaveFileName(
             self.main_controller.view.window,
             Translator.translate("MainWindow", "Save File"),
             os.getcwd(),
-            "JSON Files (*.json)",
+            "DB Files (*.db)",
         )
         if file_path:
-            config.set("file", file_path)
-            config.save()
-            path = Path(file_path)
-            interactions.save(path)
-            self.main_controller.set_window_title(path)
-            self.main_controller.saved_successfully_message_box()
+            self.save(file_path)
 
-    def save(self):
-        interactions.save(Path(config.get("file")))
+    def save(self, path: Union[Path, str, None] = None):
+        session = self.database.get_session()
+        session.commit()
+        if path:
+            path = Path(path)
+            config.set("database", str(path))
+            config.save()
+            self.database.backup(path)
+            self.main_controller.update_window_title()
+            self.bot_thread.update_database_session()
         self.main_controller.saved_successfully_message_box()
 
+    @staticmethod
+    def file_dont_exists_message_box():
+        msg = QMessageBox()
+        msg.setWindowTitle(Translator.translate("MainWindow", "Warning"))
+        msg.setText(
+            Translator.translate("MainWindow", "The file don't exists anymore.")
+        )
+        msg.setIcon(QMessageBox.Icon.Warning)
+        msg.exec()
+
     def on_save_action(self):
-        file = Path(config.get("file"))
-        if file.name == "":
+        database_path = Path(config.get("database"))
+        if database_path.name == ":memory:":
             self.on_save_as_action()
-        elif file.exists() and file.is_file():
-            self.save()
         else:
-            self.main_controller.file_dont_exists_message_box()
-            self.on_save_as_action()
+            self.save()

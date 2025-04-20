@@ -2,23 +2,37 @@ import typing
 
 from PySide6.QtCore import QPoint
 from PySide6.QtGui import QIcon, Qt
-from PySide6.QtWidgets import QListWidget, QListWidgetItem, QMessageBox, QHBoxLayout, QLineEdit, QTextEdit, QCheckBox
-from emojis import emojis
+from PySide6.QtWidgets import (
+    QListWidget,
+    QListWidgetItem,
+    QMessageBox,
+    QHBoxLayout,
+    QLineEdit,
+    QTextEdit,
+    QCheckBox,
+)
 from emojis.db import Emoji
 from extra_qwidgets.utils import get_awesome_icon
 from extra_qwidgets.widgets import QResponsiveTextEdit, QThemeResponsiveButton
+from sqlalchemy.orm import Session
 
-from core.interactions import interactions
+from core.database import Database
 from core.translator import Translator
+from models.condition import MessageCondition
+from models.expected_message import ExpectedMessage
+from models.message import Message
+from models.reaction import MessageReaction
+from models.reply import MessageReply
 from views.classes.emoji_picker import QEmojiPickerPopup
 from views.messages.listbox import QListBox
 from views.messages.messages import MessageView
 
 
 class MessageController:
-    def __init__(self):
+    def __init__(self, database: Database):
         self.view = MessageView()
-        self.current_message = None
+        self.database = database
+        self.current_message: typing.Optional[Message] = None
         self.emoji_picker_popup = None
         self.setup_binds()
 
@@ -29,20 +43,30 @@ class MessageController:
         self.__add_emoji_button(
             self.view.listbox_messages.entry_layout(), self.view.messages_line_edit
         )
-        self.__add_emoji_button(self.view.listbox_replies.entry_layout(), self.view.replies_line_edit)
-        self.view.listbox_messages.add_button().clicked.connect(
-            lambda: self.insert_on_listbox(self.view.listbox_messages, self.view.messages_line_edit)
+        self.__add_emoji_button(
+            self.view.listbox_replies.entry_layout(), self.view.replies_line_edit
         )
-        self.view.listbox_conditions.add_button().clicked.connect(self.__on_add_condition)
+        self.view.listbox_messages.add_button().clicked.connect(
+            lambda: self.insert_on_listbox(
+                self.view.listbox_messages, self.view.messages_line_edit
+            )
+        )
+        self.view.listbox_conditions.add_button().clicked.connect(
+            self.__on_add_condition
+        )
         self.view.listbox_replies.add_button().clicked.connect(
-            lambda: self.insert_on_listbox(self.view.listbox_replies, self.view.replies_line_edit)
+            lambda: self.insert_on_listbox(
+                self.view.listbox_replies, self.view.replies_line_edit
+            )
         )
         self.view.confirm.clicked.connect(self.on_confirm)
         self.view.confirm_and_save.clicked.connect(lambda: self.on_confirm(True))
         self.view.del_checkbox.checkStateChanged.connect(self.__del_checked)
         self.view.author_checkbox.checkStateChanged.connect(self.__author_checked)
         self.view.listbox_reactions.add_button().clicked.connect(
-            lambda: self.insert_on_listbox(self.view.listbox_reactions, self.view.reactions_line_edit)
+            lambda: self.insert_on_listbox(
+                self.view.listbox_reactions, self.view.reactions_line_edit
+            )
         )
 
     def __raise_emoji_popup(self, point: QPoint, line_edit: QTextEdit):
@@ -69,12 +93,17 @@ class MessageController:
 
     def __on_add_condition(self):
         index = self.view.conditions_combobox.currentIndex()
-        condition = self.view.conditions_combobox.itemData(index, Qt.ItemDataRole.UserRole)
+        condition = self.view.conditions_combobox.itemData(
+            index, Qt.ItemDataRole.UserRole
+        )
         if condition not in self.view.listbox_conditions.get_items_userdata():
             self._add_condition(condition)
 
     def is_name_valid(self):
-        return self.get_name() not in interactions.message_names() and self.get_name() != self.current_message
+        if self.current_message:
+            if self.get_name() == self.current_message.name:
+                return True
+        return self.get_name() not in self.database.message_names()
 
     def __add_emoji_button(
         self, layout: QHBoxLayout, line_edit: typing.Union[QLineEdit, QTextEdit]
@@ -118,11 +147,11 @@ class MessageController:
             message_box.exec()
         else:
             if self.current_message is None:
-                self.accepted_new_message(self.get_name(), self.get_data())
+                self.accepted_new_message()
             else:
-                self.accepted_edit_selected_message(self.current_message, self.get_name(), self.get_data())
+                self.accepted_edit_selected_message()
             if save:
-                self.view.window.done("save")
+                self.view.window.done(2)
             else:
                 self.view.window.accept()
 
@@ -161,64 +190,97 @@ class MessageController:
         for item in listbox.selectedItems():
             listbox.takeItem(listbox.indexFromItem(item).row())
 
-    def get_data(self) -> dict:
-        result = {"expected message": self.view.listbox_messages.get_items_text()}
-        reply_list = self.view.listbox_replies.get_items_text()
-        result["reply"] = list(map(lambda replies: replies.split("¨"), reply_list))
-        reactions_list = self.view.listbox_reactions.get_items_text()
-        result["reaction"] = list(
-            map(lambda reactions: list(emojis.get(reactions)), reactions_list)
+    def get_message(self, message_id: typing.Optional[int] = None) -> Message:
+        message = Message(
+            name=self.get_name(),
+            pin_or_del=self.view.group_pin_or_del.get_checked_name(),
+            kick_or_ban=self.view.group_kick_or_ban.get_checked_name(),
+            where_reply=self.view.group_where_reply.get_checked_name(),
+            where_reaction=self.view.group_where_react.get_checked_name(),
+            delay=self.view.delay.value(),
         )
-        result["conditions"] = self.view.listbox_conditions.get_items_userdata()
-        result["pin or del"] = self.view.group_pin_or_del.get_checked_name()
-        result["kick or ban"] = self.view.group_kick_or_ban.get_checked_name()
-        result["where reply"] = self.view.group_where_reply.get_checked_name()
-        result["where reaction"] = self.view.group_where_react.get_checked_name()
-        result["delay"] = self.view.delay.value()
+        if message_id:
+            message.id = message_id
+        else:
+            message.id = self.database.new_message_id()
+        return message
 
-        return result
+    def get_conditions(self, message_id: int) -> list[MessageCondition]:
+        return [
+            MessageCondition(message_id=message_id, condition=i)
+            for i in self.view.listbox_conditions.get_items_userdata()
+        ]
 
-    @staticmethod
-    def accepted_edit_selected_message(
-        old_message_name: str, new_message_name: str, message_data: dict
-    ):
-        if not new_message_name:
-            new_message_name = old_message_name
-        messages: dict = interactions.get("messages")
-        messages.pop(old_message_name)
-        messages[new_message_name] = message_data
+    def get_replies(self, message_id: int) -> list[MessageReply]:
+        return [
+            MessageReply(message_id=message_id, text=i)
+            for i in self.view.listbox_replies.get_items_text()
+        ]
 
-    @staticmethod
-    def accepted_new_message(message_name: str, message_data: dict):
-        if not message_name:
-            message_name = interactions.new_id()
-        messages: dict = interactions.get("messages")
-        messages[message_name] = message_data
+    def get_reactions(self, message_id: int) -> list[MessageReaction]:
+        return [
+            MessageReaction(message_id=message_id, reaction=i)
+            for i in self.view.listbox_reactions.get_items_text()
+        ]
+
+    def get_expected_messages(self, message_id: int) -> list[ExpectedMessage]:
+        return [
+            ExpectedMessage(message_id=message_id, text=i)
+            for i in self.view.listbox_messages.get_items_text()
+        ]
+
+    def accepted_edit_selected_message(self):
+        session = self.database.get_session()
+        message_id = self.current_message.id
+        session.delete(self.current_message)
+        message = self.get_message(message_id=message_id)
+        session.add(message)
+        self.__add_objects_to_database(message, session)
+
+    def accepted_new_message(self):
+        session = self.database.get_session()
+        message = self.get_message()
+        session.add(message)
+        self.__add_objects_to_database(message, session)
+
+    def __add_objects_to_database(self, message: Message, session: Session):
+        session.add_all(self.get_conditions(message.id))
+        session.add_all(self.get_replies(message.id))
+        session.add_all(self.get_reactions(message.id))
+        session.add_all(self.get_expected_messages(message.id))
 
     def reset(self):
         """Resets the window's field."""
+        self.current_message = None
         self.view.name_entry.setText("")
         self.view.listbox_messages.reset()
         self.view.listbox_replies.reset()
         self.view.listbox_reactions.reset()
         self.view.listbox_conditions.reset()
 
-        for group in (self.view.group_pin_or_del, self.view.group_kick_or_ban, self.view.group_where_reply, self.view.group_where_react):
+        for group in (
+            self.view.group_pin_or_del,
+            self.view.group_kick_or_ban,
+            self.view.group_where_reply,
+            self.view.group_where_react,
+        ):
             group.reset()
 
-    def config(self, name: str, data: dict):
+    def config(self, message: Message):
         """Resets the window and setup fields by data parameter."""
         self.reset()
-        self.view.name_entry.setText(name)
-        self.view.delay.setValue(data["delay"])
-        self.view.listbox_messages.add_items(data["expected message"])
-        for reply in data["reply"]:
-            self.view.listbox_replies.add_item("¨".join(reply))
-        for reaction in data["reaction"]:
-            self.view.listbox_reactions.add_item("".join(reaction))
-        for condition in data["conditions"]:
-            self._add_condition(condition)
-        self.view.group_pin_or_del.check_by_name(data["pin or del"])
-        self.view.group_kick_or_ban.check_by_name(data["kick or ban"])
-        self.view.group_where_reply.check_by_name(data["where reply"])
-        self.view.group_where_react.check_by_name(data["where reaction"])
+        self.current_message = message
+        self.view.name_entry.setText(message.name)
+        self.view.delay.setValue(message.delay)
+        for expected_message in message.expected_messages:
+            self.view.listbox_messages.add_item(expected_message.text)
+        for reply in message.replies:
+            self.view.listbox_replies.add_item(reply.text)
+        for reaction in message.reactions:
+            self.view.listbox_reactions.add_item(reaction.reaction)
+        for condition in message.conditions:
+            self._add_condition(condition.condition)
+        self.view.group_pin_or_del.check_by_name(message.pin_or_del)
+        self.view.group_kick_or_ban.check_by_name(message.kick_or_ban)
+        self.view.group_where_reply.check_by_name(message.where_reply)
+        self.view.group_where_react.check_by_name(message.where_reaction)

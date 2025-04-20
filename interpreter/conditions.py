@@ -2,17 +2,19 @@ import discord
 import emojis
 
 from core.functions import has_number, has_symbols
+from models.expected_message import ExpectedMessage
+from models.condition import MessageCondition
 
 
 class MessageConditions:
     def __init__(
         self,
         message: discord.Message,
-        expected_message: list[str],
+        expected_messages: list[ExpectedMessage],
         bot: discord.ClientUser,
     ):
 
-        expected_message = message.clean_content in expected_message
+        expected_message = message.clean_content in [i.text for i in expected_messages]
         not_expected_message = not expected_message
         mention_bot = any(user == bot for user in message.mentions)
         not_mention_bot = not mention_bot
@@ -50,9 +52,9 @@ class MessageConditions:
             "not emojis in message": not_emojis_in_message,
         }
 
-    def filter(self, conditions: list[str]) -> dict[str, bool]:
+    def filter(self, conditions: list[MessageCondition]) -> dict[str, bool]:
         return {
             key: value
             for key, value in self.string_conditions.items()
-            if key in conditions
+            if key in [i.condition for i in conditions]
         }
