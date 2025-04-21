@@ -112,8 +112,8 @@ pasta do Qt), pois iremos utilizá-lo para traduzir cada widget da interface.
 Vamos começar gerando os arquivos .ts a partir das interfaces, exemplo:
     
 ```bash
-pyside6-lupdate -extensions py .venv/Lib/site-packages/extra_qwidgets ./views ./controllers ./core -ts translations/pt_br.ts 
-pyside6-lupdate -extensions py .venv/Lib/site-packages/extra_qwidgets ./views ./controllers ./core -ts translations/en_us.ts
+pyside6-lupdate -extensions py .venv/Lib/site-packages/extra_qwidgets ./views ./controllers ./core ./widgets -ts translations/pt_br.ts 
+pyside6-lupdate -extensions py .venv/Lib/site-packages/extra_qwidgets ./views ./controllers ./core ./widgets -ts translations/en_us.ts
 ```
 
 Agora abra o arquivo .ts gerado e traduza cada widget, após isso, compile o arquivo com o comando:

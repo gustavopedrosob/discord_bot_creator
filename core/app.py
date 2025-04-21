@@ -14,10 +14,10 @@ from controllers.group import GroupController
 from controllers.main import MainController
 from controllers.message import MessageController
 from core.config import instance as config
-from views.credits.credits import CreditsView
+from views.credits import CreditsView
 from core.bot_thread import QBotThread
-from views.main.log_handler import log_handler
-from views.main.main import MainView
+from widgets.log_handler import log_handler
+from views.main import MainView
 
 
 logger = logging.getLogger(__name__)

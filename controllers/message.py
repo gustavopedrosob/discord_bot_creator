@@ -23,9 +23,9 @@ from models.expected_message import ExpectedMessage
 from models.message import Message
 from models.reaction import MessageReaction
 from models.reply import MessageReply
-from views.classes.emoji_picker import QEmojiPickerPopup
-from views.messages.listbox import QListBox
-from views.messages.messages import MessageView
+from widgets.emoji_picker import QEmojiPickerPopup
+from widgets.listbox import QListBox
+from views.messages import MessageView
 
 
 class MessageController:

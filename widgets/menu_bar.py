@@ -1,9 +1,9 @@
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QMenuBar, QMenu, QWidget
 
-from views.main.config_menu import QConfigMenu
-from views.main.file_menu import QFileMenu
-from views.main.help_menu import QHelpMenu
+from widgets.config_menu import QConfigMenu
+from widgets.file_menu import QFileMenu
+from widgets.help_menu import QHelpMenu
 
 translate = QCoreApplication.translate
 

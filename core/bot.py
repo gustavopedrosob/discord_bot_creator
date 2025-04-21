@@ -12,7 +12,7 @@ from interpreter.conditions import MessageConditions
 from interpreter.variable import Variable
 from models.message import Message
 from models.reaction import MessageReaction
-from views.main.log_handler import log_handler
+from widgets.log_handler import log_handler
 
 logger = logging.getLogger(__name__)
 logger.addHandler(log_handler)
@@ -32,11 +32,25 @@ class Bot(discord.Client):
         group = self.database.get_group(guild.id)
         if group and group.welcome_message and group.welcome_message_channel:
             channel = guild.get_channel(group.welcome_message_channel)
-            await channel.send(group.welcome_message.format(member=member.name))
+            welcome_message = group.welcome_message.format(member=member.name)
+            await channel.send(welcome_message)
             logger.info(
                 translate(
                     "Bot", 'Sending welcome message "{}" on channel "{}" at "{}" group.'
-                ).format(group.welcome_message, channel.name, guild.name)
+                ).format(welcome_message, channel.name, guild.name)
+            )
+
+    async def on_member_remove(self, member: discord.Member):
+        guild = member.guild
+        group = self.database.get_group(guild.id)
+        if group and group.goodbye_message and group.goodbye_message_channel:
+            channel = guild.get_channel(group.goodbye_message_channel)
+            goodbye_message = group.goodbye_message.format(member=member.name)
+            await channel.send(goodbye_message)
+            logger.info(
+                translate(
+                    "Bot", 'Sending goodbye message "{}" on channel "{}" at "{}" group.'
+                ).format(goodbye_message, channel.name, guild.name)
             )
 
     async def on_message(self, discord_message: discord.Message):

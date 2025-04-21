@@ -10,9 +10,9 @@ from PySide6.QtWidgets import QMessageBox, QListWidgetItem, QFileDialog
 
 from core.config import instance as config
 from core.database import Database
-from views.classes.confirm_message_box import QConfirmMessageBox
+from widgets.confirm_message_box import QConfirmMessageBox
 from core.bot_thread import QBotThread
-from views.main.main import MainView
+from views.main import MainView
 
 
 translate = QCoreApplication.translate

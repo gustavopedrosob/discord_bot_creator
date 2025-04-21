@@ -15,10 +15,10 @@ from extra_qwidgets.widgets.color_button import QColorButton
 from extra_qwidgets.widgets.password import QPassword
 
 from core.config import instance as config
-from views.classes.custom_button import QCustomButton
-from views.main.groups_list import QGroupsList
-from views.main.menu_bar import MenuBar
-from views.main.messages_list import QMessagesList
+from widgets.custom_button import QCustomButton
+from widgets.groups_list import QGroupsList
+from widgets.menu_bar import MenuBar
+from widgets.messages_list import QMessagesList
 
 translate = QCoreApplication.translate
 

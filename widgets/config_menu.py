@@ -1,8 +1,8 @@
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QMenu, QWidget
 
-from views.main.language_menu import QLanguageMenu
-from views.main.log_level_menu import QLogLevelMenu
+from widgets.language_menu import QLanguageMenu
+from widgets.log_level_menu import QLogLevelMenu
 
 translate = QCoreApplication.translate
 

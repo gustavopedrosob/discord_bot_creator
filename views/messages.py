@@ -29,9 +29,9 @@ from extra_qwidgets.widgets.emoji_picker.emoji_validator import QEmojiValidator
 from extra_qwidgets.widgets.resposive_text_edit import QResponsiveTextEdit
 
 from core.translator import Translator
-from views.classes.custom_button import QCustomButton
-from views.classes.custom_checkbox import QCustomCheckBox
-from views.messages.listbox import QListBox
+from widgets.custom_button import QCustomButton
+from widgets.custom_checkbox import QCustomCheckBox
+from widgets.listbox import QListBox
 
 translate = QCoreApplication.translate
 
@@ -82,21 +82,33 @@ class QMessageTextEdit(QResponsiveTextEdit):
 class MessageView:
     translated_conditions = {
         "expected message": Translator.translate("Conditions", "expected message"),
-        "not expected message": Translator.translate("Conditions", "not expected message"),
+        "not expected message": Translator.translate(
+            "Conditions", "not expected message"
+        ),
         "mention bot": Translator.translate("Conditions", "mention bot"),
         "not mention bot": Translator.translate("Conditions", "not mention bot"),
         "mention someone": Translator.translate("Conditions", "mention someone"),
-        "not mention someone": Translator.translate("Conditions", "not mention someone"),
+        "not mention someone": Translator.translate(
+            "Conditions", "not mention someone"
+        ),
         "mention everyone": Translator.translate("Conditions", "mention everyone"),
-        "not mention everyone": Translator.translate("Conditions", "not mention everyone"),
+        "not mention everyone": Translator.translate(
+            "Conditions", "not mention everyone"
+        ),
         "author is bot": Translator.translate("Conditions", "author is bot"),
         "not author is bot": Translator.translate("Conditions", "not author is bot"),
         "number in message": Translator.translate("Conditions", "number in message"),
-        "not number in message": Translator.translate("Conditions", "not number in message"),
+        "not number in message": Translator.translate(
+            "Conditions", "not number in message"
+        ),
         "symbols in message": Translator.translate("Conditions", "symbols in message"),
-        "not symbols in message": Translator.translate("Conditions", "not symbols in message"),
+        "not symbols in message": Translator.translate(
+            "Conditions", "not symbols in message"
+        ),
         "emojis in message": Translator.translate("Conditions", "emojis in message"),
-        "not emojis in message": Translator.translate("Conditions", "not emojis in message"),
+        "not emojis in message": Translator.translate(
+            "Conditions", "not emojis in message"
+        ),
     }
 
     def __init__(self):
@@ -159,7 +171,9 @@ class MessageView:
         self.group_pin_or_del = QCheckBoxes(
             QLabel(translate("MessageWindow", "Action"))
         )
-        self.del_checkbox = QCustomCheckBox("delete", translate("MessageWindow", "Delete"))
+        self.del_checkbox = QCustomCheckBox(
+            "delete", translate("MessageWindow", "Delete")
+        )
         self.group_pin_or_del.add_checkboxes(
             QCustomCheckBox("pin", translate("MessageWindow", "Pin")), self.del_checkbox
         )
@@ -184,7 +198,8 @@ class MessageView:
             "author", translate("MessageWindow", "Author")
         )
         self.group_where_react.add_checkboxes(
-            self.author_checkbox, QCustomCheckBox("bot", translate("MessageWindow", "Bot"))
+            self.author_checkbox,
+            QCustomCheckBox("bot", translate("MessageWindow", "Bot")),
         )
         self.delay_label = QLabel(translate("MessageWindow", "Delay"))
         self.delay = QSpinBox()

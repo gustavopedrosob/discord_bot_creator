@@ -1,4 +1,4 @@
-from views.credits.credits import CreditsView
+from views.credits import CreditsView
 
 
 class CreditsController:
