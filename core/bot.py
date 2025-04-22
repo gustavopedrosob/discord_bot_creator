@@ -4,6 +4,8 @@ import random
 import typing
 
 import discord
+from charset_normalizer.utils import is_arabic_isolated_form
+from discord import MessageType
 
 from core.config import instance as config
 from core.database import Database
@@ -54,7 +56,7 @@ class Bot(discord.Client):
             )
 
     async def on_message(self, discord_message: discord.Message):
-        if discord_message.author != self.user:
+        if discord_message.author != self.user and discord_message.type == MessageType.default:
             logger.info(
                 translate("Bot", 'Identified message "{}".').format(
                     discord_message.clean_content
