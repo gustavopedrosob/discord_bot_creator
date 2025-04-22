@@ -15,7 +15,7 @@ de executar o bot.
 
 ##### Linguagens:
 
-* [Python 3.13.2](https://www.python.org/downloads/release/python-3132/)
+* [Python 3.13.3](https://www.python.org/downloads/release/python-3133/)
 
 #### Instalação:
 
