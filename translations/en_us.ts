@@ -4,47 +4,47 @@
 <context>
     <name>Bot</name>
     <message>
-        <location filename="../core/bot.py" line="28"/>
+        <location filename="../core/bot.py" line="30"/>
         <source>Bot started!</source>
         <translation>Bot started!</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="40"/>
+        <location filename="../core/bot.py" line="42"/>
         <source>Sending welcome message &quot;{}&quot; on channel &quot;{}&quot; at &quot;{}&quot; group.</source>
         <translation>Sending welcome message &quot;{}&quot; on channel &quot;{}&quot; at &quot;{}&quot; group.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="53"/>
+        <location filename="../core/bot.py" line="55"/>
         <source>Sending goodbye message &quot;{}&quot; on channel &quot;{}&quot; at &quot;{}&quot; group.</source>
         <translation>Sending goodbye message &quot;{}&quot; on channel &quot;{}&quot; at &quot;{}&quot; group.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="59"/>
+        <location filename="../core/bot.py" line="61"/>
         <source>Identified message &quot;{}&quot;.</source>
         <translation>Identified message &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="70"/>
+        <location filename="../core/bot.py" line="72"/>
         <source>Validating message conditions {}: {}</source>
         <translation>Validating message conditions {}: {}</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="97"/>
+        <location filename="../core/bot.py" line="99"/>
         <source>Waiting {} seconds delay to next execution!</source>
         <translation>Waiting {} seconds delay to next executation!</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="115"/>
+        <location filename="../core/bot.py" line="117"/>
         <source>Adding reaction &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Adding reaction &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="154"/>
+        <location filename="../core/bot.py" line="156"/>
         <source>Replying on group &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Replying on group &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="159"/>
+        <location filename="../core/bot.py" line="161"/>
         <source>Replying on private &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</source>
         <translation>Replying on private &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</translation>
     </message>
@@ -53,52 +53,52 @@
         <translation type="vanished">Replying on {} &quot;{}&quot; to the message &quot;{}&quot; by the author {}.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="177"/>
+        <location filename="../core/bot.py" line="179"/>
         <source>Content must be 2000 or fewer in length.</source>
         <translation>Content must be 2000 or fewer in length.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="193"/>
+        <location filename="../core/bot.py" line="195"/>
         <source>Don&apos;t have permission to remove message &quot;{}&quot; by the author {}.</source>
         <translation>Don&apos;t have permission to remove message &quot;{}&quot; by the author {}.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="197"/>
+        <location filename="../core/bot.py" line="199"/>
         <source>Removing message &quot;{}&quot; by the author {}.</source>
         <translation>Removing message &quot;{}&quot; by the author {}.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="206"/>
+        <location filename="../core/bot.py" line="208"/>
         <source>Pinning message &quot;{}&quot; by the author {}.</source>
         <translation>Pinning message &quot;{}&quot; by the author {}.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="217"/>
+        <location filename="../core/bot.py" line="219"/>
         <source>Don&apos;t have permission to kick &quot;{}&quot;.</source>
         <translation>Don&apos;t have permission to kick &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="222"/>
+        <location filename="../core/bot.py" line="224"/>
         <source>Kicking member &quot;{}&quot;.</source>
         <translation>Kicking member &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="230"/>
+        <location filename="../core/bot.py" line="232"/>
         <source>Don&apos;t have permission to ban &quot;{}&quot;.</source>
         <translation>Don&apos;t have permission to ban &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="235"/>
+        <location filename="../core/bot.py" line="237"/>
         <source>Banning member &quot;{}&quot;.</source>
         <translation>Banning member &quot;{}&quot;.</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="239"/>
+        <location filename="../core/bot.py" line="241"/>
         <source>Bot finished!</source>
         <translation>Bot finished!</translation>
     </message>
     <message>
-        <location filename="../core/bot.py" line="244"/>
+        <location filename="../core/bot.py" line="246"/>
         <source>Leaving guild &quot;{}&quot;</source>
         <translation>Leaving guild &quot;{}&quot;</translation>
     </message>
@@ -207,13 +207,13 @@
 <context>
     <name>GroupWindow</name>
     <message>
-        <location filename="../controllers/group.py" line="67"/>
-        <location filename="../controllers/group.py" line="70"/>
+        <location filename="../controllers/group.py" line="69"/>
+        <location filename="../controllers/group.py" line="72"/>
         <source>(None)</source>
         <translation>(None)</translation>
     </message>
     <message>
-        <location filename="../controllers/group.py" line="97"/>
+        <location filename="../controllers/group.py" line="104"/>
         <source>Group {}</source>
         <translation>Group {}</translation>
     </message>
@@ -382,13 +382,13 @@
         <translation>Edit message</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="219"/>
+        <location filename="../controllers/main.py" line="218"/>
         <location filename="../widgets/messages_list.py" line="19"/>
         <source>Remove message</source>
         <translation>Remove message</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="229"/>
+        <location filename="../controllers/main.py" line="228"/>
         <location filename="../widgets/messages_list.py" line="22"/>
         <source>Remove all messages</source>
         <translation>Remove all messages</translation>
@@ -424,12 +424,12 @@
         <translation>Quit</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="124"/>
+        <location filename="../views/main.py" line="126"/>
         <source>Messages</source>
         <translation>Messages</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="125"/>
+        <location filename="../views/main.py" line="127"/>
         <source>Groups</source>
         <translation>Groups</translation>
     </message>
@@ -459,44 +459,44 @@
         <translation>Improper token has been passed.</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="134"/>
+        <location filename="../controllers/main.py" line="133"/>
         <source>Open File</source>
         <translation>Open File</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="144"/>
+        <location filename="../controllers/main.py" line="143"/>
         <source>Saving</source>
         <translation>Saving</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="148"/>
+        <location filename="../controllers/main.py" line="147"/>
         <source>The file has been saved successfully.</source>
         <translation>The file has been saved successfully.</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="153"/>
-        <location filename="../core/app.py" line="153"/>
+        <location filename="../controllers/main.py" line="152"/>
+        <location filename="../core/app.py" line="149"/>
         <location filename="../widgets/log_level_menu.py" line="34"/>
         <source>Warning</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="../core/app.py" line="156"/>
+        <location filename="../core/app.py" line="152"/>
         <source>The file don&apos;t exists anymore.</source>
         <translation>The file don&apos;t exists anymore.</translation>
     </message>
     <message>
-        <location filename="../core/app.py" line="131"/>
+        <location filename="../core/app.py" line="129"/>
         <source>Save File</source>
         <translation>Save File</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="157"/>
+        <location filename="../controllers/main.py" line="156"/>
         <source>You need to restart the application to apply the changes.</source>
         <translation>You need to restart the application to apply the changes.</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="222"/>
+        <location filename="../controllers/main.py" line="221"/>
         <source>Are you sure you want to remove this message?</source>
         <translation>Are you sure you want to remove this message?</translation>
     </message>
@@ -511,17 +511,17 @@
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="230"/>
+        <location filename="../controllers/main.py" line="229"/>
         <source>Are you sure you want to remove all messages?</source>
         <translation>Are you sure you want to remove all messages?</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="258"/>
+        <location filename="../controllers/main.py" line="256"/>
         <source>Invalid file</source>
         <translation>Invalid file</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="259"/>
+        <location filename="../controllers/main.py" line="257"/>
         <source>This file can&apos;t be loaded.</source>
         <translation>This file can&apos;t be loaded.</translation>
     </message>
