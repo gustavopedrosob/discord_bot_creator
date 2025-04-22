@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QComboBox,
     QMainWindow,
-    QTabWidget,
+    QTabWidget, QSlider, QSplitter,
 )
 from extra_qwidgets.utils import get_awesome_icon, colorize_icon
 from extra_qwidgets.widgets.color_button import QColorButton
@@ -95,11 +95,12 @@ class MainView:
         )
 
     def setup_layout(self):
-        central_widget = QWidget()
-        self.window.setCentralWidget(central_widget)
-        main_layout = QHBoxLayout()
-        central_widget.setLayout(main_layout)
+        splitter = QSplitter(Qt.Orientation.Horizontal)
+        self.window.setCentralWidget(splitter)
         right_frame = QVBoxLayout()
+        right_widget = QWidget()
+        right_widget.setMinimumWidth(520)
+        right_widget.setLayout(right_frame)
         for widget in [
             self.logs_text_edit,
             self.cmd_combobox,
@@ -121,6 +122,7 @@ class MainView:
         messages_layout = QVBoxLayout()
         messages_widget.setLayout(messages_layout)
         left_widget = QTabWidget()
+        left_widget.setMinimumWidth(280)
         left_widget.addTab(messages_widget, translate("MainWindow", "Messages"))
         left_widget.addTab(groups_widget, translate("MainWindow", "Groups"))
         for widget in [
@@ -131,8 +133,7 @@ class MainView:
             self.remove_all_message_button,
         ]:
             messages_layout.addWidget(widget)
-        left_widget.setContentsMargins(0, 0, 10, 0)
-        right_frame.setContentsMargins(10, 0, 0, 0)
-        main_layout.addWidget(left_widget)
-        main_layout.addLayout(right_frame)
-        main_layout.setStretch(1, 1)
+        right_frame.setContentsMargins(10, 10, 10, 10)
+        splitter.addWidget(left_widget)
+        splitter.addWidget(right_widget)
+        splitter.setStretchFactor(1, 1)
