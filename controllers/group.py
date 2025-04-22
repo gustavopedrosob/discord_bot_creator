@@ -55,8 +55,7 @@ class GroupController:
         )
 
     def save_group(self):
-        session = self.database.get_session()
-        session.merge(self.get_data())
+        self.database.merge(self.get_data())
 
     def reset(self):
         self.view.welcome_message_textedit.setPlainText("")

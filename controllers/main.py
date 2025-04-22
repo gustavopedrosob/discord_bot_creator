@@ -126,7 +126,6 @@ class MainController:
             self.database.new_session(database_path)
             self.load_data()
             self.update_window_title()
-            self.bot_thread.update_database_session()
 
     def select_file_dialog(self) -> typing.Optional[Path]:
         file_path, _ = QFileDialog.getOpenFileName(
@@ -206,7 +205,7 @@ class MainController:
         selected_messages = self.view.messages_list_widget.selectedItems()
         if selected_messages:
             message = self.database.get_message(selected_messages[0].text())
-            self.database.get_session().delete(message)
+            self.database.delete(message)
             row = self.view.messages_list_widget.indexFromItem(
                 selected_messages[0]
             ).row()
@@ -248,9 +247,8 @@ class MainController:
         Loads all messages from the database and inserts them into the message list.
         """
         self.update_window_title()
-        database = self.database
         self.view.messages_list_widget.clear()
-        for message_name in database.message_names():
+        for message_name in self.database.message_names():
             self.view.messages_list_widget.addItem(message_name)
 
     def invalid_file_alert(self):

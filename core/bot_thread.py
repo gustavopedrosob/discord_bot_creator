@@ -28,9 +28,6 @@ class QBotThread(QThread):
         except LoginFailure:
             self.login_failure.emit()
 
-    def update_database_session(self):
-        self.__bot.database.new_session(config.get("database"))
-
     def groups(self) -> dict[int, discord.Guild]:
         return {guild.id: guild for guild in self.__bot.guilds}
 

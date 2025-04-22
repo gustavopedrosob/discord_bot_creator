@@ -53,7 +53,6 @@ class Application(QApplication):
         config.save()
         self.database.new_session(":memory:")
         self.main_controller.load_data()
-        self.bot_thread.update_database_session()
 
     def get_database_path(self) -> str:
         database_path = Path(config.get("database"))
@@ -98,7 +97,6 @@ class Application(QApplication):
             result = self.group_controller.view.window.exec()
             if result == QDialog.DialogCode.Accepted:
                 self.on_save_action()
-                self.bot_thread.update_database_session()
 
     def new_message(self):
         self.message_controller.reset()
@@ -136,15 +134,13 @@ class Application(QApplication):
             self.save(file_path)
 
     def save(self, path: Union[Path, str, None] = None):
-        session = self.database.get_session()
-        session.commit()
+        self.database.commit()
         if path:
             path = Path(path)
             config.set("database", str(path))
             config.save()
             self.database.backup(path)
             self.main_controller.update_window_title()
-            self.bot_thread.update_database_session()
         self.main_controller.saved_successfully_message_box()
 
     @staticmethod

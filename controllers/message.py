@@ -230,24 +230,22 @@ class MessageController:
         ]
 
     def accepted_edit_selected_message(self):
-        session = self.database.get_session()
         message_id = self.current_message.id
-        session.delete(self.current_message)
+        self.database.delete(self.current_message)
         message = self.get_message(message_id=message_id)
-        session.add(message)
-        self.__add_objects_to_database(message, session)
+        self.database.add(message)
+        self.__add_objects_to_database(message)
 
     def accepted_new_message(self):
-        session = self.database.get_session()
         message = self.get_message()
-        session.add(message)
-        self.__add_objects_to_database(message, session)
+        self.database.add(message)
+        self.__add_objects_to_database(message)
 
-    def __add_objects_to_database(self, message: Message, session: Session):
-        session.add_all(self.get_conditions(message.id))
-        session.add_all(self.get_replies(message.id))
-        session.add_all(self.get_reactions(message.id))
-        session.add_all(self.get_expected_messages(message.id))
+    def __add_objects_to_database(self, message: Message):
+        self.database.add_all(self.get_conditions(message.id))
+        self.database.add_all(self.get_replies(message.id))
+        self.database.add_all(self.get_reactions(message.id))
+        self.database.add_all(self.get_expected_messages(message.id))
 
     def reset(self):
         """Resets the window's field."""
