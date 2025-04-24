@@ -7,11 +7,11 @@ import emojis
 
 from core.translator import Translator, FIELDS_TRANSLATIONS, OPERATORS_TRANSLATIONS, BOOL_TRANSLATIONS
 from models.condition import MessageCondition
-from widgets.log_handler import log_handler
+from core.log_handler import LogHandler
 
 
 logger = logging.getLogger(__name__)
-logger.addHandler(log_handler)
+logger.addHandler(LogHandler())
 translate = Translator.translate
 
 

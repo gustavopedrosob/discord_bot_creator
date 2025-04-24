@@ -2,8 +2,10 @@ import logging
 from datetime import datetime
 from PySide6.QtCore import Signal
 
+from core.singleton import SingletonMeta
 
-class LogHandler(logging.Handler):
+
+class LogHandler(logging.Handler, metaclass=SingletonMeta):
     def __init__(self):
         super().__init__()
         self.__signal = None

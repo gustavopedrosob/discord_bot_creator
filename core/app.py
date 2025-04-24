@@ -16,12 +16,12 @@ from controllers.message import MessageController
 from core.config import instance as config
 from views.credits import CreditsView
 from core.bot_thread import QBotThread
-from widgets.log_handler import log_handler
+from core.log_handler import LogHandler
 from views.main import MainView
 
 
 logger = logging.getLogger(__name__)
-logger.addHandler(log_handler)
+logger.addHandler(LogHandler())
 
 
 class Application(QApplication):
@@ -36,7 +36,7 @@ class Application(QApplication):
         locale.setlocale(locale.LC_ALL, lang)
         self.installTranslator(Translator().get_instance())
         self.bot_thread = QBotThread()
-        log_handler.set_signal(self.bot_thread.log)
+        LogHandler().set_signal(self.bot_thread.log)
         self.database = Database(self.get_database_path())
         self.main_controller = MainController(self.database, self.bot_thread)
         self.message_controller = MessageController(self.database)

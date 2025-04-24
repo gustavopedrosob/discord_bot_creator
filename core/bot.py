@@ -13,10 +13,10 @@ from interpreter.conditions import MessageConditionValidator
 from interpreter.variable import Variable
 from models.message import Message
 from models.reaction import MessageReaction
-from widgets.log_handler import log_handler
+from core.log_handler import LogHandler
 
 logger = logging.getLogger(__name__)
-logger.addHandler(log_handler)
+logger.addHandler(LogHandler())
 translate = Translator.translate
 
 
