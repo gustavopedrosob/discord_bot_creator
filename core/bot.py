@@ -4,13 +4,12 @@ import random
 import typing
 
 import discord
-from charset_normalizer.utils import is_arabic_isolated_form
 from discord import MessageType
 
 from core.config import instance as config
 from core.database import Database
 from core.translator import Translator
-from interpreter.conditions import MessageConditions
+from interpreter.conditions import MessageConditionValidator
 from interpreter.variable import Variable
 from models.message import Message
 from models.reaction import MessageReaction
@@ -62,19 +61,11 @@ class Bot(discord.Client):
                     discord_message.clean_content
                 )
             )
-
             for message in self.database.get_messages():
-                message_condition = MessageConditions(
-                    discord_message, message.expected_messages, self.user
+                validator = MessageConditionValidator(
+                    message.conditions, discord_message
                 )
-                conditions_to_confirm = message_condition.filter(message.conditions)
-                logger.debug(
-                    translate("Bot", "Validating message conditions {}: {}").format(
-                        message.name, conditions_to_confirm
-                    )
-                )
-
-                if all(conditions_to_confirm.values()):
+                if validator.is_valid_all():
                     if message.delay:
                         await self.apply_delay(message.delay)
                     if message.replies:

@@ -9,10 +9,12 @@ class MessageCondition(Base):
 
     id = Column(Integer, primary_key=True)
     message_id = Column(Integer, ForeignKey("messages.id"), nullable=False)
-    condition = Column(String, nullable=False)
+    field = Column(String, nullable=False)
+    operator = Column(String, nullable=False)
+    value = Column(String, nullable=False)
 
     # Relacionamento many-to-one
     message = relationship("Message", back_populates="conditions")
 
     def __repr__(self):
-        return f"<MessageCondition(condition='{self.condition}')>"
+        return f"<MessageCondition(field='{self.field}', operator='{self.operator}', value='{self.value}')>"

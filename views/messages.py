@@ -1,16 +1,11 @@
-import typing
-
 from PySide6.QtCore import (
     Qt,
     QCoreApplication,
     QRegularExpression,
-    QMimeData,
 )
 from PySide6.QtGui import (
     QIcon,
     QRegularExpressionValidator,
-    QKeyEvent,
-    QValidator,
 )
 from PySide6.QtWidgets import (
     QVBoxLayout,
@@ -26,57 +21,15 @@ from extra_qwidgets.widgets.checkboxes import QCheckBoxes
 from extra_qwidgets.widgets.collapse_group import QCollapseGroup
 from extra_qwidgets.widgets.color_button import QColorButton
 from extra_qwidgets.widgets.emoji_picker.emoji_validator import QEmojiValidator
-from extra_qwidgets.widgets.resposive_text_edit import QResponsiveTextEdit
 
 from core.translator import Translator
+from widgets.condition_listbox import QConditionListbox
 from widgets.custom_button import QCustomButton
 from widgets.custom_checkbox import QCustomCheckBox
 from widgets.listbox import QListBox
+from widgets.message_text_edit import QMessageTextEdit
 
 translate = QCoreApplication.translate
-
-
-class QMessageTextEdit(QResponsiveTextEdit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.setMaximumHeight(400)
-        self.__validator = None
-
-    def validator(self) -> typing.Optional[QValidator]:
-        return self.__validator
-
-    def set_validator(self, validator: QValidator):
-        self.__validator = validator
-
-    def insertFromMimeData(self, source: QMimeData):
-        if source.hasText():
-            text = source.text()
-            validator = self.validator()
-            if validator and validator.validate(text, 0) not in (
-                QValidator.State.Intermediate,
-                QValidator.State.Acceptable,
-            ):
-                return
-            mime_data = QMimeData()
-            mime_data.setText(source.text())
-            super().insertFromMimeData(mime_data)
-
-    def keyPressEvent(self, e: QKeyEvent):
-        if e.modifiers() == Qt.KeyboardModifier.NoModifier and e.key() not in (
-            Qt.Key.Key_Return,
-            Qt.Key.Key_Enter,
-            Qt.Key.Key_Backspace,
-        ):
-            text = self.toPlainText() + e.text()
-            validator = self.validator()
-            if validator and validator.validate(text, 0) not in (
-                QValidator.State.Intermediate,
-                QValidator.State.Acceptable,
-            ):
-                return
-            super().keyPressEvent(e)
-        else:
-            super().keyPressEvent(e)
 
 
 class MessageView:
@@ -136,11 +89,8 @@ class MessageView:
         )
         self.name_entry.setMaxLength(40)
         self.name_entry.setValidator(name_entry_validator)
-        self.conditions_combobox = QComboBox()
-        for condition, translated_condition in self.translated_conditions.items():
-            self.conditions_combobox.addItem(translated_condition, condition)
 
-        self.listbox_conditions = QListBox(self.conditions_combobox)
+        self.listbox_conditions = QConditionListbox()
         self.collapse_conditions = QCollapseGroup(
             translate("MessageWindow", "Conditions"),
             self.listbox_conditions,
@@ -155,12 +105,7 @@ class MessageView:
             self.listbox_reactions,
         )
         self.collapse_reactions.setContentsMargins(0, 0, 0, 0)
-        self.messages_line_edit = QMessageTextEdit()
-        self.listbox_messages = QListBox(self.messages_line_edit)
-        self.collapse_messages = QCollapseGroup(
-            translate("MessageWindow", "Messages"), self.listbox_messages
-        )
-        self.collapse_messages.setContentsMargins(0, 0, 0, 0)
+
         self.replies_line_edit = QMessageTextEdit()
         self.listbox_replies = QListBox(self.replies_line_edit)
         self.collapse_replies = QCollapseGroup(
@@ -221,7 +166,6 @@ class MessageView:
         for widget in (
             self.collapse_conditions,
             self.collapse_reactions,
-            self.collapse_messages,
             self.collapse_replies,
         ):
             left_layout.addWidget(widget)

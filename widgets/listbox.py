@@ -26,7 +26,7 @@ class QListBox(QScrollArea):
         self.__list = QListWidget()
         self.__list.setMinimumHeight(85)
         self.__add_button = QThemeResponsiveButton()
-        self.__add_button.setIcon(get_awesome_icon("plus"))
+        self.__add_button.setIcon(get_awesome_icon("arrow-right"))
         self.__add_button.setFlat(True)
         self.__line_edit = line_edit
         self.__horizontal_layout = QHBoxLayout()
@@ -38,7 +38,6 @@ class QListBox(QScrollArea):
         self.setWidgetResizable(True)
         content_widget = QWidget()
         self.__layout = QVBoxLayout(content_widget)
-        self.setWidget(content_widget)
         self.__layout.addWidget(self.__list)
         self.__layout.addLayout(self.__horizontal_layout)
         self.setWidget(content_widget)

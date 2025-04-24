@@ -34,7 +34,7 @@ class Application(QApplication):
         )
         lang = config.get("language")
         locale.setlocale(locale.LC_ALL, lang)
-        self.installTranslator(Translator.get_instance())
+        self.installTranslator(Translator().get_instance())
         self.bot_thread = QBotThread()
         log_handler.set_signal(self.bot_thread.log)
         self.database = Database(self.get_database_path())

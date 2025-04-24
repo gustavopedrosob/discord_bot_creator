@@ -41,18 +41,7 @@ class MessageController:
             self.view.listbox_reactions.entry_layout(), self.view.reactions_line_edit
         )
         self.__add_emoji_button(
-            self.view.listbox_messages.entry_layout(), self.view.messages_line_edit
-        )
-        self.__add_emoji_button(
             self.view.listbox_replies.entry_layout(), self.view.replies_line_edit
-        )
-        self.view.listbox_messages.add_button().clicked.connect(
-            lambda: self.insert_on_listbox(
-                self.view.listbox_messages, self.view.messages_line_edit
-            )
-        )
-        self.view.listbox_conditions.add_button().clicked.connect(
-            self.__on_add_condition
         )
         self.view.listbox_replies.add_button().clicked.connect(
             lambda: self.insert_on_listbox(
@@ -83,21 +72,6 @@ class MessageController:
         self.emoji_picker_popup.exec()
         self.emoji_picker_popup.hideEvent = emoji_picker.picked.disconnect(append_emoji)
         self.view.window.setCursor(Qt.CursorShape.ArrowCursor)
-
-    def _add_condition(self, condition: str):
-        translated_condition = self.view.translated_conditions[condition]
-        item = QListWidgetItem()
-        item.setText(translated_condition)
-        item.setData(Qt.ItemDataRole.UserRole, condition)
-        self.view.listbox_conditions.add_item(item)
-
-    def __on_add_condition(self):
-        index = self.view.conditions_combobox.currentIndex()
-        condition = self.view.conditions_combobox.itemData(
-            index, Qt.ItemDataRole.UserRole
-        )
-        if condition not in self.view.listbox_conditions.get_items_userdata():
-            self._add_condition(condition)
 
     def is_name_valid(self):
         if self.current_message:
@@ -132,19 +106,6 @@ class MessageController:
                 )
             )
             message_box.exec()
-        elif self.__has_opposite_conditions():
-            message_box = QMessageBox()
-            message_box.setWindowTitle(
-                Translator.translate("MessageWindow", "Opposite conditions")
-            )
-            message_box.setWindowIcon(QIcon("source/icons/window-icon.svg"))
-            message_box.setText(
-                Translator.translate(
-                    "MessageWindow",
-                    "You can't have opposite conditions, please remove them.",
-                )
-            )
-            message_box.exec()
         else:
             if self.current_message is None:
                 self.accepted_new_message()
@@ -154,16 +115,6 @@ class MessageController:
                 self.view.window.done(2)
             else:
                 self.view.window.accept()
-
-    def __has_opposite_conditions(self) -> bool:
-        conditions = self.view.listbox_conditions.get_items_userdata()
-        for condition in conditions:
-            opposite_condition = (
-                condition[4:] if condition.startswith("not ") else f"not {condition}"
-            )
-            if opposite_condition in conditions:
-                return True
-        return False
 
     def get_name(self):
         return self.view.name_entry.text()
@@ -205,12 +156,6 @@ class MessageController:
             message.id = self.database.new_message_id()
         return message
 
-    def get_conditions(self, message_id: int) -> list[MessageCondition]:
-        return [
-            MessageCondition(message_id=message_id, condition=i)
-            for i in self.view.listbox_conditions.get_items_userdata()
-        ]
-
     def get_replies(self, message_id: int) -> list[MessageReply]:
         return [
             MessageReply(message_id=message_id, text=i)
@@ -221,12 +166,6 @@ class MessageController:
         return [
             MessageReaction(message_id=message_id, reaction=i)
             for i in self.view.listbox_reactions.get_items_text()
-        ]
-
-    def get_expected_messages(self, message_id: int) -> list[ExpectedMessage]:
-        return [
-            ExpectedMessage(message_id=message_id, text=i)
-            for i in self.view.listbox_messages.get_items_text()
         ]
 
     def accepted_edit_selected_message(self):
@@ -242,16 +181,14 @@ class MessageController:
         self.__add_objects_to_database(message)
 
     def __add_objects_to_database(self, message: Message):
-        self.database.add_all(self.get_conditions(message.id))
+        self.database.add_all(self.view.listbox_conditions.get_data(message.id))
         self.database.add_all(self.get_replies(message.id))
         self.database.add_all(self.get_reactions(message.id))
-        self.database.add_all(self.get_expected_messages(message.id))
 
     def reset(self):
         """Resets the window's field."""
         self.current_message = None
         self.view.name_entry.setText("")
-        self.view.listbox_messages.reset()
         self.view.listbox_replies.reset()
         self.view.listbox_reactions.reset()
         self.view.listbox_conditions.reset()
@@ -270,14 +207,11 @@ class MessageController:
         self.current_message = message
         self.view.name_entry.setText(message.name)
         self.view.delay.setValue(message.delay)
-        for expected_message in message.expected_messages:
-            self.view.listbox_messages.add_item(expected_message.text)
         for reply in message.replies:
             self.view.listbox_replies.add_item(reply.text)
         for reaction in message.reactions:
             self.view.listbox_reactions.add_item(reaction.reaction)
-        for condition in message.conditions:
-            self._add_condition(condition.condition)
+        self.view.listbox_conditions.load(message.conditions)
         self.view.group_pin_or_del.check_by_name(message.pin_or_del)
         self.view.group_kick_or_ban.check_by_name(message.kick_or_ban)
         self.view.group_where_reply.check_by_name(message.where_reply)
