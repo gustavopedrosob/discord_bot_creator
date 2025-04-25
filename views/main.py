@@ -3,12 +3,10 @@ from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
-    QHBoxLayout,
-    QTextEdit,
     QLabel,
     QComboBox,
     QMainWindow,
-    QTabWidget, QSlider, QSplitter,
+    QTabWidget, QSplitter,
 )
 from extra_qwidgets.utils import get_awesome_icon, colorize_icon
 from extra_qwidgets.widgets.color_button import QColorButton
@@ -17,6 +15,7 @@ from extra_qwidgets.widgets.password import QPassword
 from core.config import instance as config
 from widgets.custom_button import QCustomButton
 from widgets.groups_list import QGroupsList
+from widgets.log_textedit import QLogTextEdit
 from widgets.menu_bar import MenuBar
 from widgets.messages_list import QMessagesList
 
@@ -32,12 +31,7 @@ class MainView:
 
         self.menu_bar = MenuBar(self.window)
 
-        self.logs_text_edit = QTextEdit()
-        self.logs_text_edit.setPlaceholderText(
-            translate("MainWindow", "No logs at moment")
-        )
-        self.logs_text_edit.setReadOnly(True)
-        self.logs_text_edit.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.logs_text_edit = QLogTextEdit()
 
         self.cmd_combobox = QComboBox()
         self.cmd_combobox.addItems(["clear"])

@@ -1,11 +1,9 @@
-import logging
 import os
 import typing
 from pathlib import Path
-import html
 
 from PySide6.QtCore import Qt, QCoreApplication
-from PySide6.QtGui import QTextCursor, QCloseEvent
+from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QMessageBox, QListWidgetItem, QFileDialog
 
 from core.config import instance as config
@@ -68,7 +66,7 @@ class MainController:
         bot_thread.finished.connect(self.on_bot_thread_finished)
         bot_thread.bot_ready.connect(self.on_bot_ready)
         bot_thread.login_failure.connect(self.on_login_failure)
-        bot_thread.log.connect(self.log)
+        bot_thread.log.connect(self.view.logs_text_edit.add_log)
         bot_thread.guild_join.connect(self.update_groups)
         bot_thread.guild_remove.connect(self.update_groups)
         bot_thread.guild_update.connect(self.update_groups)
@@ -255,23 +253,6 @@ class MainController:
         self.warning_message_box(
             translate("MainWindow", "Invalid file"),
             translate("MainWindow", "This file can't be loaded."),
-        )
-
-    def log(self, message: str, level: typing.Optional[int] = None):
-        if level is None:
-            level = logging.INFO
-        styles = {
-            logging.INFO: "",
-            logging.DEBUG: "color: #E5D352;",
-            logging.ERROR: "color: #D8315B;",
-            logging.WARNING: "color: #FF7F11;",
-        }
-        text_cursor = self.view.logs_text_edit.textCursor()
-        text_cursor.movePosition(
-            QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor
-        )
-        text_cursor.insertHtml(
-            f'<span style="{styles[level]}">{html.escape(message)}</span><br>'
         )
 
     def accepted_edit_selected_message(
