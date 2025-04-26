@@ -4,7 +4,6 @@ from PySide6.QtCore import QPoint
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import (
     QListWidget,
-    QListWidgetItem,
     QMessageBox,
     QHBoxLayout,
     QLineEdit,
@@ -14,7 +13,6 @@ from PySide6.QtWidgets import (
 from emojis.db import Emoji
 from extra_qwidgets.utils import get_awesome_icon
 from extra_qwidgets.widgets import QResponsiveTextEdit, QThemeResponsiveButton
-from sqlalchemy.orm import Session
 
 from core.database import Database
 from core.translator import Translator

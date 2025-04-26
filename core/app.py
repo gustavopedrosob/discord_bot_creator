@@ -37,7 +37,7 @@ class Application(QApplication):
         self.installTranslator(Translator().get_instance())
         self.bot_thread = QBotThread()
         LogHandler().set_signal(self.bot_thread.log)
-        self.database = Database(self.get_database_path())
+        self.database = Database()
         self.main_controller = MainController(self.database, self.bot_thread)
         self.message_controller = MessageController(self.database)
         self.group_controller = GroupController(self.database)
@@ -79,7 +79,13 @@ class Application(QApplication):
         main_view.messages_list_widget.edit_action.triggered.connect(
             self.edit_selected_message
         )
+        main_view.messages_list_widget.itemDoubleClicked.connect(
+            self.edit_selected_message
+        )
         main_view.groups_list_widget.config_action.triggered.connect(
+            self.config_selected_group
+        )
+        main_view.groups_list_widget.itemDoubleClicked.connect(
             self.config_selected_group
         )
         main_view.config_group_button.clicked.connect(self.config_selected_group)
