@@ -16,9 +16,6 @@ class Message(Base):
     delay = Column(Integer, default=0)
 
     # Relacionamentos one-to-many
-    expected_messages = relationship(
-        "ExpectedMessage", back_populates="message", cascade="all, delete-orphan"
-    )
     replies = relationship(
         "MessageReply", back_populates="message", cascade="all, delete-orphan"
     )

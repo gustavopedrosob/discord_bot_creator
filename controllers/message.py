@@ -18,8 +18,6 @@ from sqlalchemy.orm import Session
 
 from core.database import Database
 from core.translator import Translator
-from models.condition import MessageCondition
-from models.expected_message import ExpectedMessage
 from models.message import Message
 from models.reaction import MessageReaction
 from models.reply import MessageReply

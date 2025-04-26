@@ -121,7 +121,7 @@ class MainController:
         if database_path:
             config.set("database", str(database_path))
             config.save()
-            self.database.new_session(database_path)
+            self.database.update_session()
             self.load_data()
             self.update_window_title()
 

@@ -1,22 +1,26 @@
 import typing
+from datetime import datetime
+from logging import LogRecord
 from multiprocessing import Lock
 from pathlib import Path
 
 from sqlalchemy import create_engine, text, func
 from sqlalchemy.orm import sessionmaker, Session
 
+from core.config import instance as config
 from core.singleton import SingletonMeta
 from models.base import Base
 from models.group import Group
+from models.log import Log
 from models.message import Message
 
 
 class Database(metaclass=SingletonMeta):
-    def __init__(self, database: typing.Union[str, Path] = None):
+    def __init__(self):
         self.__engine = None
         self.__session = None
         self.lock = Lock()
-        self.new_session(database)
+        self.update_session()
 
     def add(self, obj):
         with self.lock:
@@ -30,15 +34,18 @@ class Database(metaclass=SingletonMeta):
         with self.lock:
             self.__session.commit()
 
-    def new_session(self, database: typing.Union[str, Path]):
-        self.end_session()
+    def new_session(self):
         connect_args = {"check_same_thread": False}
         self.__engine = create_engine(
-            f"sqlite:///{str(database)}", connect_args=connect_args
+            f"sqlite:///{config.get("database")}", connect_args=connect_args
         )
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine)
-        self.__session = session_factory()
+        return session_factory()
+
+    def update_session(self):
+        self.end_session()
+        self.__session = self.new_session()
 
     def end_session(self):
         if self.__session:
@@ -94,6 +101,13 @@ class Database(metaclass=SingletonMeta):
             if max_id is None:
                 return 0
             return max_id + 1
+
+    def new_log(self, record: LogRecord):
+        with self.new_session() as session:
+            created = datetime.fromtimestamp(record.created)
+            log = Log(datetime=created, message=record.getMessage(), level_number=record.levelno)
+            session.add(log)
+            session.commit()
 
     def __del__(self):
         """Garante que a sessão e o engine sejam fechados quando o objeto for destruído"""

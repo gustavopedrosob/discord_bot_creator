@@ -6,7 +6,6 @@ import typing
 import discord
 from discord import MessageType
 
-from core.config import instance as config
 from core.database import Database
 from core.translator import Translator
 from interpreter.conditions import MessageConditionValidator
@@ -23,7 +22,7 @@ translate = Translator.translate
 class Bot(discord.Client):
     def __init__(self):
         super().__init__(intents=discord.Intents.all())
-        self.database = Database(config.get("database"))
+        self.database = Database()
 
     async def on_ready(self):
         logger.info(translate("Bot", "Bot started!"))

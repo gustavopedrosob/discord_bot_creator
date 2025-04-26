@@ -51,7 +51,7 @@ class Application(QApplication):
     def on_new_action(self):
         config.set("database", ":memory:")
         config.save()
-        self.database.new_session(":memory:")
+        self.database.update_session()
         self.main_controller.load_data()
 
     def get_database_path(self) -> str:

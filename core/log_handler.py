@@ -2,6 +2,7 @@ import logging
 from datetime import datetime
 from PySide6.QtCore import Signal
 
+from core.database import Database
 from core.singleton import SingletonMeta
 
 
@@ -16,6 +17,7 @@ class LogHandler(logging.Handler, metaclass=SingletonMeta):
             self.__signal.emit(
                 f"{date.strftime("%x %X")} - {record.getMessage()}\n", record.levelno
             )
+        Database().new_log(record)
 
     def set_signal(self, signal: Signal):
         self.__signal = signal
