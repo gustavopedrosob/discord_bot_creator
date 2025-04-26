@@ -113,6 +113,9 @@ class Database(metaclass=SingletonMeta):
             session.add(log)
             session.commit()
 
+    def need_to_commit(self) -> bool:
+        return self.__session.new or self.__session.dirty or self.__session.deleted
+
     def __del__(self):
         """Garante que a sessão e o engine sejam fechados quando o objeto for destruído"""
         self.end_session()

@@ -146,7 +146,7 @@ class Application(QApplication):
             config.set("database", str(path))
             config.save()
             self.database.backup(path)
-            self.main_controller.update_window_title()
+        self.main_controller.update_window_title()
         self.main_controller.saved_successfully_message_box()
 
     @staticmethod

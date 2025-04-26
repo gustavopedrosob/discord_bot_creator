@@ -114,6 +114,8 @@ class MainController:
         database_path = Path(config.get("database"))
         if database_path and database_path.exists():
             title = f"Discord Bot Creator - {database_path.name}"
+        if self.database.need_to_commit():
+            title += " *"
         self.view.window.setWindowTitle(title)
 
     def on_load_action(self):
@@ -259,9 +261,11 @@ class MainController:
         self, old_message_name: str, new_message_name: str
     ):
         self.__get_list_item_message(old_message_name).setText(new_message_name)
+        self.update_window_title()
 
     def accepted_new_message(self, message_name: str):
         self.view.messages_list_widget.addItem(message_name)
+        self.update_window_title()
 
     def turn_off_bot(self):
         self.bot_thread.close()
