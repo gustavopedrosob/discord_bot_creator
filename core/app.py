@@ -105,13 +105,13 @@ class Application(QApplication):
                 self.on_save_action()
 
     def new_message(self):
-        self.message_controller.reset()
+        self.message_controller.config()
         result = self.message_controller.view.window.exec()
         if result == 2:
             self.on_save_action()
         if result in (2, QDialog.DialogCode.Accepted):
             self.main_controller.accepted_new_message(
-                self.message_controller.get_name()
+                self.message_controller.current_message.name
             )
 
     def edit_selected_message(self):

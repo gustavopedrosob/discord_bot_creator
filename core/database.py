@@ -99,13 +99,17 @@ class Database(metaclass=SingletonMeta):
         with self.lock:
             max_id = self.__session.query(func.max(Message.id)).scalar()
             if max_id is None:
-                return 0
+                return 1
             return max_id + 1
 
     def new_log(self, record: LogRecord):
         with self.new_session() as session:
             created = datetime.fromtimestamp(record.created)
-            log = Log(datetime=created, message=record.getMessage(), level_number=record.levelno)
+            log = Log(
+                datetime=created,
+                message=record.getMessage(),
+                level_number=record.levelno,
+            )
             session.add(log)
             session.commit()
 

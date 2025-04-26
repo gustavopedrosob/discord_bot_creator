@@ -113,7 +113,18 @@ class MessageController:
                 self.view.window.accept()
 
     def get_name(self):
-        return self.view.name_entry.text()
+        message_name = self.view.name_entry.text()
+        if (
+            message_name == ""
+            and self.current_message
+            and self.current_message.name != ""
+        ):
+            message_name = self.current_message.name
+        elif message_name == "":
+            message_name = Translator.translate("MessageWindow", "Message {}").format(
+                self.database.new_message_id()
+            )
+        return message_name
 
     def __del_checked(self, check_state: int):
         author_checkbox = self.view.group_where_react.findChild(QCheckBox, "author")
@@ -170,11 +181,13 @@ class MessageController:
         message = self.get_message(message_id=message_id)
         self.database.add(message)
         self.__add_objects_to_database(message)
+        self.current_message = message
 
     def accepted_new_message(self):
         message = self.get_message()
         self.database.add(message)
         self.__add_objects_to_database(message)
+        self.current_message = message
 
     def __add_objects_to_database(self, message: Message):
         self.database.add_all(self.view.listbox_conditions.get_data(message.id))
@@ -197,18 +210,20 @@ class MessageController:
         ):
             group.reset()
 
-    def config(self, message: Message):
+    def config(self, message: typing.Optional[Message] = None):
         """Resets the window and setup fields by data parameter."""
         self.reset()
         self.current_message = message
-        self.view.name_entry.setText(message.name)
-        self.view.delay.setValue(message.delay)
-        for reply in message.replies:
-            self.view.listbox_replies.add_item(reply.text)
-        for reaction in message.reactions:
-            self.view.listbox_reactions.add_item(reaction.reaction)
-        self.view.listbox_conditions.load(message.conditions)
-        self.view.group_pin_or_del.check_by_name(message.pin_or_del)
-        self.view.group_kick_or_ban.check_by_name(message.kick_or_ban)
-        self.view.group_where_reply.check_by_name(message.where_reply)
-        self.view.group_where_react.check_by_name(message.where_reaction)
+        if message:
+            self.view.name_entry.setText(message.name)
+            self.view.delay.setValue(message.delay)
+            for reply in message.replies:
+                self.view.listbox_replies.add_item(reply.text)
+            for reaction in message.reactions:
+                self.view.listbox_reactions.add_item(reaction.reaction)
+            self.view.listbox_conditions.load(message.conditions)
+            self.view.group_pin_or_del.check_by_name(message.pin_or_del)
+            self.view.group_kick_or_ban.check_by_name(message.kick_or_ban)
+            self.view.group_where_reply.check_by_name(message.where_reply)
+            self.view.group_where_react.check_by_name(message.where_reaction)
+        self.view.name_entry.setPlaceholderText(self.get_name())

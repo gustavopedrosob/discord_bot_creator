@@ -555,18 +555,22 @@
     </message>
     <message>
         <location filename="../controllers/main.py" line="150"/>
-        <location filename="../core/app.py" line="149"/>
+        <location filename="../core/app.py" line="155"/>
         <location filename="../widgets/log_level_menu.py" line="34"/>
         <source>Warning</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="../core/app.py" line="152"/>
+        <source>Message {}</source>
+        <translation type="vanished">Message {}</translation>
+    </message>
+    <message>
+        <location filename="../core/app.py" line="158"/>
         <source>The file don&apos;t exists anymore.</source>
         <translation>The file don&apos;t exists anymore.</translation>
     </message>
     <message>
-        <location filename="../core/app.py" line="129"/>
+        <location filename="../core/app.py" line="135"/>
         <source>Save File</source>
         <translation>Save File</translation>
     </message>
@@ -719,14 +723,19 @@
         <translation>Confirm and save</translation>
     </message>
     <message>
-        <location filename="../controllers/message.py" line="98"/>
+        <location filename="../controllers/message.py" line="96"/>
         <source>Name already exists</source>
         <translation>Name already exists</translation>
     </message>
     <message>
-        <location filename="../controllers/message.py" line="105"/>
+        <location filename="../controllers/message.py" line="103"/>
         <source>You can&apos;t set a message with a name that already exists.</source>
         <translation>You can&apos;t set a message with a name that already exists.</translation>
+    </message>
+    <message>
+        <location filename="../controllers/message.py" line="118"/>
+        <source>Message {}</source>
+        <translation>Message {}</translation>
     </message>
     <message>
         <source>Opposite conditions</source>
