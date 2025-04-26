@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from models.base import Base
@@ -12,6 +12,7 @@ class MessageCondition(Base):
     field = Column(String, nullable=False)
     operator = Column(String, nullable=False)
     value = Column(String, nullable=False)
+    case_insensitive = Column(Boolean, nullable=True, default=False)
 
     # Relacionamento many-to-one
     message = relationship("Message", back_populates="conditions")
