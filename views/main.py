@@ -1,3 +1,4 @@
+import qtawesome
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import (
@@ -6,9 +7,10 @@ from PySide6.QtWidgets import (
     QLabel,
     QComboBox,
     QMainWindow,
-    QTabWidget, QSplitter,
+    QTabWidget,
+    QSplitter,
 )
-from extra_qwidgets.utils import get_awesome_icon, colorize_icon
+from extra_qwidgets.utils import colorize_icon
 from extra_qwidgets.widgets.color_button import QColorButton
 from extra_qwidgets.widgets.password import QPassword
 
@@ -47,13 +49,13 @@ class MainView:
             translate("MainWindow", "Turn on bot"), "#3e92cc"
         )
         self.turn_on_bot_button.setIcon(
-            colorize_icon(get_awesome_icon("play"), "#FFFFFF")
+            colorize_icon(qtawesome.icon("fa6s.play"), "#FFFFFF")
         )
         self.turn_off_bot_button = QColorButton(
             translate("MainWindow", "Turn off bot"), "#d8315b"
         )
         self.turn_off_bot_button.setIcon(
-            colorize_icon(get_awesome_icon("stop"), "#FFFFFF")
+            colorize_icon(qtawesome.icon("fa6s.stop"), "#FFFFFF")
         )
 
         self.groups_list_widget = QGroupsList()

@@ -1,5 +1,6 @@
 import typing
 
+import qtawesome
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIntValidator, QAction
 from PySide6.QtWidgets import (
@@ -14,7 +15,6 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMenu,
 )
-from extra_qwidgets.utils import get_awesome_icon
 from extra_qwidgets.widgets import QThemeResponsiveButton
 from extra_qwidgets.widgets.theme_responsive_checkbutton import (
     QThemeResponsiveCheckButton,
@@ -38,13 +38,13 @@ class QConditionListbox(QScrollArea):
         self.operator_combobox = QComboBox()
         self.case_insensitive_checkbutton = QThemeResponsiveCheckButton()
         self.case_insensitive_checkbutton.setToolTip(self.tr("Case insensitive"))
-        self.case_insensitive_checkbutton.setIcon(get_awesome_icon("font"))
+        self.case_insensitive_checkbutton.setIcon(qtawesome.icon("fa6s.font"))
         self.value_lineedit = QLineEdit()
         self.value_lineedit.setPlaceholderText(
             Translator.translate("QConditionListbox", "Value")
         )
         self.__add_button = QThemeResponsiveButton()
-        self.__add_button.setIcon(get_awesome_icon("arrow-right"))
+        self.__add_button.setIcon(qtawesome.icon("fa6s.arrow-right"))
         self.__add_button.setFlat(True)
         self.setWidgetResizable(True)
         self.setup_binds()

@@ -1,3 +1,4 @@
+import qtawesome
 from PySide6.QtCore import QCoreApplication, Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
@@ -9,7 +10,7 @@ from PySide6.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
 )
-from extra_qwidgets.utils import get_awesome_icon, colorize_icon
+from extra_qwidgets.utils import colorize_icon
 from extra_qwidgets.widgets import (
     QResponsiveTextEdit,
     QColorButton,
@@ -37,19 +38,19 @@ class GroupView:
         self.welcome_message_textedit = QResponsiveTextEdit()
         self.welcome_message_textedit.setMaximumHeight(300)
         self.welcome_message_pick_button = QThemeResponsiveButton()
-        self.welcome_message_pick_button.setIcon(get_awesome_icon("list"))
+        self.welcome_message_pick_button.setIcon(qtawesome.icon("fa6s.list"))
 
         self.goodbye_message_channels = QComboBox()
         self.goodbye_message_textedit = QResponsiveTextEdit()
         self.goodbye_message_textedit.setMaximumHeight(300)
         self.goodbye_message_pick_button = QThemeResponsiveButton()
-        self.goodbye_message_pick_button.setIcon(get_awesome_icon("list"))
+        self.goodbye_message_pick_button.setIcon(qtawesome.icon("fa6s.list"))
 
         self.save_button = QColorButton(
             translate("MessageWindow", "Confirm and save"), "#3DCC61"
         )
         self.save_button.setIcon(
-            colorize_icon(get_awesome_icon("floppy-disk"), "#FFFFFF")
+            colorize_icon(qtawesome.icon("fa6s.floppy-disk"), "#FFFFFF")
         )
 
         self.setup_layout()

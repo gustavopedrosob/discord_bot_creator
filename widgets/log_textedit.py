@@ -1,10 +1,9 @@
 import logging
 import typing
 
-from PySide6.QtCore import Qt, QEvent
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QTextCursor, QColor, QTextCharFormat, QTextDocument
 from PySide6.QtWidgets import QTextEdit, QApplication
-from extra_qwidgets.utils import is_dark_mode
 
 from utils import colors
 
@@ -21,9 +20,7 @@ class QLogTextEdit(QTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setReadOnly(True)
-        self.setPlaceholderText(
-            self.tr("No logs at moment")
-        )
+        self.setPlaceholderText(self.tr("No logs at moment"))
         self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.installEventFilter(self)
         style_hints = QApplication.styleHints()
@@ -79,5 +76,8 @@ class QLogTextEdit(QTextEdit):
                         new_fmt = QTextCharFormat(fmt)
                         new_fmt.setForeground(color_map[color_class])
                         cursor.setPosition(fragment.position())
-                        cursor.setPosition(fragment.position() + fragment.length(), QTextCursor.MoveMode.KeepAnchor)
+                        cursor.setPosition(
+                            fragment.position() + fragment.length(),
+                            QTextCursor.MoveMode.KeepAnchor,
+                        )
                         cursor.setCharFormat(new_fmt)

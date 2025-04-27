@@ -1,5 +1,6 @@
 import typing
 
+import qtawesome
 from PySide6.QtCore import QPoint
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import (
@@ -11,7 +12,6 @@ from PySide6.QtWidgets import (
     QCheckBox,
 )
 from emojis.db import Emoji
-from extra_qwidgets.utils import get_awesome_icon
 from extra_qwidgets.widgets import QResponsiveTextEdit, QThemeResponsiveButton
 
 from core.database import Database
@@ -79,7 +79,7 @@ class MessageController:
         self, layout: QHBoxLayout, line_edit: typing.Union[QLineEdit, QTextEdit]
     ):
         emote_button = QThemeResponsiveButton()
-        emote_button.setIcon(get_awesome_icon("face-smile"))
+        emote_button.setIcon(qtawesome.icon("fa6s.face-smile"))
         emote_button.setFlat(True)
         layout.addWidget(emote_button, alignment=Qt.AlignmentFlag.AlignTop)
         emote_button.clicked.connect(

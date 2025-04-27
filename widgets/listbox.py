@@ -1,5 +1,6 @@
 import typing
 
+import qtawesome
 from PySide6.QtCore import Qt, QCoreApplication
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
@@ -13,7 +14,6 @@ from PySide6.QtWidgets import (
     QTextEdit,
     QScrollArea,
 )
-from extra_qwidgets.utils import get_awesome_icon
 from extra_qwidgets.widgets.theme_responsive_button import QThemeResponsiveButton
 
 
@@ -26,7 +26,7 @@ class QListBox(QScrollArea):
         self.__list = QListWidget()
         self.__list.setMinimumHeight(85)
         self.__add_button = QThemeResponsiveButton()
-        self.__add_button.setIcon(get_awesome_icon("arrow-right"))
+        self.__add_button.setIcon(qtawesome.icon("fa6s.arrow-right"))
         self.__add_button.setFlat(True)
         self.__line_edit = line_edit
         self.__horizontal_layout = QHBoxLayout()

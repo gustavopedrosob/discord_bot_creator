@@ -1,3 +1,4 @@
+import qtawesome
 from PySide6.QtCore import (
     Qt,
     QCoreApplication,
@@ -12,11 +13,10 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QDialog,
     QLabel,
-    QComboBox,
     QSpinBox,
     QLineEdit,
 )
-from extra_qwidgets.utils import get_awesome_icon, colorize_icon
+from extra_qwidgets.utils import colorize_icon
 from extra_qwidgets.widgets.checkboxes import QCheckBoxes
 from extra_qwidgets.widgets.collapse_group import QCollapseGroup
 from extra_qwidgets.widgets.color_button import QColorButton
@@ -155,7 +155,7 @@ class MessageView:
         self.confirm_and_save.setAutoDefault(False)
         self.confirm_and_save.setDefault(False)
         self.confirm_and_save.setIcon(
-            colorize_icon(get_awesome_icon("floppy-disk"), "#FFFFFF")
+            colorize_icon(qtawesome.icon("fa6s.floppy-disk"), "#FFFFFF")
         )
         self.setup_layout()
 

@@ -40,7 +40,7 @@ class MainController:
             self.quit_selected_group
         )
         self.view.quit_group_button.clicked.connect(self.quit_selected_group)
-        self.view.token_widget.line_edit.textEdited.connect(self.update_token)
+        # self.view.token_widget.line_edit.textEdited.connect(self.update_token)
         # noinspection PyUnresolvedReferences
         self.view.cmd_combobox.lineEdit().returnPressed.connect(self.entry_command)
         self.view.window.close_event = self.close_event
