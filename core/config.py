@@ -11,6 +11,7 @@ class Config(metaclass=SingletonMeta):
     _default_content = {
         "token": "",
         "language": "en_us",
+        "auto_start_bot": False,
         "database": ":memory:",
         "log_level": logging.INFO,
     }

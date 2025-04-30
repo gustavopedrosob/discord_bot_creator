@@ -65,6 +65,8 @@ class Application(QApplication):
         self.database.update_session()
         self.main_controller.load_data()
         self.logs_controller.load_data()
+        if Config.get("auto_start_bot"):
+            self.main_controller.start_turn_on_bot_thread()
 
     def on_new_action(self):
         Config.set("database", ":memory:")

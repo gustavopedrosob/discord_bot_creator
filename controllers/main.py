@@ -40,7 +40,7 @@ class MainController:
             self.quit_selected_group
         )
         self.view.quit_group_button.clicked.connect(self.quit_selected_group)
-        # self.view.token_widget.line_edit.textEdited.connect(self.update_token)
+        self.view.token_widget.textEdited.connect(self.update_token)
         # noinspection PyUnresolvedReferences
         self.view.cmd_combobox.lineEdit().returnPressed.connect(self.entry_command)
         self.view.window.close_event = self.close_event
@@ -168,8 +168,7 @@ class MainController:
 
     def update_token(self):
         """Updates the token in the "config.json" file and in the interface."""
-        token = self.view.token_widget.line_edit.text()
-        Config.set("token", token)
+        Config.set("token", self.view.token_widget.text())
         Config.save()
 
     def get_selected_message(self) -> typing.Optional[str]:
