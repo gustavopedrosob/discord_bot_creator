@@ -63,7 +63,7 @@ class LogsController:
         header = self.view.logs_table.horizontalHeader()
         column_count = self.view.logs_table.model().columnCount()
         for col in range(column_count - 1):
-            header.setSectionResizeMode(col, QHeaderView.ResizeMode)
+            header.setSectionResizeMode(col, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(column_count - 1, QHeaderView.ResizeMode.Stretch)
 
     def reset_table(self):
