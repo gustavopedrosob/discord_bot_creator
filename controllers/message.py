@@ -1,18 +1,16 @@
 import typing
 
-import qtawesome
 from PySide6.QtCore import QPoint
-from PySide6.QtGui import QIcon, Qt
+from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
     QListWidget,
-    QMessageBox,
-    QHBoxLayout,
     QLineEdit,
     QTextEdit,
     QCheckBox,
 )
 from emojis.db import Emoji
-from extra_qwidgets.widgets import QResponsiveTextEdit, QThemeResponsiveButton
+from extra_qwidgets.widgets import QResponsiveTextEdit
+from qfluentwidgets import TransparentToolButton, MessageBox
 
 from core.database import Database
 from core.translator import Translator
@@ -33,15 +31,17 @@ class MessageController:
         self.setup_binds()
 
     def setup_binds(self):
-        self.__add_emoji_button(
-            self.view.listbox_reactions.entry_layout(), self.view.reactions_line_edit
+        self.__bind_emoji_button(
+            self.view.listbox_reactions.emote_button(),
+            self.view.listbox_reactions.line_edit(),
         )
-        self.__add_emoji_button(
-            self.view.listbox_replies.entry_layout(), self.view.replies_line_edit
+        self.__bind_emoji_button(
+            self.view.listbox_replies.emote_button(),
+            self.view.listbox_replies.line_edit(),
         )
         self.view.listbox_replies.add_button().clicked.connect(
             lambda: self.insert_on_listbox(
-                self.view.listbox_replies, self.view.replies_line_edit
+                self.view.listbox_replies, self.view.listbox_replies.line_edit()
             )
         )
         self.view.confirm.clicked.connect(self.on_confirm)
@@ -50,7 +50,7 @@ class MessageController:
         self.view.author_checkbox.checkStateChanged.connect(self.__author_checked)
         self.view.listbox_reactions.add_button().clicked.connect(
             lambda: self.insert_on_listbox(
-                self.view.listbox_reactions, self.view.reactions_line_edit
+                self.view.listbox_reactions, self.view.listbox_reactions.line_edit()
             )
         )
 
@@ -75,13 +75,11 @@ class MessageController:
                 return True
         return self.get_name() not in self.database.message_names()
 
-    def __add_emoji_button(
-        self, layout: QHBoxLayout, line_edit: typing.Union[QLineEdit, QTextEdit]
+    def __bind_emoji_button(
+        self,
+        emote_button: TransparentToolButton,
+        line_edit: typing.Union[QLineEdit, QTextEdit],
     ):
-        emote_button = QThemeResponsiveButton()
-        emote_button.setIcon(qtawesome.icon("fa6s.face-smile"))
-        emote_button.setFlat(True)
-        layout.addWidget(emote_button, alignment=Qt.AlignmentFlag.AlignTop)
         emote_button.clicked.connect(
             lambda: self.__raise_emoji_popup(
                 emote_button.mapToGlobal(QPoint(0, 0)), line_edit
@@ -90,17 +88,12 @@ class MessageController:
 
     def on_confirm(self, save: bool = False):
         if not self.is_name_valid():
-            message_box = QMessageBox()
-            message_box.setWindowTitle(
-                Translator.translate("MessageWindow", "Name already exists")
+            title = Translator.translate("MessageWindow", "Name already exists")
+            text = Translator.translate(
+                "MessageWindow",
+                "You can't set a message with a name that already exists.",
             )
-            message_box.setWindowIcon(QIcon("source/icons/window-icon.svg"))
-            message_box.setText(
-                Translator.translate(
-                    "MessageWindow",
-                    "You can't set a message with a name that already exists.",
-                )
-            )
+            message_box = MessageBox(title, text, self.view.window)
             message_box.exec()
         else:
             if self.current_message is None:

@@ -1,5 +1,7 @@
 from typing import Union
 
+from qfluentwidgets import setTheme, Theme, toggleTheme
+
 from core.database import Database
 from core.translator import Translator
 import locale
@@ -7,7 +9,7 @@ import logging
 import os
 import sys
 from pathlib import Path
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox
 from controllers.credits import CreditsController
 from controllers.group import GroupController
@@ -37,6 +39,7 @@ class Application(QApplication):
         self.installTranslator(Translator().get_instance())
         self.bot_thread = QBotThread()
         LogHandler().set_signal(self.bot_thread.log)
+
         self.database = Database()
         self.main_controller = MainController(self.database, self.bot_thread)
         self.message_controller = MessageController(self.database)
@@ -46,6 +49,17 @@ class Application(QApplication):
             self.main_controller.view,
             self.credits_controller.view,
         )
+        setTheme(Theme.AUTO)
+        QTimer.singleShot(0, self.on_app_ready)
+
+    @staticmethod
+    def _on_theme_change():
+        toggleTheme()
+
+    def on_app_ready(self):
+        config.set("database", self.get_database_path())
+        config.save()
+        self.database.update_session()
         self.main_controller.load_data()
 
     def on_new_action(self):
@@ -61,7 +75,7 @@ class Application(QApplication):
         elif database_path.exists() and database_path.is_file():
             return str(database_path)
         else:
-            self.file_dont_exists_message_box()
+            self.main_controller.file_dont_exists_message_box()
             return ":memory:"
 
     def setup_binds(
@@ -69,6 +83,7 @@ class Application(QApplication):
         main_view: MainView,
         credits_view: CreditsView,
     ):
+        QApplication.styleHints().colorSchemeChanged.connect(self._on_theme_change)
         main_view.menu_bar.help.credits.triggered.connect(credits_view.window.show)
         main_view.menu_bar.file.save_as.triggered.connect(self.on_save_as_action)
         main_view.menu_bar.file.save.triggered.connect(self.on_save_action)
@@ -148,16 +163,6 @@ class Application(QApplication):
             self.database.backup(path)
         self.main_controller.update_window_title()
         self.main_controller.saved_successfully_message_box()
-
-    @staticmethod
-    def file_dont_exists_message_box():
-        msg = QMessageBox()
-        msg.setWindowTitle(Translator.translate("MainWindow", "Warning"))
-        msg.setText(
-            Translator.translate("MainWindow", "The file don't exists anymore.")
-        )
-        msg.setIcon(QMessageBox.Icon.Warning)
-        msg.exec()
 
     def on_save_action(self):
         database_path = Path(config.get("database"))

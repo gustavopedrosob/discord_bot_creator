@@ -13,57 +13,22 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QDialog,
     QLabel,
-    QSpinBox,
-    QLineEdit,
 )
 from extra_qwidgets.utils import colorize_icon
 from extra_qwidgets.widgets.checkboxes import QCheckBoxes
 from extra_qwidgets.widgets.collapse_group import QCollapseGroup
-from extra_qwidgets.widgets.color_button import QColorButton
 from extra_qwidgets.widgets.emoji_picker.emoji_validator import QEmojiValidator
+from qfluentwidgets import PushButton, CaptionLabel, LineEdit, SpinBox
 
-from core.translator import Translator
 from widgets.condition_listbox import QConditionListbox
-from widgets.custom_button import QCustomButton
+from widgets.custom_button import ColoredPushButton
 from widgets.custom_checkbox import QCustomCheckBox
 from widgets.listbox import QListBox
-from widgets.message_text_edit import QMessageTextEdit
 
 translate = QCoreApplication.translate
 
 
 class MessageView:
-    translated_conditions = {
-        "expected message": Translator.translate("Conditions", "expected message"),
-        "not expected message": Translator.translate(
-            "Conditions", "not expected message"
-        ),
-        "mention bot": Translator.translate("Conditions", "mention bot"),
-        "not mention bot": Translator.translate("Conditions", "not mention bot"),
-        "mention someone": Translator.translate("Conditions", "mention someone"),
-        "not mention someone": Translator.translate(
-            "Conditions", "not mention someone"
-        ),
-        "mention everyone": Translator.translate("Conditions", "mention everyone"),
-        "not mention everyone": Translator.translate(
-            "Conditions", "not mention everyone"
-        ),
-        "author is bot": Translator.translate("Conditions", "author is bot"),
-        "not author is bot": Translator.translate("Conditions", "not author is bot"),
-        "number in message": Translator.translate("Conditions", "number in message"),
-        "not number in message": Translator.translate(
-            "Conditions", "not number in message"
-        ),
-        "symbols in message": Translator.translate("Conditions", "symbols in message"),
-        "not symbols in message": Translator.translate(
-            "Conditions", "not symbols in message"
-        ),
-        "emojis in message": Translator.translate("Conditions", "emojis in message"),
-        "not emojis in message": Translator.translate(
-            "Conditions", "not emojis in message"
-        ),
-    }
-
     def __init__(self):
         self.window = QDialog()
         self.window.setWindowFlags(
@@ -76,8 +41,9 @@ class MessageView:
 
         self.emoji_picker_popup = None
 
-        self.name_text = QLabel(translate("MessageWindow", "Name"))
-        self.name_entry = QLineEdit()
+        self.name_text = CaptionLabel()
+        self.name_text.setText(translate("MessageWindow", "Name"))
+        self.name_entry = LineEdit()
         self.name_entry.setToolTip(
             translate(
                 "MessageWindow",
@@ -96,18 +62,16 @@ class MessageView:
             self.listbox_conditions,
         )
         self.collapse_conditions.setContentsMargins(0, 0, 0, 0)
+        self.listbox_reactions = QListBox()
         emoji_validator = QEmojiValidator()
-        self.reactions_line_edit = QMessageTextEdit()
-        self.reactions_line_edit.set_validator(emoji_validator)
-        self.listbox_reactions = QListBox(self.reactions_line_edit)
+        self.listbox_reactions.line_edit().setValidator(emoji_validator)
         self.collapse_reactions = QCollapseGroup(
             translate("MessageWindow", "Reactions"),
             self.listbox_reactions,
         )
         self.collapse_reactions.setContentsMargins(0, 0, 0, 0)
 
-        self.replies_line_edit = QMessageTextEdit()
-        self.listbox_replies = QListBox(self.replies_line_edit)
+        self.listbox_replies = QListBox()
         self.collapse_replies = QCollapseGroup(
             translate("MessageWindow", "Replies"), self.listbox_replies
         )
@@ -147,11 +111,11 @@ class MessageView:
             QCustomCheckBox("bot", translate("MessageWindow", "Bot")),
         )
         self.delay_label = QLabel(translate("MessageWindow", "Delay"))
-        self.delay = QSpinBox()
-        self.confirm = QCustomButton(translate("MessageWindow", "Confirm"))
-        self.confirm_and_save = QColorButton(
-            translate("MessageWindow", "Confirm and save"), "#3DCC61"
-        )
+        self.delay = SpinBox()
+        self.confirm = PushButton()
+        self.confirm.setText(translate("MessageWindow", "Confirm"))
+        self.confirm_and_save = ColoredPushButton("#3DCC61")
+        self.confirm_and_save.setText(translate("MessageWindow", "Confirm and save"))
         self.confirm_and_save.setAutoDefault(False)
         self.confirm_and_save.setDefault(False)
         self.confirm_and_save.setIcon(

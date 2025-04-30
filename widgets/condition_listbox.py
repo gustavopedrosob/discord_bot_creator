@@ -1,23 +1,25 @@
 import typing
 
 import qtawesome
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QIntValidator, QAction
 from PySide6.QtWidgets import (
     QScrollArea,
     QTableWidget,
-    QComboBox,
     QTableWidgetItem,
     QVBoxLayout,
     QHBoxLayout,
     QWidget,
     QHeaderView,
-    QLineEdit,
-    QMenu,
 )
-from extra_qwidgets.widgets import QThemeResponsiveButton
-from extra_qwidgets.widgets.theme_responsive_checkbutton import (
-    QThemeResponsiveCheckButton,
+from qfluentwidgets import (
+    TableWidget,
+    LineEdit,
+    ComboBox,
+    TransparentToggleToolButton,
+    TransparentToolButton,
+    RoundMenu,
+    ToggleToolButton,
 )
 
 from core.translator import Translator, FIELDS_TRANSLATIONS, OPERATORS_TRANSLATIONS
@@ -28,24 +30,25 @@ from models.condition import MessageCondition
 class QConditionListbox(QScrollArea):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.table = QTableWidget()
+        self.table = TableWidget()
         self.table.verticalHeader().setVisible(False)
         self.table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        self.context_menu = QMenu(self)
+        self.context_menu = RoundMenu()
         self.remove_action = QAction(self.tr("Remove"), self)
-        self.field_combobox = QComboBox()
-        self.operator_combobox = QComboBox()
-        self.case_insensitive_checkbutton = QThemeResponsiveCheckButton()
+        self.field_combobox = ComboBox()
+        self.operator_combobox = ComboBox()
+        self.case_insensitive_checkbutton = TransparentToggleToolButton()
         self.case_insensitive_checkbutton.setToolTip(self.tr("Case insensitive"))
         self.case_insensitive_checkbutton.setIcon(qtawesome.icon("fa6s.font"))
-        self.value_lineedit = QLineEdit()
+        self.case_insensitive_checkbutton.setIconSize(QSize(20, 20))
+        self.value_lineedit = LineEdit()
         self.value_lineedit.setPlaceholderText(
             Translator.translate("QConditionListbox", "Value")
         )
-        self.__add_button = QThemeResponsiveButton()
+        self.__add_button = TransparentToolButton()
         self.__add_button.setIcon(qtawesome.icon("fa6s.arrow-right"))
-        self.__add_button.setFlat(True)
+        self.__add_button.setIconSize(QSize(20, 20))
         self.setWidgetResizable(True)
         self.setup_binds()
         self.setup_layout()
@@ -91,7 +94,7 @@ class QConditionListbox(QScrollArea):
 
     def _add_fields_options(self):
         for data, text in FIELDS_TRANSLATIONS.items():
-            self.field_combobox.addItem(text, data)
+            self.field_combobox.addItem(text, userData=data)
 
     def _is_current_field_str(self) -> bool:
         field_data = self.field_combobox.itemData(self.field_combobox.currentIndex())
@@ -105,7 +108,7 @@ class QConditionListbox(QScrollArea):
             operators = MessageConditionValidator.INT_OPERATORS
             self.case_insensitive_checkbutton.setDisabled(True)
         for i in operators:
-            self.operator_combobox.addItem(OPERATORS_TRANSLATIONS[i], i)
+            self.operator_combobox.addItem(OPERATORS_TRANSLATIONS[i], userData=i)
 
     def _setup_value_validator(self):
         if self._is_current_field_str():

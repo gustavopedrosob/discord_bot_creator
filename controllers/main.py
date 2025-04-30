@@ -5,6 +5,7 @@ from pathlib import Path
 from PySide6.QtCore import Qt, QCoreApplication
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QMessageBox, QListWidgetItem, QFileDialog
+from qfluentwidgets import MessageBox
 
 from core.config import instance as config
 from core.database import Database
@@ -87,27 +88,16 @@ class MainController:
             self.view.groups_list_widget.addItem(group)
 
     def on_login_failure(self):
-        self.warning_message_box(
+        self.information_message_box(
             translate("MainWindow", "Login failure"),
             translate("MainWindow", "Improper token has been passed."),
         )
         self.view.turn_on_bot_button.setDisabled(False)
 
-    def warning_message_box(self, title: str, text: str):
-        QMessageBox.warning(
-            self.view.window,
-            title,
-            text,
-            QMessageBox.StandardButton.Ok,
-        )
-
     def information_message_box(self, title: str, text: str):
-        QMessageBox.information(
-            self.view.window,
-            title,
-            text,
-            QMessageBox.StandardButton.Ok,
-        )
+        message_box = MessageBox(title, text, self.view.window)
+        message_box.cancelButton.hide()
+        message_box.exec()
 
     def update_window_title(self):
         title = "Discord Bot Creator"
@@ -148,7 +138,7 @@ class MainController:
         )
 
     def set_language(self, language: str):
-        self.warning_message_box(
+        self.information_message_box(
             translate("MainWindow", "Warning"),
             translate(
                 "MainWindow",
@@ -231,9 +221,7 @@ class MainController:
         )
 
     def confirm_message_box(self, title: str, text: str, callback):
-        dialog = QConfirmMessageBox(self.view.window)
-        dialog.setWindowTitle(title)
-        dialog.setText(text)
+        dialog = QConfirmMessageBox(title, text, self.view.window)
         dialog.accepted.connect(callback)
         dialog.exec()
 
@@ -251,10 +239,10 @@ class MainController:
         for message_name in self.database.message_names():
             self.view.messages_list_widget.addItem(message_name)
 
-    def invalid_file_alert(self):
-        self.warning_message_box(
-            translate("MainWindow", "Invalid file"),
-            translate("MainWindow", "This file can't be loaded."),
+    def file_dont_exists_message_box(self):
+        self.information_message_box(
+            translate("MainWindow", "Warning"),
+            translate("MainWindow", "The file don't exists anymore."),
         )
 
     def accepted_edit_selected_message(

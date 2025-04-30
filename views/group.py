@@ -1,5 +1,5 @@
 import qtawesome
-from PySide6.QtCore import QCoreApplication, Qt
+from PySide6.QtCore import QCoreApplication, Qt, QSize
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QDialog,
@@ -16,8 +16,10 @@ from extra_qwidgets.widgets import (
     QColorButton,
     QThemeResponsiveButton,
 )
+from qfluentwidgets import ComboBox, PlainTextEdit, ToolButton, FluentIcon
 
 from widgets.channel_dialog import ChannelDialog
+from widgets.custom_button import ColoredPushButton
 
 translate = QCoreApplication.translate
 
@@ -34,21 +36,20 @@ class GroupView:
 
         self.channel_pick_dialog = ChannelDialog()
 
-        self.welcome_message_channels = QComboBox()
-        self.welcome_message_textedit = QResponsiveTextEdit()
+        self.welcome_message_channels = ComboBox()
+        self.welcome_message_textedit = PlainTextEdit()
         self.welcome_message_textedit.setMaximumHeight(300)
-        self.welcome_message_pick_button = QThemeResponsiveButton()
-        self.welcome_message_pick_button.setIcon(qtawesome.icon("fa6s.list"))
+        self.welcome_message_pick_button = ToolButton(qtawesome.icon("fa6s.list"))
+        self.welcome_message_pick_button.setIconSize(QSize(19, 19))
 
-        self.goodbye_message_channels = QComboBox()
-        self.goodbye_message_textedit = QResponsiveTextEdit()
+        self.goodbye_message_channels = ComboBox()
+        self.goodbye_message_textedit = PlainTextEdit()
         self.goodbye_message_textedit.setMaximumHeight(300)
-        self.goodbye_message_pick_button = QThemeResponsiveButton()
-        self.goodbye_message_pick_button.setIcon(qtawesome.icon("fa6s.list"))
+        self.goodbye_message_pick_button = ToolButton(qtawesome.icon("fa6s.list"))
+        self.goodbye_message_pick_button.setIconSize(QSize(19, 19))
 
-        self.save_button = QColorButton(
-            translate("MessageWindow", "Confirm and save"), "#3DCC61"
-        )
+        self.save_button = ColoredPushButton("#3DCC61")
+        self.save_button.setText(translate("MessageWindow", "Confirm and save"))
         self.save_button.setIcon(
             colorize_icon(qtawesome.icon("fa6s.floppy-disk"), "#FFFFFF")
         )

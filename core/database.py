@@ -20,7 +20,6 @@ class Database(metaclass=SingletonMeta):
         self.__engine = None
         self.__session = None
         self.lock = Lock()
-        self.update_session()
 
     def add(self, obj):
         with self.lock:

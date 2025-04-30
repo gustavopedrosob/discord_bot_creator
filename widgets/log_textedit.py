@@ -4,11 +4,12 @@ import typing
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QTextCursor, QColor, QTextCharFormat, QTextDocument
 from PySide6.QtWidgets import QTextEdit, QApplication
+from qfluentwidgets import PlainTextEdit
 
 from utils import colors
 
 
-class QLogTextEdit(QTextEdit):
+class QLogTextEdit(PlainTextEdit):
     _CLASS_PROPERTY_KEY = 1001
     _CLASS_MAP = {
         logging.INFO: colors.TEXT,

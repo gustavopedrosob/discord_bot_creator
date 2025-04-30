@@ -72,8 +72,12 @@ class GroupController:
             translate("GroupWindow", "(None)"), None
         )
         for channel in discord_group.text_channels + discord_group.voice_channels:
-            self.view.welcome_message_channels.addItem(channel.name, channel.id)
-            self.view.goodbye_message_channels.addItem(channel.name, channel.id)
+            self.view.welcome_message_channels.addItem(
+                channel.name, userData=channel.id
+            )
+            self.view.goodbye_message_channels.addItem(
+                channel.name, userData=channel.id
+            )
         self.view.channel_pick_dialog.update_channels(discord_group)
 
     def config(

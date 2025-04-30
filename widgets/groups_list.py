@@ -1,11 +1,12 @@
 from PySide6.QtCore import QPoint, Qt, QCoreApplication
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QListWidget, QMenu
+from qfluentwidgets import ListWidget, RoundMenu
 
 translate = QCoreApplication.translate
 
 
-class QGroupsList(QListWidget):
+class QGroupsList(ListWidget):
     def __init__(self):
         super().__init__()
 
@@ -16,7 +17,8 @@ class QGroupsList(QListWidget):
         self.quit_action = QAction(translate("MainWindow", "Quit group"), self)
 
     def group_context_menu_event(self, position: QPoint):
-        context_menu = QMenu(self)
         if bool(self.selectedIndexes()):
-            context_menu.addActions((self.config_action, self.quit_action))
-        context_menu.exec(self.mapToGlobal(position))
+            context_menu = RoundMenu()
+            context_menu.addAction(self.config_action)
+            context_menu.addAction(self.quit_action)
+            context_menu.exec(self.mapToGlobal(position))

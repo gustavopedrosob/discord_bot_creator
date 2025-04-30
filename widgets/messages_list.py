@@ -1,11 +1,12 @@
 from PySide6.QtCore import QCoreApplication, QPoint
 from PySide6.QtGui import QAction, Qt
 from PySide6.QtWidgets import QListWidget, QMenu
+from qfluentwidgets import ListWidget, RoundMenu
 
 translate = QCoreApplication.translate
 
 
-class QMessagesList(QListWidget):
+class QMessagesList(ListWidget):
     def __init__(self):
         super().__init__()
 
@@ -24,9 +25,10 @@ class QMessagesList(QListWidget):
         self.remove_all_action.setShortcut("Ctrl+Delete")
 
     def message_context_menu_event(self, position: QPoint):
-        context_menu = QMenu(self)
+        context_menu = RoundMenu()
         context_menu.addAction(self.new_action)
         if bool(self.selectedIndexes()):
-            context_menu.addActions((self.edit_action, self.remove_action))
+            context_menu.addAction(self.edit_action)
+            context_menu.addAction(self.remove_action)
         context_menu.addAction(self.remove_all_action)
         context_menu.exec(self.mapToGlobal(position))

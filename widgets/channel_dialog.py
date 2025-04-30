@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
 )
 from discord import Guild
+from qfluentwidgets import PushButton, TreeView
 
 from widgets.text_channel_item import TextChannelItem
 from widgets.voice_channel_item import VoiceChannelItem
@@ -34,12 +35,14 @@ class ChannelDialog(QDialog):
         self.voice_item.setSelectable(False)
 
         self.channels_model = QStandardItemModel()
-        self.channels_treeview = QTreeView()
+        self.channels_treeview = TreeView()
         self.channels_treeview.setModel(self.channels_model)
 
-        self.accept_button = QPushButton(self.tr("Select"))
+        self.accept_button = PushButton()
+        self.accept_button.setText(self.tr("Select"))
         self.accept_button.clicked.connect(self.on_accept_pressed)
-        self.cancel_button = QPushButton(self.tr("Cancel"))
+        self.cancel_button = PushButton()
+        self.cancel_button.setText(self.tr("Cancel"))
         self.cancel_button.clicked.connect(self.reject)
         self.setup_layout()
         if group:
@@ -49,6 +52,7 @@ class ChannelDialog(QDialog):
         main_layout = QFormLayout()
         main_layout.addRow(self.channels_treeview)
         buttons_layout = QHBoxLayout()
+        buttons_layout.setSpacing(10)
         buttons_layout.addItem(
             QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         )

@@ -1,6 +1,6 @@
 import qtawesome
 from PySide6.QtCore import QCoreApplication
-from PySide6.QtGui import QIcon, Qt
+from PySide6.QtGui import QIcon, Qt, QColor
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -13,9 +13,10 @@ from PySide6.QtWidgets import (
 from extra_qwidgets.utils import colorize_icon
 from extra_qwidgets.widgets.color_button import QColorButton
 from extra_qwidgets.widgets.password import QPassword
+from qfluentwidgets import PasswordLineEdit, PushButton, PrimaryPushButton
 
 from core.config import instance as config
-from widgets.custom_button import QCustomButton
+from widgets.custom_button import ColoredPushButton
 from widgets.groups_list import QGroupsList
 from widgets.log_textedit import QLogTextEdit
 from widgets.menu_bar import MenuBar
@@ -41,33 +42,35 @@ class MainView:
         self.cmd_combobox.lineEdit().clear()
         self.cmd_combobox.lineEdit().setPlaceholderText("Cmd")
 
-        self.token_widget = QPassword()
-        self.token_widget.line_edit.setText(config.get("token"))
-        self.token_widget.line_edit.setMaxLength(100)
+        self.token_widget = PasswordLineEdit()
+        self.token_widget.setText(config.get("token"))
+        self.token_widget.setMaxLength(100)
 
-        self.turn_on_bot_button = QColorButton(
-            translate("MainWindow", "Turn on bot"), "#3e92cc"
-        )
+        self.turn_on_bot_button = ColoredPushButton("#3A81F1")
+        self.turn_on_bot_button.setText(translate("MainWindow", "Turn on bot"))
         self.turn_on_bot_button.setIcon(
             colorize_icon(qtawesome.icon("fa6s.play"), "#FFFFFF")
         )
-        self.turn_off_bot_button = QColorButton(
-            translate("MainWindow", "Turn off bot"), "#d8315b"
-        )
+        self.turn_off_bot_button = ColoredPushButton("#d8315b")
+        self.turn_off_bot_button.setText(translate("MainWindow", "Turn off bot"))
         self.turn_off_bot_button.setIcon(
             colorize_icon(qtawesome.icon("fa6s.stop"), "#FFFFFF")
         )
 
         self.groups_list_widget = QGroupsList()
-        self.config_group_button = QCustomButton(translate("MainWindow", "Config"))
-        self.quit_group_button = QCustomButton(translate("MainWindow", "Quit"))
+        self.config_group_button = PushButton()
+        self.config_group_button.setText(translate("MainWindow", "Config"))
+        self.quit_group_button = PushButton()
+        self.quit_group_button.setText(translate("MainWindow", "Quit"))
         self.messages_list_widget = QMessagesList()
-        self.new_message_button = QCustomButton(translate("MainWindow", "New"))
-        self.edit_messages_button = QCustomButton(translate("MainWindow", "Edit"))
-        self.remove_message_button = QCustomButton(translate("MainWindow", "Remove"))
-        self.remove_all_message_button = QCustomButton(
-            translate("MainWindow", "Remove all")
-        )
+        self.new_message_button = PushButton()
+        self.new_message_button.setText(translate("MainWindow", "New"))
+        self.edit_messages_button = PushButton()
+        self.edit_messages_button.setText(translate("MainWindow", "Edit"))
+        self.remove_message_button = PushButton()
+        self.remove_message_button.setText(translate("MainWindow", "Remove"))
+        self.remove_all_message_button = PushButton()
+        self.remove_all_message_button.setText(translate("MainWindow", "Remove all"))
 
         self.setup_layout()
         self.setup_menus()
