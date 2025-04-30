@@ -1,28 +1,27 @@
-from typing import Union
-
-from qfluentwidgets import setTheme, Theme, toggleTheme
-
-from controllers.logs import LogsController
-from core.database import Database
-from core.translator import Translator
 import locale
 import logging
 import os
 import sys
 from pathlib import Path
+from typing import Union
+
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox
+from PySide6.QtWidgets import QApplication, QDialog, QFileDialog
+from qfluentwidgets import setTheme, Theme, toggleTheme
+
 from controllers.credits import CreditsController
 from controllers.group import GroupController
+from controllers.logs import LogsController
 from controllers.main import MainController
 from controllers.message import MessageController
-from core.config import instance as config
-from views.credits import CreditsView
 from core.bot_thread import QBotThread
+from core.config import Config
+from core.database import Database
 from core.log_handler import LogHandler
+from core.translator import Translator
+from views.credits import CreditsView
 from views.logs import LogsView
 from views.main import MainView
-
 
 logger = logging.getLogger(__name__)
 logger.addHandler(LogHandler())
@@ -32,11 +31,11 @@ class Application(QApplication):
     def __init__(self):
         super().__init__(sys.argv)
         logging.basicConfig(
-            level=config.get("log_level"),
+            level=Config.get("log_level"),
             format="%(asctime)s - %(message)s",
             datefmt="%x %X",
         )
-        lang = config.get("language")
+        lang = Config.get("language")
         locale.setlocale(locale.LC_ALL, lang)
         self.installTranslator(Translator().get_instance())
         self.bot_thread = QBotThread()
@@ -61,20 +60,20 @@ class Application(QApplication):
         toggleTheme()
 
     def on_app_ready(self):
-        config.set("database", self.get_database_path())
-        config.save()
+        Config.set("database", self.get_database_path())
+        Config.save()
         self.database.update_session()
         self.main_controller.load_data()
         self.logs_controller.load_data()
 
     def on_new_action(self):
-        config.set("database", ":memory:")
-        config.save()
+        Config.set("database", ":memory:")
+        Config.save()
         self.database.update_session()
         self.main_controller.load_data()
 
     def get_database_path(self) -> str:
-        database_path = Path(config.get("database"))
+        database_path = Path(Config.get("database"))
         if database_path.name == ":memory:":
             return ":memory:"
         elif database_path.exists() and database_path.is_file():
@@ -165,14 +164,14 @@ class Application(QApplication):
         self.database.commit()
         if path:
             path = Path(path)
-            config.set("database", str(path))
-            config.save()
+            Config.set("database", str(path))
+            Config.save()
             self.database.backup(path)
         self.main_controller.update_window_title()
         self.main_controller.saved_successfully_message_box()
 
     def on_save_action(self):
-        database_path = Path(config.get("database"))
+        database_path = Path(Config.get("database"))
         if database_path.name == ":memory:":
             self.on_save_as_action()
         else:

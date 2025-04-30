@@ -1,36 +1,46 @@
 import logging
-import os
+import typing
+from pathlib import Path
+
 import yaml
 
+from core.singleton import SingletonMeta
 
-class Config:
-    __content: dict
+
+class Config(metaclass=SingletonMeta):
+    _default_content = {
+        "token": "",
+        "language": "en_us",
+        "database": ":memory:",
+        "log_level": logging.INFO,
+    }
+    _file = Path(__file__).parent.parent / "config.yaml"
 
     def __init__(self):
-        if os.path.exists("config.yaml"):
-            self.load()
+        if self._file.exists() and self._file.is_file():
+            self.content = self._load()
         else:
-            self.__content = {
-                "token": "",
-                "language": "en_us",
-                "database": ":memory:",
-                "log_level": logging.INFO,
-            }
+            self.content = self._default_content.copy()
             self.save()
 
-    def load(self):
-        with open("config.yaml", "r") as arquivo:
-            self.__content = yaml.load(arquivo, Loader=yaml.FullLoader)
+    @classmethod
+    def load(cls):
+        cls().content = cls._load()
 
-    def save(self):
-        with open("config.yaml", "w") as arquivo:
-            yaml.dump(self.__content, arquivo)
+    @classmethod
+    def _load(cls):
+        with open(cls._file, "r") as file:
+            return yaml.load(file, Loader=yaml.FullLoader)
 
-    def get(self, variable):
-        return self.__content[variable]
+    @classmethod
+    def save(cls):
+        with open(cls._file, "w") as file:
+            yaml.dump(cls().content, file)
 
-    def set(self, variable, value):
-        self.__content[variable] = value
+    @classmethod
+    def get(cls, variable: str):
+        return cls().content[variable]
 
-
-instance = Config()
+    @classmethod
+    def set(cls, variable: str, value: typing.Union[str, int, bool] = None):
+        cls().content[variable] = value

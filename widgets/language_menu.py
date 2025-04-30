@@ -1,14 +1,14 @@
 from PySide6.QtGui import QActionGroup, QAction
 from PySide6.QtWidgets import QMenu, QWidget
 
-from core.config import instance as config
+from core.config import Config
 
 
 class QLanguageMenu(QMenu):
     def __init__(self, text: str, parent: QWidget):
         super().__init__(text, parent)
 
-        language = config.get("language")
+        language = Config.get("language")
         self.action_group = QActionGroup(self)
         self.action_group.setExclusive(True)
         self.english = QAction(

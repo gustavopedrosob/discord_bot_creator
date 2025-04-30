@@ -1,5 +1,5 @@
 from PySide6.QtCore import QCoreApplication
-from PySide6.QtWidgets import QMessageBox, QWidget
+from PySide6.QtWidgets import QWidget
 from qfluentwidgets import MessageBox
 
 translate = QCoreApplication.translate

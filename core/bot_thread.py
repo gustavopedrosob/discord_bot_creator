@@ -4,7 +4,7 @@ from discord import (
     LoginFailure,
 )
 
-from core.config import instance as config
+from core.config import Config
 from core.integrated_bot import IntegratedBot
 
 
@@ -24,7 +24,7 @@ class QBotThread(QThread):
         if self.__bot.is_closed():
             self.__bot = IntegratedBot(self)
         try:
-            self.__bot.run(config.get("token"))
+            self.__bot.run(Config.get("token"))
         except LoginFailure:
             self.login_failure.emit()
 

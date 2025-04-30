@@ -6,17 +6,11 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QFormLayout,
-    QComboBox,
     QSpacerItem,
     QSizePolicy,
 )
 from extra_qwidgets.utils import colorize_icon
-from extra_qwidgets.widgets import (
-    QResponsiveTextEdit,
-    QColorButton,
-    QThemeResponsiveButton,
-)
-from qfluentwidgets import ComboBox, PlainTextEdit, ToolButton, FluentIcon
+from qfluentwidgets import ComboBox, PlainTextEdit, ToolButton
 
 from widgets.channel_dialog import ChannelDialog
 from widgets.custom_button import ColoredPushButton

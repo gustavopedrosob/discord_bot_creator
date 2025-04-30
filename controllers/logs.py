@@ -6,7 +6,7 @@ from core.database import Database
 from core.translator import Translator, LOGGING_TRANSLATIONS
 from models.log import Log
 from views.logs import LogsView
-from core.config import instance as config
+from core.config import Config
 
 
 class LogsController:
@@ -85,7 +85,7 @@ class LogsController:
         self.logs_model.appendRow((date, message, level))
 
     def _set_date_format(self):
-        lang = config.get("language")
+        lang = Config.get("language")
         if lang == "pt_br":
             locale = QLocale(QLocale.Language.Portuguese, QLocale.Country.Brazil)
         elif lang == "en_us":

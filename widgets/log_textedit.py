@@ -3,7 +3,7 @@ import typing
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QTextCursor, QColor, QTextCharFormat, QTextDocument
-from PySide6.QtWidgets import QTextEdit, QApplication
+from PySide6.QtWidgets import QApplication
 from qfluentwidgets import PlainTextEdit
 
 from utils import colors

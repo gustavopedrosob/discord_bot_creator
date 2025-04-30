@@ -19,7 +19,6 @@ from qfluentwidgets import (
     TransparentToggleToolButton,
     TransparentToolButton,
     RoundMenu,
-    ToggleToolButton,
 )
 
 from core.translator import Translator, FIELDS_TRANSLATIONS, OPERATORS_TRANSLATIONS

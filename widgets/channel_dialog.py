@@ -4,9 +4,7 @@ from PySide6.QtCore import QCoreApplication, Qt
 from PySide6.QtGui import QStandardItem, QStandardItemModel, QIcon
 from PySide6.QtWidgets import (
     QDialog,
-    QTreeView,
     QFormLayout,
-    QPushButton,
     QHBoxLayout,
     QSpacerItem,
     QSizePolicy,

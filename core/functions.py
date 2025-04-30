@@ -2,7 +2,7 @@ import logging
 import re
 from datetime import datetime
 
-from core.config import instance as config
+from core.config import Config
 
 
 def has_number(string: str) -> bool:
@@ -20,5 +20,5 @@ def get_time(string: str):
 def config_log_level(level: int):
     logging.getLogger("main").setLevel(level)
     logging.getLogger("bot").setLevel(level)
-    config.set("log_level", level)
-    config.save()
+    Config.set("log_level", level)
+    Config.save()

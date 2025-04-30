@@ -1,11 +1,8 @@
-from PySide6.QtCore import QLocale
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import (
     QDialog,
     QVBoxLayout,
     QHBoxLayout,
-    QTableWidget,
-    QHeaderView,
     QSizePolicy,
 )
 from qfluentwidgets import (

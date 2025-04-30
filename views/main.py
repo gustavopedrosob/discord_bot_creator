@@ -1,6 +1,6 @@
 import qtawesome
 from PySide6.QtCore import QCoreApplication
-from PySide6.QtGui import QIcon, Qt, QColor
+from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -11,11 +11,9 @@ from PySide6.QtWidgets import (
     QSplitter,
 )
 from extra_qwidgets.utils import colorize_icon
-from extra_qwidgets.widgets.color_button import QColorButton
-from extra_qwidgets.widgets.password import QPassword
-from qfluentwidgets import PasswordLineEdit, PushButton, PrimaryPushButton
+from qfluentwidgets import PasswordLineEdit, PushButton
 
-from core.config import instance as config
+from core.config import Config
 from widgets.custom_button import ColoredPushButton
 from widgets.groups_list import QGroupsList
 from widgets.log_textedit import QLogTextEdit
@@ -43,7 +41,7 @@ class MainView:
         self.cmd_combobox.lineEdit().setPlaceholderText("Cmd")
 
         self.token_widget = PasswordLineEdit()
-        self.token_widget.setText(config.get("token"))
+        self.token_widget.setText(Config.get("token"))
         self.token_widget.setMaxLength(100)
 
         self.turn_on_bot_button = ColoredPushButton("#3A81F1")

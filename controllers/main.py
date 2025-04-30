@@ -4,15 +4,14 @@ from pathlib import Path
 
 from PySide6.QtCore import Qt, QCoreApplication
 from PySide6.QtGui import QCloseEvent
-from PySide6.QtWidgets import QMessageBox, QListWidgetItem, QFileDialog
+from PySide6.QtWidgets import QListWidgetItem, QFileDialog
 from qfluentwidgets import MessageBox
 
-from core.config import instance as config
-from core.database import Database
-from widgets.confirm_message_box import QConfirmMessageBox
 from core.bot_thread import QBotThread
+from core.config import Config
+from core.database import Database
 from views.main import MainView
-
+from widgets.confirm_message_box import QConfirmMessageBox
 
 translate = QCoreApplication.translate
 
@@ -101,7 +100,7 @@ class MainController:
 
     def update_window_title(self):
         title = "Discord Bot Creator"
-        database_path = Path(config.get("database"))
+        database_path = Path(Config.get("database"))
         if database_path and database_path.exists():
             title = f"Discord Bot Creator - {database_path.name}"
         if self.database.need_to_commit():
@@ -111,8 +110,8 @@ class MainController:
     def on_load_action(self):
         database_path = self.select_file_dialog()
         if database_path:
-            config.set("database", str(database_path))
-            config.save()
+            Config.set("database", str(database_path))
+            Config.save()
             self.database.update_session()
             self.load_data()
             self.update_window_title()
@@ -145,11 +144,11 @@ class MainController:
                 "You need to restart the application to apply the changes.",
             ),
         )
-        config.set("language", language)
-        config.save()
+        Config.set("language", language)
+        Config.save()
 
     def start_turn_on_bot_thread(self):
-        if config.get("token") == "":
+        if Config.get("token") == "":
             self.on_login_failure()
         else:
             self.bot_thread.start()
@@ -170,8 +169,8 @@ class MainController:
     def update_token(self):
         """Updates the token in the "config.json" file and in the interface."""
         token = self.view.token_widget.line_edit.text()
-        config.set("token", token)
-        config.save()
+        Config.set("token", token)
+        Config.save()
 
     def get_selected_message(self) -> typing.Optional[str]:
         if bool(self.view.messages_list_widget.selectedIndexes()):

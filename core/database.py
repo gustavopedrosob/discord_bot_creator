@@ -7,7 +7,7 @@ from pathlib import Path
 from sqlalchemy import create_engine, text, func
 from sqlalchemy.orm import sessionmaker, Session
 
-from core.config import instance as config
+from core.config import Config
 from core.singleton import SingletonMeta
 from models.base import Base
 from models.group import Group
@@ -36,7 +36,7 @@ class Database(metaclass=SingletonMeta):
     def new_session(self):
         connect_args = {"check_same_thread": False}
         self.__engine = create_engine(
-            f"sqlite:///{config.get("database")}", connect_args=connect_args
+            f"sqlite:///{Config.get("database")}", connect_args=connect_args
         )
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine)

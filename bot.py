@@ -1,6 +1,6 @@
 import logging
 from core.bot import Bot
-from core.config import instance as config
+from core.config import Config
 
 
 if __name__ == "__main__":
@@ -10,4 +10,4 @@ if __name__ == "__main__":
         datefmt="%x %X",
     )
     bot = Bot()
-    bot.run(config.get("token"))
+    bot.run(Config.get("token"))
