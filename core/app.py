@@ -2,6 +2,7 @@ from typing import Union
 
 from qfluentwidgets import setTheme, Theme, toggleTheme
 
+from controllers.logs import LogsController
 from core.database import Database
 from core.translator import Translator
 import locale
@@ -19,6 +20,7 @@ from core.config import instance as config
 from views.credits import CreditsView
 from core.bot_thread import QBotThread
 from core.log_handler import LogHandler
+from views.logs import LogsView
 from views.main import MainView
 
 
@@ -42,12 +44,14 @@ class Application(QApplication):
 
         self.database = Database()
         self.main_controller = MainController(self.database, self.bot_thread)
+        self.logs_controller = LogsController(self.database)
         self.message_controller = MessageController(self.database)
         self.group_controller = GroupController(self.database)
         self.credits_controller = CreditsController()
         self.setup_binds(
             self.main_controller.view,
             self.credits_controller.view,
+            self.logs_controller.view,
         )
         setTheme(Theme.AUTO)
         QTimer.singleShot(0, self.on_app_ready)
@@ -61,6 +65,7 @@ class Application(QApplication):
         config.save()
         self.database.update_session()
         self.main_controller.load_data()
+        self.logs_controller.load_data()
 
     def on_new_action(self):
         config.set("database", ":memory:")
@@ -82,9 +87,11 @@ class Application(QApplication):
         self,
         main_view: MainView,
         credits_view: CreditsView,
+        logs_view: LogsView,
     ):
         QApplication.styleHints().colorSchemeChanged.connect(self._on_theme_change)
         main_view.menu_bar.help.credits.triggered.connect(credits_view.window.show)
+        main_view.menu_bar.help.logs.triggered.connect(logs_view.window.show)
         main_view.menu_bar.file.save_as.triggered.connect(self.on_save_as_action)
         main_view.menu_bar.file.save.triggered.connect(self.on_save_action)
         main_view.menu_bar.file.new.triggered.connect(self.on_new_action)

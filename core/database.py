@@ -115,6 +115,22 @@ class Database(metaclass=SingletonMeta):
     def need_to_commit(self) -> bool:
         return self.__session.new or self.__session.dirty or self.__session.deleted
 
+    def get_logs(
+        self,
+        message: typing.Optional[str] = None,
+        date: typing.Optional[datetime.date] = None,
+        log_level: typing.Optional[int] = None,
+    ) -> typing.List[Log]:
+        with self.lock:
+            query = self.__session.query(Log)
+            if message:
+                query = query.filter(Log.message.like(f"%{message}%"))
+            if date:
+                query = query.filter(Log.datetime.date() == date)
+            if log_level:
+                query = query.filter(Log.level_number == log_level)
+            return query.all()
+
     def __del__(self):
         """Garante que a sessão e o engine sejam fechados quando o objeto for destruído"""
         self.end_session()

@@ -4,12 +4,12 @@
 <context>
     <name>Boolean</name>
     <message>
-        <location filename="../core/translator.py" line="46"/>
+        <location filename="../core/translator.py" line="59"/>
         <source>True</source>
         <translation>True</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="47"/>
+        <location filename="../core/translator.py" line="60"/>
         <source>False</source>
         <translation>False</translation>
     </message>
@@ -118,17 +118,17 @@
 <context>
     <name>ChannelDialog</name>
     <message>
-        <location filename="../widgets/channel_dialog.py" line="25"/>
+        <location filename="../widgets/channel_dialog.py" line="26"/>
         <source>Select a channel</source>
         <translation>Select a channel</translation>
     </message>
     <message>
-        <location filename="../widgets/channel_dialog.py" line="40"/>
+        <location filename="../widgets/channel_dialog.py" line="42"/>
         <source>Select</source>
         <translation>Select</translation>
     </message>
     <message>
-        <location filename="../widgets/channel_dialog.py" line="42"/>
+        <location filename="../widgets/channel_dialog.py" line="45"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
@@ -162,125 +162,109 @@
 <context>
     <name>Conditions</name>
     <message>
-        <location filename="../views/messages.py" line="37"/>
         <source>expected message</source>
-        <translation>Expected message</translation>
+        <translation type="vanished">Expected message</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="40"/>
         <source>not expected message</source>
-        <translation>Not expected message</translation>
+        <translation type="vanished">Not expected message</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="41"/>
         <source>mention bot</source>
-        <translation>Mention bot</translation>
+        <translation type="vanished">Mention bot</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="42"/>
         <source>not mention bot</source>
-        <translation>Not mention bot</translation>
+        <translation type="vanished">Not mention bot</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="43"/>
         <source>mention someone</source>
-        <translation>Mention someone</translation>
+        <translation type="vanished">Mention someone</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="46"/>
         <source>not mention someone</source>
-        <translation>Not mention someone</translation>
+        <translation type="vanished">Not mention someone</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="47"/>
         <source>mention everyone</source>
-        <translation>Mention everyone</translation>
+        <translation type="vanished">Mention everyone</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="50"/>
         <source>not mention everyone</source>
-        <translation>Not mention everyone</translation>
+        <translation type="vanished">Not mention everyone</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="51"/>
         <source>author is bot</source>
-        <translation>Author is bot</translation>
+        <translation type="vanished">Author is bot</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="52"/>
         <source>not author is bot</source>
-        <translation>Not author is bot</translation>
+        <translation type="vanished">Not author is bot</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="53"/>
         <source>number in message</source>
-        <translation>Number in message</translation>
+        <translation type="vanished">Number in message</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="56"/>
         <source>not number in message</source>
-        <translation>Not number in message</translation>
+        <translation type="vanished">Not number in message</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="57"/>
         <source>symbols in message</source>
-        <translation>Symbols in message</translation>
+        <translation type="vanished">Symbols in message</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="60"/>
         <source>not symbols in message</source>
-        <translation>Not symbols in message</translation>
+        <translation type="vanished">Not symbols in message</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="61"/>
         <source>emojis in message</source>
-        <translation>Emojis in message</translation>
+        <translation type="vanished">Emojis in message</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="64"/>
         <source>not emojis in message</source>
-        <translation>Not emojis in message</translation>
+        <translation type="vanished">Not emojis in message</translation>
     </message>
 </context>
 <context>
     <name>Field</name>
     <message>
-        <location filename="../core/translator.py" line="21"/>
+        <location filename="../core/translator.py" line="24"/>
         <source>Message</source>
         <translation>Message</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="22"/>
+        <location filename="../core/translator.py" line="25"/>
         <source>Author Name</source>
         <translation>Author Name</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="23"/>
+        <location filename="../core/translator.py" line="26"/>
         <source>Channel Name</source>
         <translation>Channel Name</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="24"/>
+        <location filename="../core/translator.py" line="27"/>
         <source>Guild Name</source>
         <translation>Guild Name</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="25"/>
+        <location filename="../core/translator.py" line="28"/>
         <source>Mentions to Bot</source>
         <translation>Mentions to Bot</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="26"/>
+        <location filename="../core/translator.py" line="29"/>
         <source>Mentions</source>
         <translation>Mentions</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="27"/>
+        <location filename="../core/translator.py" line="30"/>
         <source>Bot Author</source>
         <translation>Bot Author</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="28"/>
+        <location filename="../core/translator.py" line="31"/>
         <source>Emojis</source>
         <translation>Emojis</translation>
     </message>
@@ -294,7 +278,7 @@
         <translation>(None)</translation>
     </message>
     <message>
-        <location filename="../controllers/group.py" line="104"/>
+        <location filename="../controllers/group.py" line="108"/>
         <source>Group {}</source>
         <translation>Group {}</translation>
     </message>
@@ -311,24 +295,24 @@
         <translation type="vanished">Unset welcome message channel</translation>
     </message>
     <message>
-        <location filename="../views/group.py" line="60"/>
+        <location filename="../views/group.py" line="62"/>
         <source>Welcome message:</source>
         <translation>Welcome message:</translation>
     </message>
     <message>
-        <location filename="../views/group.py" line="68"/>
-        <location filename="../views/group.py" line="80"/>
+        <location filename="../views/group.py" line="70"/>
+        <location filename="../views/group.py" line="82"/>
         <source>Channel:</source>
         <translation>Channel:</translation>
     </message>
     <message>
-        <location filename="../views/group.py" line="71"/>
-        <location filename="../views/group.py" line="83"/>
+        <location filename="../views/group.py" line="73"/>
+        <location filename="../views/group.py" line="85"/>
         <source>Message:</source>
         <translation>Message:</translation>
     </message>
     <message>
-        <location filename="../views/group.py" line="73"/>
+        <location filename="../views/group.py" line="75"/>
         <source>Goodbye message:</source>
         <translation>Goodbye message:</translation>
     </message>
@@ -337,19 +321,87 @@
         <translation type="vanished">Welcome message channel: {}</translation>
     </message>
     <message>
-        <location filename="../widgets/channel_dialog.py" line="83"/>
+        <location filename="../widgets/channel_dialog.py" line="87"/>
         <source>Channels</source>
         <translation>Channels</translation>
     </message>
     <message>
-        <location filename="../widgets/channel_dialog.py" line="29"/>
+        <location filename="../widgets/channel_dialog.py" line="30"/>
         <source>Text channels</source>
         <translation>Text channels</translation>
     </message>
     <message>
-        <location filename="../widgets/channel_dialog.py" line="32"/>
+        <location filename="../widgets/channel_dialog.py" line="33"/>
         <source>Voice channels</source>
         <translation>Voice channels</translation>
+    </message>
+</context>
+<context>
+    <name>Logging</name>
+    <message>
+        <location filename="../core/translator.py" line="51"/>
+        <source>Info</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <location filename="../core/translator.py" line="52"/>
+        <source>Warning</source>
+        <translation>Warning</translation>
+    </message>
+    <message>
+        <location filename="../core/translator.py" line="53"/>
+        <source>Error</source>
+        <translation>Error</translation>
+    </message>
+    <message>
+        <location filename="../core/translator.py" line="54"/>
+        <source>Critical</source>
+        <translation>Critical</translation>
+    </message>
+    <message>
+        <location filename="../core/translator.py" line="55"/>
+        <source>Debug</source>
+        <translation>Debug</translation>
+    </message>
+</context>
+<context>
+    <name>LogsWindow</name>
+    <message>
+        <location filename="../views/logs.py" line="23"/>
+        <source>Logs</source>
+        <translation>Logs</translation>
+    </message>
+    <message>
+        <location filename="../views/logs.py" line="33"/>
+        <location filename="../controllers/logs.py" line="14"/>
+        <source>Date</source>
+        <translation>Date</translation>
+    </message>
+    <message>
+        <location filename="../views/logs.py" line="35"/>
+        <source>Filter</source>
+        <translation>Filter</translation>
+    </message>
+    <message>
+        <location filename="../views/logs.py" line="37"/>
+        <source>Reset</source>
+        <translation>Reset</translation>
+    </message>
+    <message>
+        <location filename="../views/logs.py" line="30"/>
+        <location filename="../controllers/logs.py" line="15"/>
+        <source>Message</source>
+        <translation>Message</translation>
+    </message>
+    <message>
+        <location filename="../controllers/logs.py" line="16"/>
+        <source>Level</source>
+        <translation>Level</translation>
+    </message>
+    <message>
+        <location filename="../controllers/logs.py" line="27"/>
+        <source>All</source>
+        <translation type="unfinished">All</translation>
     </message>
 </context>
 <context>
@@ -360,13 +412,13 @@
         <translation>File</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="60"/>
+        <location filename="../views/main.py" line="62"/>
         <location filename="../widgets/menu_bar.py" line="15"/>
         <source>Config</source>
         <translation>Config</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="64"/>
+        <location filename="../views/main.py" line="69"/>
         <location filename="../widgets/menu_bar.py" line="16"/>
         <source>Edit</source>
         <translation>Edit</translation>
@@ -439,48 +491,53 @@
     </message>
     <message>
         <location filename="../widgets/help_menu.py" line="14"/>
+        <source>Logs</source>
+        <translation>Logs</translation>
+    </message>
+    <message>
+        <location filename="../widgets/help_menu.py" line="15"/>
         <source>Project</source>
         <translation>Project</translation>
     </message>
     <message>
-        <location filename="../widgets/help_menu.py" line="15"/>
+        <location filename="../widgets/help_menu.py" line="16"/>
         <source>Report bug</source>
         <translation>Report bug</translation>
     </message>
     <message>
-        <location filename="../widgets/help_menu.py" line="17"/>
+        <location filename="../widgets/help_menu.py" line="18"/>
         <source>Discord applications</source>
         <translation>Discord applications</translation>
     </message>
     <message>
-        <location filename="../widgets/messages_list.py" line="15"/>
+        <location filename="../widgets/messages_list.py" line="16"/>
         <source>New message</source>
         <translation>New message</translation>
     </message>
     <message>
-        <location filename="../widgets/messages_list.py" line="17"/>
+        <location filename="../widgets/messages_list.py" line="18"/>
         <source>Edit message</source>
         <translation>Edit message</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="216"/>
-        <location filename="../widgets/messages_list.py" line="19"/>
+        <location filename="../controllers/main.py" line="208"/>
+        <location filename="../widgets/messages_list.py" line="20"/>
         <source>Remove message</source>
         <translation>Remove message</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="226"/>
-        <location filename="../widgets/messages_list.py" line="22"/>
+        <location filename="../controllers/main.py" line="218"/>
+        <location filename="../widgets/messages_list.py" line="23"/>
         <source>Remove all messages</source>
         <translation>Remove all messages</translation>
     </message>
     <message>
-        <location filename="../widgets/groups_list.py" line="15"/>
+        <location filename="../widgets/groups_list.py" line="16"/>
         <source>Config group</source>
         <translation>Config group</translation>
     </message>
     <message>
-        <location filename="../widgets/groups_list.py" line="16"/>
+        <location filename="../widgets/groups_list.py" line="17"/>
         <source>Quit group</source>
         <translation>Quit group</translation>
     </message>
@@ -489,73 +546,73 @@
         <translation type="vanished">No logs at moment</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="47"/>
+        <location filename="../views/main.py" line="50"/>
         <source>Turn on bot</source>
         <translation>Turn on bot</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="53"/>
+        <location filename="../views/main.py" line="55"/>
         <source>Turn off bot</source>
         <translation>Turn off bot</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="61"/>
+        <location filename="../views/main.py" line="64"/>
         <source>Quit</source>
         <translation>Quit</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="120"/>
+        <location filename="../views/main.py" line="125"/>
         <source>Messages</source>
         <translation>Messages</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="121"/>
+        <location filename="../views/main.py" line="126"/>
         <source>Groups</source>
         <translation>Groups</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="63"/>
+        <location filename="../views/main.py" line="67"/>
         <source>New</source>
         <translation>New</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="65"/>
+        <location filename="../views/main.py" line="71"/>
         <source>Remove</source>
         <translation>Remove</translation>
     </message>
     <message>
-        <location filename="../views/main.py" line="68"/>
+        <location filename="../views/main.py" line="73"/>
         <source>Remove all</source>
         <translation>Remove all</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="91"/>
+        <location filename="../controllers/main.py" line="92"/>
         <source>Login failure</source>
         <translation>Login failure</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="92"/>
+        <location filename="../controllers/main.py" line="93"/>
         <source>Improper token has been passed.</source>
         <translation>Improper token has been passed.</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="131"/>
+        <location filename="../controllers/main.py" line="123"/>
         <source>Open File</source>
         <translation>Open File</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="141"/>
+        <location filename="../controllers/main.py" line="133"/>
         <source>Saving</source>
         <translation>Saving</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="145"/>
+        <location filename="../controllers/main.py" line="137"/>
         <source>The file has been saved successfully.</source>
         <translation>The file has been saved successfully.</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="150"/>
-        <location filename="../core/app.py" line="155"/>
+        <location filename="../controllers/main.py" line="142"/>
+        <location filename="../controllers/main.py" line="244"/>
         <location filename="../widgets/log_level_menu.py" line="34"/>
         <source>Warning</source>
         <translation>Warning</translation>
@@ -565,75 +622,73 @@
         <translation type="vanished">Message {}</translation>
     </message>
     <message>
-        <location filename="../core/app.py" line="158"/>
+        <location filename="../controllers/main.py" line="245"/>
         <source>The file don&apos;t exists anymore.</source>
         <translation>The file don&apos;t exists anymore.</translation>
     </message>
     <message>
-        <location filename="../core/app.py" line="135"/>
+        <location filename="../core/app.py" line="157"/>
         <source>Save File</source>
         <translation>Save File</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="154"/>
+        <location filename="../controllers/main.py" line="146"/>
         <source>You need to restart the application to apply the changes.</source>
         <translation>You need to restart the application to apply the changes.</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="219"/>
+        <location filename="../controllers/main.py" line="211"/>
         <source>Are you sure you want to remove this message?</source>
         <translation>Are you sure you want to remove this message?</translation>
     </message>
     <message>
-        <location filename="../widgets/confirm_message_box.py" line="14"/>
+        <location filename="../widgets/confirm_message_box.py" line="11"/>
         <source>Yes</source>
         <translation>Yes</translation>
     </message>
     <message>
-        <location filename="../widgets/confirm_message_box.py" line="16"/>
+        <location filename="../widgets/confirm_message_box.py" line="12"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="227"/>
+        <location filename="../controllers/main.py" line="219"/>
         <source>Are you sure you want to remove all messages?</source>
         <translation>Are you sure you want to remove all messages?</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="254"/>
         <source>Invalid file</source>
-        <translation>Invalid file</translation>
+        <translation type="vanished">Invalid file</translation>
     </message>
     <message>
-        <location filename="../controllers/main.py" line="255"/>
         <source>This file can&apos;t be loaded.</source>
-        <translation>This file can&apos;t be loaded.</translation>
+        <translation type="vanished">This file can&apos;t be loaded.</translation>
     </message>
 </context>
 <context>
     <name>MessageWindow</name>
     <message>
-        <location filename="../views/messages.py" line="75"/>
+        <location filename="../views/messages.py" line="40"/>
         <source>Message</source>
         <translation>Message</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="79"/>
+        <location filename="../views/messages.py" line="45"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="86"/>
+        <location filename="../views/messages.py" line="52"/>
         <source>The name can include letters (with accents), numbers, and spaces. Example: &apos;John123&apos;.</source>
         <translation>The name can include letters (with accents), numbers, and spaces. Example: &apos;Test 123&apos;.</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="95"/>
+        <location filename="../views/messages.py" line="61"/>
         <source>Conditions</source>
         <translation>Conditions</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="104"/>
+        <location filename="../views/messages.py" line="69"/>
         <source>Reactions</source>
         <translation>Reactions</translation>
     </message>
@@ -642,98 +697,98 @@
         <translation type="vanished">Messages</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="112"/>
+        <location filename="../views/messages.py" line="76"/>
         <source>Replies</source>
         <translation>Replies</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="117"/>
+        <location filename="../views/messages.py" line="81"/>
         <source>Action</source>
         <translation>Action</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="123"/>
+        <location filename="../views/messages.py" line="87"/>
         <source>Pin</source>
         <translation>Pin</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="121"/>
+        <location filename="../views/messages.py" line="85"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="126"/>
+        <location filename="../views/messages.py" line="90"/>
         <source>Penalty</source>
         <translation>Penalty</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="129"/>
+        <location filename="../views/messages.py" line="93"/>
         <source>Kick</source>
         <translation>Kick</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="130"/>
+        <location filename="../views/messages.py" line="94"/>
         <source>Ban</source>
         <translation>Ban</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="133"/>
+        <location filename="../views/messages.py" line="97"/>
         <source>Where reply</source>
         <translation>Where reply</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="136"/>
+        <location filename="../views/messages.py" line="100"/>
         <source>Group</source>
         <translation>Group</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="137"/>
+        <location filename="../views/messages.py" line="101"/>
         <source>Private</source>
         <translation>Private</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="140"/>
+        <location filename="../views/messages.py" line="104"/>
         <source>Where react</source>
         <translation>Where react</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="144"/>
+        <location filename="../views/messages.py" line="108"/>
         <source>Author</source>
         <translation>Author</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="147"/>
+        <location filename="../views/messages.py" line="111"/>
         <source>Bot</source>
         <translation>Bot</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="149"/>
+        <location filename="../views/messages.py" line="113"/>
         <source>Delay</source>
         <translation>Delay</translation>
     </message>
     <message>
-        <location filename="../views/messages.py" line="151"/>
+        <location filename="../views/messages.py" line="116"/>
         <source>Confirm</source>
         <translation>Confirm</translation>
     </message>
     <message>
-        <location filename="../views/group.py" line="49"/>
-        <location filename="../views/messages.py" line="153"/>
+        <location filename="../views/group.py" line="52"/>
+        <location filename="../views/messages.py" line="118"/>
         <source>Confirm and save</source>
         <translation>Confirm and save</translation>
     </message>
     <message>
-        <location filename="../controllers/message.py" line="96"/>
+        <location filename="../controllers/message.py" line="92"/>
         <source>Name already exists</source>
         <translation>Name already exists</translation>
     </message>
     <message>
-        <location filename="../controllers/message.py" line="103"/>
+        <location filename="../controllers/message.py" line="96"/>
         <source>You can&apos;t set a message with a name that already exists.</source>
         <translation>You can&apos;t set a message with a name that already exists.</translation>
     </message>
     <message>
-        <location filename="../controllers/message.py" line="118"/>
+        <location filename="../controllers/message.py" line="117"/>
         <source>Message {}</source>
         <translation>Message {}</translation>
     </message>
@@ -749,57 +804,57 @@
 <context>
     <name>Operator</name>
     <message>
-        <location filename="../core/translator.py" line="32"/>
+        <location filename="../core/translator.py" line="35"/>
         <source>Equal to</source>
         <translation>Equal to</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="33"/>
+        <location filename="../core/translator.py" line="36"/>
         <source>Not equal to</source>
         <translation>Not equal to</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="34"/>
+        <location filename="../core/translator.py" line="37"/>
         <source>Contains</source>
         <translation>Contains</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="35"/>
+        <location filename="../core/translator.py" line="38"/>
         <source>Not contains</source>
         <translation>Not contains</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="36"/>
+        <location filename="../core/translator.py" line="39"/>
         <source>Starts with</source>
         <translation>Starts with</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="37"/>
+        <location filename="../core/translator.py" line="40"/>
         <source>Ends with</source>
         <translation>Ends with</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="38"/>
+        <location filename="../core/translator.py" line="41"/>
         <source>Regex</source>
         <translation>Regex</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="39"/>
+        <location filename="../core/translator.py" line="42"/>
         <source>Is greater than</source>
         <translation>Is greater than</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="40"/>
+        <location filename="../core/translator.py" line="43"/>
         <source>Is less than</source>
         <translation>Is less than</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="41"/>
+        <location filename="../core/translator.py" line="46"/>
         <source>Is greater or equal to</source>
         <translation>Is greater or equal to</translation>
     </message>
     <message>
-        <location filename="../core/translator.py" line="42"/>
+        <location filename="../core/translator.py" line="47"/>
         <source>Is less or equal to</source>
         <translation>Is less or equal to</translation>
     </message>
@@ -883,41 +938,41 @@
         <translation type="vanished">Is less or equal to</translation>
     </message>
     <message>
-        <location filename="../widgets/condition_listbox.py" line="36"/>
+        <location filename="../widgets/condition_listbox.py" line="38"/>
         <source>Remove</source>
         <translation>Remove</translation>
     </message>
     <message>
-        <location filename="../widgets/condition_listbox.py" line="40"/>
-        <location filename="../widgets/condition_listbox.py" line="179"/>
+        <location filename="../widgets/condition_listbox.py" line="42"/>
+        <location filename="../widgets/condition_listbox.py" line="182"/>
         <source>Case insensitive</source>
         <translation>Case insensitive</translation>
     </message>
     <message>
-        <location filename="../widgets/condition_listbox.py" line="126"/>
-        <location filename="../widgets/condition_listbox.py" line="225"/>
+        <location filename="../widgets/condition_listbox.py" line="129"/>
+        <location filename="../widgets/condition_listbox.py" line="228"/>
         <source>Yes</source>
         <translation>Yes</translation>
     </message>
     <message>
-        <location filename="../widgets/condition_listbox.py" line="127"/>
-        <location filename="../widgets/condition_listbox.py" line="226"/>
+        <location filename="../widgets/condition_listbox.py" line="130"/>
+        <location filename="../widgets/condition_listbox.py" line="229"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../widgets/condition_listbox.py" line="177"/>
+        <location filename="../widgets/condition_listbox.py" line="180"/>
         <source>Field</source>
         <translation>Field</translation>
     </message>
     <message>
-        <location filename="../widgets/condition_listbox.py" line="178"/>
+        <location filename="../widgets/condition_listbox.py" line="181"/>
         <source>Operator</source>
         <translation>Operator</translation>
     </message>
     <message>
-        <location filename="../widgets/condition_listbox.py" line="45"/>
-        <location filename="../widgets/condition_listbox.py" line="180"/>
+        <location filename="../widgets/condition_listbox.py" line="48"/>
+        <location filename="../widgets/condition_listbox.py" line="183"/>
         <source>Value</source>
         <translation>Value</translation>
     </message>
@@ -925,67 +980,67 @@
 <context>
     <name>QEmojiPicker</name>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="37"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="39"/>
         <source>Enter your favorite emoji</source>
         <translation>Enter your favorite emoji</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="82"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="84"/>
         <source>Recent</source>
         <translation>Recents</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="88"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="90"/>
         <source>Favorite</source>
         <translation>Favorite</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="93"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="95"/>
         <source>Smileys &amp; Emotion</source>
         <translation>Smileys &amp; Emotion</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="98"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="100"/>
         <source>Animals &amp; Nature</source>
         <translation>Animals &amp; Nature</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="103"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="105"/>
         <source>Food &amp; Drink</source>
         <translation>Food &amp; Drink</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="108"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="110"/>
         <source>Activities</source>
         <translation>Activities</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="113"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="115"/>
         <source>Travel &amp; Places</source>
         <translation>Travel &amp; Places</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="118"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="120"/>
         <source>Objects</source>
         <translation>Objects</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="123"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="125"/>
         <source>Symbols</source>
         <translation>Symbols</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="128"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="130"/>
         <source>Flags</source>
         <translation>Flags</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="299"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="301"/>
         <source>Remove from favorite</source>
         <translation>Remove from favorite</translation>
     </message>
     <message>
-        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="303"/>
+        <location filename="../.venv/Lib/site-packages/extra_qwidgets/widgets/emoji_picker/emoji_picker.py" line="305"/>
         <source>Add to favorite</source>
         <translation>Add to favorite</translation>
     </message>
@@ -993,7 +1048,7 @@
 <context>
     <name>QListBox</name>
     <message>
-        <location filename="../widgets/listbox.py" line="87"/>
+        <location filename="../widgets/listbox.py" line="38"/>
         <source>Remove</source>
         <translation>Remove</translation>
     </message>
@@ -1001,7 +1056,7 @@
 <context>
     <name>QLogTextEdit</name>
     <message>
-        <location filename="../widgets/log_textedit.py" line="26"/>
+        <location filename="../widgets/log_textedit.py" line="24"/>
         <source>No logs at moment</source>
         <translation>No logs at moment</translation>
     </message>

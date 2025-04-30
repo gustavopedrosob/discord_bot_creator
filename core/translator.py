@@ -1,3 +1,5 @@
+import logging
+
 from PySide6.QtCore import QTranslator
 
 from core.config import instance as config
@@ -16,7 +18,8 @@ class Translator(metaclass=SingletonMeta):
 
     def get_instance(self) -> QTranslator:
         return self.__instance
-    
+
+
 FIELDS_TRANSLATIONS = {
     "message": Translator.translate("Field", "Message"),
     "author name": Translator.translate("Field", "Author Name"),
@@ -38,8 +41,18 @@ OPERATORS_TRANSLATIONS = {
     "regex": Translator.translate("Operator", "Regex"),
     "is greater than": Translator.translate("Operator", "Is greater than"),
     "is less than": Translator.translate("Operator", "Is less than"),
-    "is greater or equal to": Translator.translate("Operator", "Is greater or equal to"),
+    "is greater or equal to": Translator.translate(
+        "Operator", "Is greater or equal to"
+    ),
     "is less or equal to": Translator.translate("Operator", "Is less or equal to"),
+}
+
+LOGGING_TRANSLATIONS = {
+    logging.INFO: Translator.translate("Logging", "Info"),
+    logging.WARNING: Translator.translate("Logging", "Warning"),
+    logging.ERROR: Translator.translate("Logging", "Error"),
+    logging.CRITICAL: Translator.translate("Logging", "Critical"),
+    logging.DEBUG: Translator.translate("Logging", "Debug"),
 }
 
 BOOL_TRANSLATIONS = {

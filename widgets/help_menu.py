@@ -11,6 +11,7 @@ class QHelpMenu(QMenu):
     def __init__(self, text: str, parent: QWidget):
         super().__init__(text, parent)
         self.credits = QAction(translate("MainWindow", "Credits"), self)
+        self.logs = QAction(translate("MainWindow", "Logs"), self)
         self.project = QAction(translate("MainWindow", "Project"), self)
         self.report = QAction(translate("MainWindow", "Report bug"), self)
         self.discord_applications = QAction(
@@ -24,6 +25,7 @@ class QHelpMenu(QMenu):
         self.addActions(
             (
                 self.discord_applications,
+                self.logs,
                 self.credits,
                 self.project,
                 self.report,

@@ -3,23 +3,19 @@ import typing
 from PySide6.QtCore import QPoint
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
-    QListWidget,
-    QLineEdit,
-    QTextEdit,
     QCheckBox,
 )
 from emojis.db import Emoji
-from extra_qwidgets.widgets import QResponsiveTextEdit
-from qfluentwidgets import TransparentToolButton, MessageBox
+from qfluentwidgets import TransparentToolButton, MessageBox, LineEdit, ListWidget
 
 from core.database import Database
 from core.translator import Translator
 from models.message import Message
 from models.reaction import MessageReaction
 from models.reply import MessageReply
+from views.messages import MessageView
 from widgets.emoji_picker import QEmojiPickerPopup
 from widgets.listbox import QListBox
-from views.messages import MessageView
 
 
 class MessageController:
@@ -54,9 +50,9 @@ class MessageController:
             )
         )
 
-    def __raise_emoji_popup(self, point: QPoint, line_edit: QTextEdit):
+    def __raise_emoji_popup(self, point: QPoint, line_edit: LineEdit):
         def append_emoji(emoji: Emoji):
-            return line_edit.insertPlainText(emoji.emoji)
+            return line_edit.insert(emoji.emoji)
 
         self.view.window.setCursor(Qt.CursorShape.WaitCursor)
         if self.emoji_picker_popup is None:
@@ -78,7 +74,7 @@ class MessageController:
     def __bind_emoji_button(
         self,
         emote_button: TransparentToolButton,
-        line_edit: typing.Union[QLineEdit, QTextEdit],
+        line_edit: LineEdit,
     ):
         emote_button.clicked.connect(
             lambda: self.__raise_emoji_popup(
@@ -128,15 +124,15 @@ class MessageController:
         del_checkbox.setDisabled(check_state == Qt.CheckState.Checked)
 
     @staticmethod
-    def insert_on_listbox(listbox: QListBox, text_edit: QResponsiveTextEdit):
+    def insert_on_listbox(listbox: QListBox, text_edit: LineEdit):
         """Insere um valor na listbox especificada e apaga o conteúdo da entry especificada"""
-        text = text_edit.toPlainText()
+        text = text_edit.text()
         if text:
             listbox.add_item(text)
             text_edit.clear()
 
     @staticmethod
-    def remove_selected_on_listbox(listbox: QListWidget):
+    def remove_selected_on_listbox(listbox: ListWidget):
         """remove um item selecionado na listbox"""
         for item in listbox.selectedItems():
             listbox.takeItem(listbox.indexFromItem(item).row())
