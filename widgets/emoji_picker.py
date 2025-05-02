@@ -4,7 +4,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QDialog,
 )
-from extra_qwidgets.widgets.emoji_picker.emoji_picker import QEmojiPicker
+from extra_qwidgets.fluent_widgets.emoji_picker.emoji_picker import EmojiPicker
 
 
 class QEmojiPickerPopup(QDialog):
@@ -12,7 +12,7 @@ class QEmojiPickerPopup(QDialog):
         super().__init__()
         self.setWindowFlags(Qt.WindowType.Popup)
         self.setFixedSize(QSize(500, 500))
-        self.__emoji_picker = QEmojiPicker(False, False)
+        self.__emoji_picker = EmojiPicker(False, False)
         layout = QVBoxLayout()
         layout.addWidget(self.__emoji_picker)
         self.setLayout(layout)

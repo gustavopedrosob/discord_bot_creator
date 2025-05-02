@@ -14,10 +14,11 @@ from PySide6.QtWidgets import (
     QDialog,
     QLabel,
 )
+from extra_qwidgets.fluent_widgets.collapse_group import CollapseGroup
 from extra_qwidgets.utils import colorize_icon
+from extra_qwidgets.validators.emoji_validator import QEmojiValidator
 from extra_qwidgets.widgets.checkboxes import QCheckBoxes
 from extra_qwidgets.widgets.collapse_group import QCollapseGroup
-from extra_qwidgets.widgets.emoji_picker.emoji_validator import QEmojiValidator
 from qfluentwidgets import PushButton, CaptionLabel, LineEdit, SpinBox
 
 from widgets.condition_listbox import QConditionListbox
@@ -55,27 +56,22 @@ class MessageView:
         )
         self.name_entry.setMaxLength(40)
         self.name_entry.setValidator(name_entry_validator)
-
         self.listbox_conditions = QConditionListbox()
-        self.collapse_conditions = QCollapseGroup(
-            translate("MessageWindow", "Conditions"),
-            self.listbox_conditions,
-        )
-        self.collapse_conditions.setContentsMargins(0, 0, 0, 0)
         self.listbox_reactions = QListBox()
         emoji_validator = QEmojiValidator()
         self.listbox_reactions.line_edit().setValidator(emoji_validator)
-        self.collapse_reactions = QCollapseGroup(
+        self.listbox_replies = QListBox()
+        self.collapse_group = CollapseGroup()
+        self.collapse_group.addCollapse(
+            translate("MessageWindow", "Conditions"), self.listbox_conditions
+        )
+        self.collapse_group.addCollapse(
             translate("MessageWindow", "Reactions"),
             self.listbox_reactions,
         )
-        self.collapse_reactions.setContentsMargins(0, 0, 0, 0)
-
-        self.listbox_replies = QListBox()
-        self.collapse_replies = QCollapseGroup(
+        self.collapse_group.addCollapse(
             translate("MessageWindow", "Replies"), self.listbox_replies
         )
-        self.collapse_replies.setContentsMargins(0, 0, 0, 0)
 
         self.group_pin_or_del = QCheckBoxes(
             QLabel(translate("MessageWindow", "Action"))
@@ -83,20 +79,20 @@ class MessageView:
         self.del_checkbox = QCustomCheckBox(
             "delete", translate("MessageWindow", "Delete")
         )
-        self.group_pin_or_del.add_checkboxes(
+        self.group_pin_or_del.addCheckboxes(
             QCustomCheckBox("pin", translate("MessageWindow", "Pin")), self.del_checkbox
         )
         self.group_kick_or_ban = QCheckBoxes(
             QLabel(translate("MessageWindow", "Penalty"))
         )
-        self.group_kick_or_ban.add_checkboxes(
+        self.group_kick_or_ban.addCheckboxes(
             QCustomCheckBox("kick", translate("MessageWindow", "Kick")),
             QCustomCheckBox("ban", translate("MessageWindow", "Ban")),
         )
         self.group_where_reply = QCheckBoxes(
             QLabel(translate("MessageWindow", "Where reply"))
         )
-        self.group_where_reply.add_checkboxes(
+        self.group_where_reply.addCheckboxes(
             QCustomCheckBox("group", translate("MessageWindow", "Group")),
             QCustomCheckBox("private", translate("MessageWindow", "Private")),
         )
@@ -106,7 +102,7 @@ class MessageView:
         self.author_checkbox = QCustomCheckBox(
             "author", translate("MessageWindow", "Author")
         )
-        self.group_where_react.add_checkboxes(
+        self.group_where_react.addCheckboxes(
             self.author_checkbox,
             QCustomCheckBox("bot", translate("MessageWindow", "Bot")),
         )
@@ -127,12 +123,7 @@ class MessageView:
         left_layout = QVBoxLayout()
         mid_layout = QVBoxLayout()
         right_layout = QVBoxLayout()
-        for widget in (
-            self.collapse_conditions,
-            self.collapse_reactions,
-            self.collapse_replies,
-        ):
-            left_layout.addWidget(widget)
+        left_layout.addWidget(self.collapse_group)
         left_layout.setSpacing(0)
         left_layout.setContentsMargins(0, 0, 0, 0)
         right_layout.addWidget(self.group_pin_or_del)

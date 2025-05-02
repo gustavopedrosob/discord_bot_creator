@@ -140,10 +140,10 @@ class MessageController:
     def get_message(self, message_id: typing.Optional[int] = None) -> Message:
         message = Message(
             name=self.get_name(),
-            pin_or_del=self.view.group_pin_or_del.get_checked_name(),
-            kick_or_ban=self.view.group_kick_or_ban.get_checked_name(),
-            where_reply=self.view.group_where_reply.get_checked_name(),
-            where_reaction=self.view.group_where_react.get_checked_name(),
+            pin_or_del=self.view.group_pin_or_del.getCheckedName(),
+            kick_or_ban=self.view.group_kick_or_ban.getCheckedName(),
+            where_reply=self.view.group_where_reply.getCheckedName(),
+            where_reaction=self.view.group_where_react.getCheckedName(),
             delay=self.view.delay.value(),
         )
         if message_id:
@@ -211,8 +211,8 @@ class MessageController:
             for reaction in message.reactions:
                 self.view.listbox_reactions.add_item(reaction.reaction)
             self.view.listbox_conditions.load(message.conditions)
-            self.view.group_pin_or_del.check_by_name(message.pin_or_del)
-            self.view.group_kick_or_ban.check_by_name(message.kick_or_ban)
-            self.view.group_where_reply.check_by_name(message.where_reply)
-            self.view.group_where_react.check_by_name(message.where_reaction)
+            self.view.group_pin_or_del.checkByName(message.pin_or_del)
+            self.view.group_kick_or_ban.checkByName(message.kick_or_ban)
+            self.view.group_where_reply.checkByName(message.where_reply)
+            self.view.group_where_react.checkByName(message.where_reaction)
         self.view.name_entry.setPlaceholderText(self.get_name())
