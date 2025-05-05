@@ -5,7 +5,7 @@ from multiprocessing import Lock
 from pathlib import Path
 
 from sqlalchemy import create_engine, text, func
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker, Session, Query
 
 from core.config import Config
 from core.singleton import SingletonMeta
@@ -115,12 +115,12 @@ class Database(metaclass=SingletonMeta):
     def need_to_commit(self) -> bool:
         return self.__session.new or self.__session.dirty or self.__session.deleted
 
-    def get_logs(
+    def get_logs_query(
         self,
         message: typing.Optional[str] = None,
         date: typing.Optional[datetime.date] = None,
         log_level: typing.Optional[int] = None,
-    ) -> typing.List[Log]:
+    ) -> Query:
         with self.lock:
             query = self.__session.query(Log)
             if message:
@@ -129,7 +129,21 @@ class Database(metaclass=SingletonMeta):
                 query = query.filter(Log.datetime.date() == date)
             if log_level:
                 query = query.filter(Log.level_number == log_level)
-            return query.all()
+            return query
+
+    def get_logs_page(
+        self, logs_query: Query, page: int, per_page: int
+    ) -> typing.List[Log]:
+        with self.lock:
+            return logs_query.offset((page - 1) * per_page).limit(per_page).all()
+
+    def get_logs_page_count(self, logs_query: Query, per_page: int) -> int:
+        with self.lock:
+            division = logs_query.count() / per_page
+            if division.is_integer():
+                return int(division)
+            else:
+                return int(division) + 1
 
     def __del__(self):
         """Garante que a sessão e o engine sejam fechados quando o objeto for destruído"""

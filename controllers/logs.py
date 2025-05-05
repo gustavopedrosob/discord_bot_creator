@@ -10,6 +10,8 @@ from core.config import Config
 
 
 class LogsController:
+    page_size = 100
+
     def __init__(self, database: Database):
         self.view = LogsView()
         self.logs_model = QStandardItemModel()
@@ -37,6 +39,8 @@ class LogsController:
     def _setup_binds(self):
         self.view.filter_button.clicked.connect(self.on_filter)
         self.view.reset_filter_button.clicked.connect(self.reset)
+        self.view.pager.currentPageChanged.connect(self.update_logs_by_filters)
+        self.view.update_button.clicked.connect(self.on_filter)
 
     def on_filter(self):
         self.update_logs_by_filters()
@@ -50,12 +54,23 @@ class LogsController:
         self.update_logs_by_filters()
 
     def load_data(self):
-        for log in self.database.get_logs(
+        query = self.database.get_logs_query(
             self.view.message_filter.text(),
             self.view.date_filter.getDate(),
             self.view.level_filter.currentData(),
+        )
+        self.view.pager.setPageCount(
+            self.database.get_logs_page_count(query, self.page_size)
+        )
+        for log in self.database.get_logs_page(
+            query, self.view.pager.getCurrentPage(), self.page_size
         ):
             self.add_log(log)
+        self.view.rows_count.setText(
+            Translator.translate("LogsWindow", "Rows: {}").format(
+                self.logs_model.rowCount()
+            )
+        )
         self._resize_columns()
 
     def _resize_columns(self):

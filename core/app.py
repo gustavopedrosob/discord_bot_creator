@@ -20,7 +20,6 @@ from core.database import Database
 from core.log_handler import LogHandler
 from core.translator import Translator
 from views.credits import CreditsView
-from views.logs import LogsView
 from views.main import MainView
 
 logger = logging.getLogger(__name__)
@@ -50,7 +49,6 @@ class Application(QApplication):
         self.setup_binds(
             self.main_controller.view,
             self.credits_controller.view,
-            self.logs_controller.view,
         )
         setTheme(Theme.AUTO)
         QTimer.singleShot(0, self.on_app_ready)
@@ -84,15 +82,18 @@ class Application(QApplication):
             self.main_controller.file_dont_exists_message_box()
             return ":memory:"
 
+    def on_opening_logs_window(self):
+        self.logs_controller.view.window.show()
+        self.logs_controller.update_logs_by_filters()
+
     def setup_binds(
         self,
         main_view: MainView,
         credits_view: CreditsView,
-        logs_view: LogsView,
     ):
         QApplication.styleHints().colorSchemeChanged.connect(self._on_theme_change)
         main_view.menu_bar.help.credits.triggered.connect(credits_view.window.show)
-        main_view.menu_bar.help.logs.triggered.connect(logs_view.window.show)
+        main_view.menu_bar.help.logs.triggered.connect(self.on_opening_logs_window)
         main_view.menu_bar.file.save_as.triggered.connect(self.on_save_as_action)
         main_view.menu_bar.file.save.triggered.connect(self.on_save_action)
         main_view.menu_bar.file.new.triggered.connect(self.on_new_action)
