@@ -20,6 +20,7 @@ from core.database import Database
 from core.log_handler import LogHandler
 from core.translator import Translator
 from views.credits import CreditsView
+from views.loading import LoadingView
 from views.main import MainView
 
 logger = logging.getLogger(__name__)
@@ -40,6 +41,8 @@ class Application(QApplication):
         self.bot_thread = QBotThread()
         LogHandler().set_signal(self.bot_thread.log)
 
+        self.loading_view = LoadingView()
+        self.processEvents()
         self.database = Database()
         self.main_controller = MainController(self.database, self.bot_thread)
         self.logs_controller = LogsController(self.database)
@@ -65,6 +68,9 @@ class Application(QApplication):
         self.logs_controller.load_data()
         if Config.get("auto_start_bot"):
             self.main_controller.start_turn_on_bot_thread()
+        self.main_controller.view.window.show()
+        self.loading_view.splash.finish()
+        self.loading_view.window.close()
 
     def on_new_action(self):
         Config.set("database", ":memory:")

@@ -14,7 +14,6 @@ from models.message import Message
 from models.reaction import MessageReaction
 from models.reply import MessageReply
 from views.messages import MessageView
-from widgets.emoji_picker import QEmojiPickerPopup
 from widgets.listbox import QListBox
 
 

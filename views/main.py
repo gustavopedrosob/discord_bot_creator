@@ -1,5 +1,5 @@
 import qtawesome
-from PySide6.QtCore import QCoreApplication
+from PySide6.QtCore import QCoreApplication, QSize
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import (
     QWidget,
@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
     QSplitter,
 )
 from extra_qwidgets.utils import colorize_icon
-from qfluentwidgets import PasswordLineEdit, PushButton
+from qfluentwidgets import PasswordLineEdit, PushButton, SplashScreen
 
 from core.config import Config
 from widgets.custom_button import ColoredPushButton
@@ -72,7 +72,6 @@ class MainView:
 
         self.setup_layout()
         self.setup_menus()
-        self.window.show()
 
     def setup_menus(self):
         self.window.setMenuBar(self.menu_bar)
