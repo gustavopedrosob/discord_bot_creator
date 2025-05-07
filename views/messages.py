@@ -18,12 +18,12 @@ from extra_qwidgets.fluent_widgets.collapse_group import CollapseGroup
 from extra_qwidgets.utils import colorize_icon
 from extra_qwidgets.validators.emoji_validator import QEmojiValidator
 from extra_qwidgets.widgets.checkboxes import QCheckBoxes
-from extra_qwidgets.widgets.collapse_group import QCollapseGroup
 from qfluentwidgets import PushButton, CaptionLabel, LineEdit, SpinBox
 
 from widgets.condition_listbox import QConditionListbox
 from widgets.custom_button import ColoredPushButton
 from widgets.custom_checkbox import QCustomCheckBox
+from widgets.emoji_picker import QEmojiPickerPopup
 from widgets.listbox import QListBox
 
 translate = QCoreApplication.translate
@@ -40,7 +40,7 @@ class MessageView:
         self.window.resize(1000, 800)
         self.window.setWindowTitle(translate("MessageWindow", "Message"))
 
-        self.emoji_picker_popup = None
+        self.emoji_picker_popup = QEmojiPickerPopup()
 
         self.name_text = CaptionLabel()
         self.name_text.setText(translate("MessageWindow", "Name"))

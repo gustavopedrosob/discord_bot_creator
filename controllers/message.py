@@ -23,7 +23,6 @@ class MessageController:
         self.view = MessageView()
         self.database = database
         self.current_message: typing.Optional[Message] = None
-        self.emoji_picker_popup = None
         self.setup_binds()
 
     def setup_binds(self):
@@ -55,14 +54,17 @@ class MessageController:
             return line_edit.insert(emoji.emoji)
 
         self.view.window.setCursor(Qt.CursorShape.WaitCursor)
-        if self.emoji_picker_popup is None:
-            self.emoji_picker_popup = QEmojiPickerPopup()
-        emoji_picker = self.emoji_picker_popup.emoji_picker()
+        emoji_picker = self.view.emoji_picker_popup.emoji_picker()
         emoji_picker.picked.connect(append_emoji)
         emoji_picker.reset()
-        self.emoji_picker_popup.move(point.x() - 500, point.y() - 500)
-        self.emoji_picker_popup.exec()
-        self.emoji_picker_popup.hideEvent = emoji_picker.picked.disconnect(append_emoji)
+        self.view.emoji_picker_popup.move(
+            point.x() - self.view.emoji_picker_popup.width(),
+            point.y() - self.view.emoji_picker_popup.height(),
+        )
+        self.view.emoji_picker_popup.exec()
+        self.view.emoji_picker_popup.hideEvent = emoji_picker.picked.disconnect(
+            append_emoji
+        )
         self.view.window.setCursor(Qt.CursorShape.ArrowCursor)
 
     def is_name_valid(self):
