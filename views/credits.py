@@ -18,11 +18,7 @@ class CreditsView:
 
         self.label = QLabel(QCoreApplication.translate("MainWindow", "Credits text"))
 
-        self.layout.addWidget(self.logo)
-        self.layout.addWidget(self.label)
-
-        # centraliza os widgets
-        self.layout.setAlignment(self.logo, Qt.AlignmentFlag.AlignCenter)
-        self.layout.setAlignment(self.label, Qt.AlignmentFlag.AlignCenter)
+        self.layout.addWidget(self.logo, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.layout.addWidget(self.label, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.window.setLayout(self.layout)
