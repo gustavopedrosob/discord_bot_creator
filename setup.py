@@ -2,7 +2,7 @@ from cx_Freeze import setup, Executable
 
 setup(
     name="Discord Bot Creator",
-    version="1.0.1",
+    version="2.0.0",
     description="Discord Bot Creator",
     options={
         "build_exe": {
@@ -10,7 +10,10 @@ setup(
                 ("source/", "source"),
                 ("translations/build", "translations/build"),
             ],
+            "packages": ["audioop", "sqlalchemy.dialects.sqlite", "sqlite3"],
         }
     },
-    executables=[Executable("main.py", base="Win32GUI", icon="logo.ico")],
+    executables=[
+        Executable("main.py", target_name="Discord Bot Creator.exe", icon="logo.ico")
+    ],
 )
