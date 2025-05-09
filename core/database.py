@@ -84,8 +84,8 @@ class Database(metaclass=SingletonMeta):
         return self.__session
 
     def delete_messages(self):
-        with self.lock:
-            for message in self.get_messages():
+        for message in self.get_messages():
+            with self.lock:
                 self.__session.delete(message)
 
     def new_name(self) -> str:
