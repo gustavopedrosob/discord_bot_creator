@@ -69,7 +69,6 @@ class Application(QApplication):
         if Config.get("auto_start_bot"):
             self.main_controller.start_turn_on_bot_thread()
         self.main_controller.view.window.show()
-        self.loading_view.splash.finish()
         self.loading_view.window.close()
 
     def on_new_action(self):
