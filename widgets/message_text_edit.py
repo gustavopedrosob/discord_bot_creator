@@ -2,7 +2,7 @@ import typing
 
 from PySide6.QtCore import QMimeData, Qt
 from PySide6.QtGui import QValidator, QKeyEvent
-from extra_qwidgets.widgets import QResponsiveTextEdit
+from extra_qwidgets.widgets.resposive_text_edit import QResponsiveTextEdit
 
 
 class QMessageTextEdit(QResponsiveTextEdit):

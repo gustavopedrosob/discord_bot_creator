@@ -42,7 +42,7 @@ class GroupView:
         self.goodbye_message_pick_button = ToolButton(qtawesome.icon("fa6s.list"))
         self.goodbye_message_pick_button.setIconSize(QSize(19, 19))
 
-        self.save_button = ColoredPushButton("#3DCC61")
+        self.save_button = ColoredPushButton("#3DCC61", self.window)
         self.save_button.setText(translate("MessageWindow", "Confirm and save"))
         self.save_button.setIcon(
             colorize_icon(qtawesome.icon("fa6s.floppy-disk"), "#FFFFFF")

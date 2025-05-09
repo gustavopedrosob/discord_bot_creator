@@ -1,11 +1,12 @@
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QWidget
 from extra_qwidgets.utils import adjust_brightness
 from qfluentwidgets import PushButton, setCustomStyleSheet
 
 
 class ColoredPushButton(PushButton):
-    def __init__(self, color: str):
-        super().__init__()
+    def __init__(self, color: str, parent: QWidget):
+        super().__init__(parent)
         hover_color = adjust_brightness(color, 10)
         pressed_color = adjust_brightness(color, -10)
         disabled_color = adjust_brightness(color, -20)

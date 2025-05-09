@@ -29,8 +29,16 @@ class MainView:
         self.window.setMinimumSize(800, 600)
         self.window.resize(1000, 800)
         self.window.setWindowIcon(QIcon("source/icons/window-icon.svg"))
-
+        self.window.setWindowTitle("Discord Bot Creator")
         self.menu_bar = MenuBar(self.window)
+
+        self.splash = SplashScreen(QIcon("source/icons/icon.svg"), self.window)
+        self.splash.setIconSize(QSize(192, 192))
+        self.splash.titleBar.minBtn.hide()
+        self.splash.titleBar.maxBtn.hide()
+        self.splash.titleBar.closeBtn.hide()
+        self.splash.show()
+        self.window.show()
 
         self.logs_text_edit = QLogTextEdit()
 
@@ -44,12 +52,12 @@ class MainView:
         self.token_widget.setText(Config.get("token"))
         self.token_widget.setMaxLength(100)
 
-        self.turn_on_bot_button = ColoredPushButton("#3A81F1")
+        self.turn_on_bot_button = ColoredPushButton("#3A81F1", self.window)
         self.turn_on_bot_button.setText(translate("MainWindow", "Turn on bot"))
         self.turn_on_bot_button.setIcon(
             colorize_icon(qtawesome.icon("fa6s.play"), "#FFFFFF")
         )
-        self.turn_off_bot_button = ColoredPushButton("#d8315b")
+        self.turn_off_bot_button = ColoredPushButton("#d8315b", self.window)
         self.turn_off_bot_button.setText(translate("MainWindow", "Turn off bot"))
         self.turn_off_bot_button.setIcon(
             colorize_icon(qtawesome.icon("fa6s.stop"), "#FFFFFF")
@@ -69,9 +77,6 @@ class MainView:
         self.remove_message_button.setText(translate("MainWindow", "Remove"))
         self.remove_all_message_button = PushButton()
         self.remove_all_message_button.setText(translate("MainWindow", "Remove all"))
-
-        self.setup_layout()
-        self.setup_menus()
 
     def setup_menus(self):
         self.window.setMenuBar(self.menu_bar)

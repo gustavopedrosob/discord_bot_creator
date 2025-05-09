@@ -110,7 +110,7 @@ class MessageView:
         self.delay = SpinBox()
         self.confirm = PushButton()
         self.confirm.setText(translate("MessageWindow", "Confirm"))
-        self.confirm_and_save = ColoredPushButton("#3DCC61")
+        self.confirm_and_save = ColoredPushButton("#3DCC61", self.window)
         self.confirm_and_save.setText(translate("MessageWindow", "Confirm and save"))
         self.confirm_and_save.setAutoDefault(False)
         self.confirm_and_save.setDefault(False)
