@@ -102,15 +102,18 @@ class Database(metaclass=SingletonMeta):
             return max_id + 1
 
     def new_log(self, record: LogRecord):
-        with self.new_session() as session:
-            created = datetime.fromtimestamp(record.created)
-            log = Log(
-                datetime=created,
-                message=record.getMessage(),
-                level_number=record.levelno,
-            )
-            session.add(log)
-            session.commit()
+        created = datetime.fromtimestamp(record.created)
+        log = Log(
+            datetime=created,
+            message=record.getMessage(),
+            level_number=record.levelno,
+        )
+        if Config.get("database") == ":memory:":
+            self.__session.add(log)
+        else:
+            with self.new_session() as session:
+                session.add(log)
+                session.commit()
 
     def need_to_commit(self) -> bool:
         return self.__session.new or self.__session.dirty or self.__session.deleted
@@ -122,7 +125,10 @@ class Database(metaclass=SingletonMeta):
         log_level: typing.Optional[int] = None,
     ) -> Query:
         with self.lock:
-            query = self.__session.query(Log)
+            if Config.get("database") == ":memory:":
+                query = self.__session.query(Log)
+            else:
+                query = self.new_session().query(Log)
             if message:
                 query = query.filter(Log.message.like(f"%{message}%"))
             if date:
