@@ -1,10 +1,12 @@
 import qtawesome
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QStandardItem
 from discord import VoiceChannel
+from extra_qwidgets.widgets.theme_responsive_standard_item import (
+    QThemeResponsiveStandardItem,
+)
 
 
-class VoiceChannelItem(QStandardItem):
+class VoiceChannelItem(QThemeResponsiveStandardItem):
     def __init__(self, channel: VoiceChannel):
         super().__init__(channel.name)
         self.setIcon(qtawesome.icon("fa6s.volume-high"))

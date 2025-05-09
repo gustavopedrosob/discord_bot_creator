@@ -9,6 +9,9 @@ from PySide6.QtWidgets import (
     QWidget,
     QScrollArea,
 )
+from extra_qwidgets.fluent_widgets.theme_responsive_transparent_tool_button import (
+    ThemeResponsiveTransparentToolButton,
+)
 from qfluentwidgets import ListWidget, TransparentToolButton, LineEdit, RoundMenu
 
 translate = QCoreApplication.translate
@@ -19,10 +22,10 @@ class QListBox(QScrollArea):
         super().__init__()
         self.__list = ListWidget()
         self.__list.setMinimumHeight(85)
-        self.__add_button = TransparentToolButton()
+        self.__add_button = ThemeResponsiveTransparentToolButton()
         self.__add_button.setIcon(qtawesome.icon("fa6s.arrow-right"))
         self.__add_button.setIconSize(QSize(20, 20))
-        self.__emote_button = TransparentToolButton()
+        self.__emote_button = ThemeResponsiveTransparentToolButton()
         self.__emote_button.setIcon(qtawesome.icon("fa6s.face-smile"))
         self.__emote_button.setIconSize(QSize(20, 20))
         self.__line_edit = LineEdit()

@@ -9,8 +9,11 @@ from PySide6.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
 )
+from extra_qwidgets.fluent_widgets.theme_responsive_tool_button import (
+    ThemeResponsiveToolButton,
+)
 from extra_qwidgets.utils import colorize_icon
-from qfluentwidgets import ComboBox, PlainTextEdit, ToolButton
+from qfluentwidgets import ComboBox, PlainTextEdit
 
 from widgets.channel_dialog import ChannelDialog
 from widgets.custom_button import ColoredPushButton
@@ -33,13 +36,17 @@ class GroupView:
         self.welcome_message_channels = ComboBox()
         self.welcome_message_textedit = PlainTextEdit()
         self.welcome_message_textedit.setMaximumHeight(300)
-        self.welcome_message_pick_button = ToolButton(qtawesome.icon("fa6s.list"))
+        self.welcome_message_pick_button = ThemeResponsiveToolButton(
+            qtawesome.icon("fa6s.list")
+        )
         self.welcome_message_pick_button.setIconSize(QSize(19, 19))
 
         self.goodbye_message_channels = ComboBox()
         self.goodbye_message_textedit = PlainTextEdit()
         self.goodbye_message_textedit.setMaximumHeight(300)
-        self.goodbye_message_pick_button = ToolButton(qtawesome.icon("fa6s.list"))
+        self.goodbye_message_pick_button = ThemeResponsiveToolButton(
+            qtawesome.icon("fa6s.list")
+        )
         self.goodbye_message_pick_button.setIconSize(QSize(19, 19))
 
         self.save_button = ColoredPushButton("#3DCC61", self.window)

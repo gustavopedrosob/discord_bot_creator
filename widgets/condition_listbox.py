@@ -12,11 +12,16 @@ from PySide6.QtWidgets import (
     QWidget,
     QHeaderView,
 )
+from extra_qwidgets.fluent_widgets.theme_responsive_transparent_toggle_tool_button import (
+    ThemeResponsiveTransparentToggleToolButton,
+)
+from extra_qwidgets.fluent_widgets.theme_responsive_transparent_tool_button import (
+    ThemeResponsiveTransparentToolButton,
+)
 from qfluentwidgets import (
     TableWidget,
     LineEdit,
     ComboBox,
-    TransparentToggleToolButton,
     TransparentToolButton,
     RoundMenu,
 )
@@ -37,7 +42,7 @@ class QConditionListbox(QScrollArea):
         self.remove_action = QAction(self.tr("Remove"), self)
         self.field_combobox = ComboBox()
         self.operator_combobox = ComboBox()
-        self.case_insensitive_checkbutton = TransparentToggleToolButton()
+        self.case_insensitive_checkbutton = ThemeResponsiveTransparentToggleToolButton()
         self.case_insensitive_checkbutton.setToolTip(self.tr("Case insensitive"))
         self.case_insensitive_checkbutton.setIcon(qtawesome.icon("fa6s.font"))
         self.case_insensitive_checkbutton.setIconSize(QSize(20, 20))
@@ -45,7 +50,7 @@ class QConditionListbox(QScrollArea):
         self.value_lineedit.setPlaceholderText(
             Translator.translate("QConditionListbox", "Value")
         )
-        self.__add_button = TransparentToolButton()
+        self.__add_button = ThemeResponsiveTransparentToolButton()
         self.__add_button.setIcon(qtawesome.icon("fa6s.arrow-right"))
         self.__add_button.setIconSize(QSize(20, 20))
         self.setWidgetResizable(True)
